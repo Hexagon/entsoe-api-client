@@ -1,0 +1,19 @@
+{
+    "lint": {
+        "files": {
+            "include": ["src","test/deno"]
+        }
+    },
+    "fmt": {
+        "files": {
+            "include": ["test/deno"]
+        },
+        "options": {
+            "lineWidth": 100
+        }
+    },
+    "tasks": {
+        "test": "deno test --allow-none test/deno",
+        "build": "npm run build:docs"
+    }
+}

@@ -8,10 +8,6 @@ ENTSO-e transparency platform API Client built for Deno. Complete. Easy to use. 
 *   Works in Deno >=1.16
 *   Supports [TypeScript](https://www.typescriptlang.org/)
 
-## Documentation
-
-Full documentation available at [hexagon.github.io/entsoe-api-client](https://hexagon.github.io/entsoe-api-client/).
-
 ### Examples
 
 See /examples folder for complete examples

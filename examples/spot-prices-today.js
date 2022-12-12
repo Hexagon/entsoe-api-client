@@ -1,4 +1,4 @@
-import { Query } from "https://deno.land/x/entsoe_api_client@0.0.1/mod.js";
+import { Query } from "https://deno.land/x/entsoe_api_client@0.0.3/mod.js";
 
 // Prepare dates
 const
@@ -8,7 +8,7 @@ dateToday.setHours(0,0,0,0);
 dateTomorrow.setDate(dateTomorrow.getDate()+1);
 dateTomorrow.setHours(0,0,0,0);
 
-// Run query
+// Run ENTSO-e transparency playform query
 const result = await Query(
     "your-api-key-here", // Your entsoe api-token
     "A44",                  // A44 - Day-ahead prices
@@ -18,7 +18,8 @@ const result = await Query(
     dateTomorrow  // End date
 );
 
-const ts = result.TimeSeries;
+// Get first TimeSeries
+const ts = result.TimeSeries[0];
 
 // Print meta data
 console.table({

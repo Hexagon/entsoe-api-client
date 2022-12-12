@@ -82,17 +82,21 @@
       }
       const timeInterval = `${startDateTime.toISOString()}/${endDateTime.toISOString()}`;
       params.append("TimeInterval", timeInterval);
-  
+
       // Construct url and get result
       const 
           result = await fetch(`${ENTSOE_ENDPOINT}?${params}`),
           resultText = await result.text();
     
+      // Check for 401
+      if (result.status === 401) {
+        throw new Error("401 Unauthorized. Missing or invalid security token.");
+      }
+
       // Parse result
       const
           resultJson = await ParseDocument(resultText);
       
-  
       return resultJson;
   };
   

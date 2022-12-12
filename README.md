@@ -14,7 +14,7 @@ Full documentation available at [hexagon.github.io/entsoe-api-client](https://he
 
 ### Examples
 
-See /examples folder for complete examples
+See [/examples](/examples) folder for complete examples, like getting spot prices for today.
 
 ## Contributing
 

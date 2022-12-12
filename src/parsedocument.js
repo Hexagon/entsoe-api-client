@@ -14,6 +14,12 @@ const ParseDocument = (xmlDocument) => {
         }
     }
 
+    // Check if TimeSeries is a single element or Array
+    // - If single element, convert to array with one element
+    if (doc.Publication_MarketDocument.TimeSeries && !Array.isArray(doc.Publication_MarketDocument.TimeSeries)) {
+        doc.Publication_MarketDocument.TimeSeries = [doc.Publication_MarketDocument.TimeSeries];
+    }
+
     // Return MarketDocument
     return doc.Publication_MarketDocument;
 

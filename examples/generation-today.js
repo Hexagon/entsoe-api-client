@@ -10,14 +10,14 @@ dateTomorrow.setHours(0,0,0,0);
 
 // Run ENTSO-e transparency playform query
 const result = await Query(
-     Deno.env.get("API_TOKEN"), // Your entsoe api-token
-     {
-        documentType: "A44",              // A44 - Price docuement
-        processType: "A01",               // A01 - Day ahead
-        inDomain: "SE2",                  // In_Domain: For A44 - Electricity price area
-        outDomain: "SE2",               // Out_Domain: For A44 - Electricity price area
-        startDateTime: dateToday,         // Start date
-        endDateTime: dateTomorrow         // End date
+    Deno.env.get("API_TOKEN"), // Your entsoe api-token
+    {
+        documentType: "A71",        // A69 - Generation forecast
+        processType: "A01",         // A01 - Day ahead
+        inDomain: "Sweden (SE)",    // In_Domain: For A44 - Electricity price area
+        outDomain: "Sweden (SE)",   // Out_Domain: For A44 - Electricity price area
+        startDateTime: dateToday,   // Start date
+        endDateTime: dateTomorrow   // End date
     }
 );
 

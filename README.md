@@ -12,6 +12,20 @@ ENTSO-e transparency platform API Client built for Deno. Complete. Easy to use. 
 
 See [/examples](/examples) folder for complete examples, like getting spot prices for today.
 
+Pass your entso-e API key by environment variable API_TOKEN, example for getting todays spot prices.
+
+Powershell
+
+```
+$env:API_TOKEN="your-api-token"; deno run -A .\spot-prices-today.js
+```
+
+Bash
+
+```
+API_TOKEN="your-api-token" deno run -A .\generation-today.js
+```
+
 ## Contributing
 
 See [Contribution Guide](/CONTRIBUTING.md)

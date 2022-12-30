@@ -30,7 +30,7 @@ const ENTSOE_ENDPOINT = "https://web-api.tp.entsoe.eu/api";
 
 import { Areas } from "./src/parameters/areas.js";
 import { DocumentType } from "./src/parameters/documenttype.js";
-import { ParseDocument } from "./src/parsedocument.js";
+import { ParseDocument, QueryResult } from "./src/parsedocument.ts";
 import { ProcessType } from "./src/parameters/processtype.js"; 
 import { PsrType } from "./src/parameters/psrtype.js";
 
@@ -44,7 +44,7 @@ interface QueryParameters {
     endDateTime: Date;
 }
 
-  const Query = async ( securityToken: string, params: QueryParameters ) => {
+  const Query = async ( securityToken: string, params: QueryParameters ): Promise<QueryResult> => {
     
       const query = new URLSearchParams({
           securityToken
@@ -116,10 +116,10 @@ interface QueryParameters {
       }
 
       // Parse result
-      const
-          resultJson = await ParseDocument(resultText);
+      const resultJson: QueryResult = await ParseDocument(resultText);
       
       return resultJson;
   };
   
+  export type { QueryResult };
   export { Query };

@@ -10,7 +10,7 @@ ENTSO-e transparency platform API Client built for Deno. Complete. Easy to use. 
 
 ### Examples
 
-See [/examples](/examples) folder for complete examples, like getting spot prices for today.
+See [/examples](/examples) folder for complete examples, like getting spot prices or total generation per hour.
 
 Pass your entso-e API key by environment variable API_TOKEN, example for getting todays spot prices.
 

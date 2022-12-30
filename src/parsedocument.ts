@@ -1,11 +1,38 @@
 import { parse } from "https://deno.land/x/xml/mod.ts";
 
-const ParseDocument = (xmlDocument) => {
+
+interface EntsoeQueryTimeInterval {
+    start: string;
+  }
+  
+  interface EntsoeQueryPoint {
+    position: string;
+    "price.amount": string;
+  }
+  
+  interface EntsoeQueryPeriod {
+    timeInterval: EntsoeQueryTimeInterval;
+    Point: EntsoeQueryPoint[];
+  }
+  
+  interface EntsoeQueryEntry {
+    Period: EntsoeQueryPeriod;
+  }
+  
+  interface QueryResult {
+    TimeSeries: EntsoeQueryEntry[]
+  }
+
+  interface UnsafeQueryResult {
+    TimeSeries: EntsoeQueryEntry | EntsoeQueryEntry[]
+  }
+
+const ParseDocument = (xmlDocument: string): QueryResult => {
 
     // Parse document
     const doc = parse(xmlDocument);
 
-    const rootNode = doc.Publication_MarketDocument || doc.GL_MarketDocument;
+    const rootNode: UnsafeQueryResult = (doc.Publication_MarketDocument || doc.GL_MarketDocument) as unknown as UnsafeQueryResult;
 
     // Check that root element exists
     if (!rootNode) {
@@ -23,9 +50,12 @@ const ParseDocument = (xmlDocument) => {
         rootNode.TimeSeries = [rootNode.TimeSeries];
     }
 
+    const checkedDocument: QueryResult = rootNode as unknown as QueryResult;
+
     // Return MarketDocument
-    return rootNode;
+    return checkedDocument;
 
 };
 
+export type { QueryResult };
 export { ParseDocument };

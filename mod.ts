@@ -38,10 +38,10 @@ interface QueryParameters {
   documentType: string;
   processType?: string;
   psrType?: string;
-  inDomain: string;
-  inBiddingZoneDomain: string;
-  outDomain: string;
-  outBiddingZoneDomain: string;
+  inDomain?: string;
+  inBiddingZoneDomain?: string;
+  outDomain?: string;
+  outBiddingZoneDomain?: string;
   startDateTime: Date;
   endDateTime: Date;
 }

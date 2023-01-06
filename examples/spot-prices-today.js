@@ -1,4 +1,4 @@
-import { Query } from "https://deno.land/x/entsoe_api_client@0.1.6/mod.ts";
+import { Query } from "https://deno.land/x/entsoe_api_client@0.1.7/mod.ts";
 
 // Prepare dates
 const
@@ -14,8 +14,8 @@ const result = await Query(
      {
         documentType: "A44",              // A44 - Price docuement
         processType: "A01",               // A01 - Day ahead
-        inDomain: "SE2",                  // In_Domain: For A44 - Electricity price area
-        outDomain: "SE2",               // Out_Domain: For A44 - Electricity price area
+        inDomain: "SE2",            // In_Domain: For A44 - Electricity price area
+        outDomain: "SE2",           // Out_Domain: For A44 - Electricity price area
         startDateTime: dateToday,         // Start date
         endDateTime: dateTomorrow         // End date
     }
@@ -28,8 +28,9 @@ const ts = result.TimeSeries[0];
 console.table({
     start: ts.Period.timeInterval.start,
     end: ts.Period.timeInterval.end,
+    resoluton: ts.Period.resolution,
     currency: ts["currency_Unit.name"],
-    unit: ts["price_Measure_Unit.name"]
+    unit: ts["price_Measure_Unit.name"],
 });
 
 // Print spot prices per hour

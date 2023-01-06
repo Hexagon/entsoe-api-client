@@ -1,4 +1,4 @@
-import { Query } from "https://deno.land/x/entsoe_api_client@0.1.6/mod.ts";
+import { Query } from "https://deno.land/x/entsoe_api_client@0.1.7/mod.ts";
 
 // Prepare dates
 const
@@ -12,10 +12,10 @@ dateTomorrow.setHours(0,0,0,0);
 const result = await Query(
     Deno.env.get("API_TOKEN"), // Your entsoe api-token
     {
-        documentType: "A71",        // A69 - Generation forecast
+        documentType: "A71",        // A71 - Generation forecast
         processType: "A01",         // A01 - Day ahead
-        inDomain: "Sweden (SE)",    // In_Domain: For A44 - Electricity price area
-        outDomain: "Sweden (SE)",   // Out_Domain: For A44 - Electricity price area
+        inDomain: "Sweden (SE)",    
+        outDomain: "Sweden (SE)",   
         startDateTime: dateToday,   // Start date
         endDateTime: dateTomorrow   // End date
     }

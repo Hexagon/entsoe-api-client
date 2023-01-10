@@ -1,5 +1,5 @@
-import { Query } from "https://deno.land/x/entsoe_api_client@0.1.7/mod.ts";
-import { PsrType } from "https://deno.land/x/entsoe_api_client@0.1.7/src/parameters/psrtype.js";
+import { Query } from "https://deno.land/x/entsoe_api_client@0.1.9/mod.ts";
+import { PsrType } from "https://deno.land/x/entsoe_api_client@0.1.9/src/parameters/psrtype.js";
 
 // Prepare dates
 const
@@ -17,8 +17,8 @@ const result = await Query(
     {
         documentType: "A75",        // A75 - Actual generation per type
         processType: "A16",         // A16 - Realised
-        inDomain: "BZN|DE-LU",         // In_Domain
-        outDomain: "BZN|DE-LU",        // Out_Domain
+        inDomain: "BZN|SE2",         // In_Domain
+        outDomain: "BZN|SE2",        // Out_Domain
         startDateTime: dateToday,   // Start date
         endDateTime: dateTomorrow,  // End date
     }
@@ -35,7 +35,7 @@ const output = {
 };
 
 for (const ts of result.TimeSeries) {
-    // We expect hourly data, use PT60M and ignore other periods
+    // We expect hourly data from BZN|SE2, use PT60M and ignore other periods
     if (ts.Period.resolution==="PT60M") {
         for (const point of ts.Period.Point) {
             const psrTypeTranslation = PsrType[ts.MktPSRType.psrType];

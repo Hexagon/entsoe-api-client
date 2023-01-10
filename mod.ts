@@ -79,7 +79,7 @@ const Query = async (securityToken: string, params: QueryParameters): Promise<Qu
   // Validate inDomain, add to parameter list
   if (params.inDomain) {
     const foundInDomain = Object.entries(Areas).find(([_key, value]) =>
-      value.includes(params.inDomain)
+      params.inDomain && value.includes(params.inDomain)
     );
     if (!foundInDomain) {
       throw new Error("inDomain not valid");
@@ -91,7 +91,7 @@ const Query = async (securityToken: string, params: QueryParameters): Promise<Qu
   // Validate inBiddingZoneDomain, add to parameter list
   if (params.inBiddingZoneDomain) {
     const foundInDomain = Object.entries(Areas).find(([_key, value]) =>
-      value.includes(params.inBiddingZoneDomain)
+      params.inBiddingZoneDomain && value.includes(params.inBiddingZoneDomain)
     );
     if (!foundInDomain) {
       throw new Error("inBiddingZoneDomain not valid");
@@ -103,7 +103,7 @@ const Query = async (securityToken: string, params: QueryParameters): Promise<Qu
   // Validate outDomain, add to parameter list
   if (params.outDomain) {
     const foundOutDomain = Object.entries(Areas).find(([_key, value]) =>
-      value.includes(params.outDomain)
+      params.outDomain && value.includes(params.outDomain)
     );
     if (!foundOutDomain) {
       throw new Error("outDomain not valid");
@@ -114,8 +114,8 @@ const Query = async (securityToken: string, params: QueryParameters): Promise<Qu
 
   // Validate outDomain, add to parameter list
   if (params.outBiddingZoneDomain) {
-    const foundOutDomain = Object.entries(Areas).find(([_key, value]) =>
-      value.includes(params.outBiddingZoneDomain)
+    const foundOutDomain = Object.entries(Areas).find(([_key, value]) => 
+      params.outBiddingZoneDomain && value.includes(params.outBiddingZoneDomain)
     );
     if (!foundOutDomain) {
       throw new Error("outBiddingZoneDomain not valid");
@@ -125,10 +125,10 @@ const Query = async (securityToken: string, params: QueryParameters): Promise<Qu
   }
 
   // Validate startDateTime, endDateTime, custruct timeInterval
-  if (!(params.startDateTime instanceof Date && !isNaN(params.startDateTime))) {
+  if (!(params.startDateTime instanceof Date && !isNaN(params.startDateTime.getTime()))) {
     throw new Error("startDateTime not valid, should be Date object");
   }
-  if (!(params.endDateTime instanceof Date && !isNaN(params.endDateTime))) {
+  if (!(params.endDateTime instanceof Date && !isNaN(params.endDateTime.getTime()))) {
     throw new Error("endDateTime not valid, should be Date object");
   }
   const timeInterval = `${params.startDateTime.toISOString()}/${params.endDateTime.toISOString()}`;

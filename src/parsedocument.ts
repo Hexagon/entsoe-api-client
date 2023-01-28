@@ -48,7 +48,7 @@ const ParseDocument = (xmlDocument: string): QueryResult => {
   const doc = parse(xmlDocument);
 
   const rootNode: UnsafeQueryResult =
-    (doc.Publication_MarketDocument || doc.GL_MarketDocument) as unknown as UnsafeQueryResult;
+    (doc.Publication_MarketDocument || doc.GL_MarketDocument || doc.Unavailability_MarketDocument) as unknown as UnsafeQueryResult;
 
   // Check that root element exists
   if (!rootNode) {
@@ -58,7 +58,6 @@ const ParseDocument = (xmlDocument: string): QueryResult => {
         `Request failed. Code '${invalidRootNode.Reason.code}', Reason '${invalidRootNode.Reason.text}'`,
       );
     } else {
-      console.log(doc);
       throw new Error("Unknown XML document structure received");
     }
   }

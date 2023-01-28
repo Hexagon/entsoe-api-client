@@ -33,6 +33,7 @@ import { DocumentType } from "./src/parameters/documenttype.js";
 import { ParseDocument, QueryResult } from "./src/parsedocument.ts";
 import { ProcessType } from "./src/parameters/processtype.js";
 import { PsrType } from "./src/parameters/psrtype.js";
+import { ZipReader, Uint8ArrayReader, TextWriter } from "./deps.js";
 
 interface QueryParameters {
   documentType: string;
@@ -40,13 +41,15 @@ interface QueryParameters {
   psrType?: string;
   inDomain?: string;
   inBiddingZoneDomain?: string;
+  biddingZoneDomain?: string;
   outDomain?: string;
   outBiddingZoneDomain?: string;
   startDateTime: Date;
   endDateTime: Date;
 }
 
-const Query = async (securityToken: string, params: QueryParameters): Promise<QueryResult> => {
+const ComposeQuery = (securityToken: string, params: QueryParameters) : URLSearchParams => {
+
   const query = new URLSearchParams({
     securityToken,
   });
@@ -100,6 +103,18 @@ const Query = async (securityToken: string, params: QueryParameters): Promise<Qu
     }
   }
 
+  // Validate biddingZoneDomain, add to parameter list
+  if (params.biddingZoneDomain) {
+    const foundInDomain = Object.entries(Areas).find(([_key, value]) =>
+      params.biddingZoneDomain && value.includes(params.biddingZoneDomain)
+    );
+    if (!foundInDomain) {
+      throw new Error("biddingZoneDomain not valid");
+    } else {
+      query.append("BiddingZone_Domain", foundInDomain[0]);
+    }
+  }
+
   // Validate outDomain, add to parameter list
   if (params.outDomain) {
     const foundOutDomain = Object.entries(Areas).find(([_key, value]) =>
@@ -134,6 +149,13 @@ const Query = async (securityToken: string, params: QueryParameters): Promise<Qu
   const timeInterval = `${params.startDateTime.toISOString()}/${params.endDateTime.toISOString()}`;
   query.append("TimeInterval", timeInterval);
 
+  return query;
+};
+
+const Query = async (securityToken: string, params: QueryParameters): Promise<QueryResult> => {
+
+  const query = ComposeQuery(securityToken, params);
+
   // Construct url and get result
   const result = await fetch(`${ENTSOE_ENDPOINT}?${query}`),
     resultText = await result.text();
@@ -149,5 +171,40 @@ const Query = async (securityToken: string, params: QueryParameters): Promise<Qu
   return resultJson;
 };
 
+
+const QueryZipped = async (securityToken: string, params: QueryParameters): Promise<QueryResult[]> => {
+
+  const query = ComposeQuery(securityToken, params);
+  
+  // Construct url and get result
+  const result = await fetch(`${ENTSOE_ENDPOINT}?${query}`),
+    resultAB : ArrayBuffer = await result.arrayBuffer();
+
+  // Placeholder for documents
+  const documents: QueryResult[] = [];
+  
+  // Unzip response, which hopefully is a Uint8Array containing a zip file
+  let zipReader;
+  try {
+      const zipDataReader = new Uint8ArrayReader(new Uint8Array(resultAB))
+      zipReader = new ZipReader(zipDataReader);
+      for(const xmlFileEntry of await zipReader.getEntries()) {
+          // Unzip file
+          const stringDataWriter = new TextWriter();
+          await xmlFileEntry.getData(stringDataWriter);
+          const xmlFileData = await stringDataWriter.getData()
+                        
+          // Parse result
+          const resultJson: QueryResult = await ParseDocument(xmlFileData);
+
+          documents.push(resultJson);
+      }  
+  } finally {
+      await zipReader?.close();
+  }
+
+  return documents;
+};
+
 export type { QueryResult };
-export { Query };
+export { Query, QueryZipped };

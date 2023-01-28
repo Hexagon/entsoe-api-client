@@ -1,4 +1,4 @@
-import { Query } from "https://deno.land/x/entsoe_api_client@0.1.9/mod.ts";
+import { Query } from "https://deno.land/x/entsoe_api_client@0.2.0/mod.ts";
 
 // Prepare dates
 const

@@ -30,3 +30,4 @@ build/Release
 node_modules
 testing.js
 test.js
+deno.lock

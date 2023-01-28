@@ -1,5 +1,5 @@
-import { Query } from "https://deno.land/x/entsoe_api_client@0.1.9/mod.ts";
-import { PsrType } from "https://deno.land/x/entsoe_api_client@0.1.9/src/parameters/psrtype.js";
+import { Query } from "https://deno.land/x/entsoe_api_client@0.2.0/mod.ts";
+import { PsrType } from "https://deno.land/x/entsoe_api_client@0.2.0/src/parameters/psrtype.js";
 
 // Prepare dates
 const

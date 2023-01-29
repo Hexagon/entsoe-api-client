@@ -1,6 +1,6 @@
-import { QueryZipped } from "https://deno.land/x/entsoe_api_client@0.2.1/mod.ts";
-import { PsrType } from "https://deno.land/x/entsoe_api_client@0.2.1/src/parameters/psrtype.js";
-import { BusinessType } from "https://deno.land/x/entsoe_api_client@0.2.1/src/parameters/businesstype.js";
+import { QueryZipped } from "https://deno.land/x/entsoe_api_client@0.2.2/mod.ts";
+import { PsrType } from "https://deno.land/x/entsoe_api_client@0.2.2/src/parameters/psrtype.js";
+import { BusinessType } from "https://deno.land/x/entsoe_api_client@0.2.2/src/parameters/businesstype.js";
 
 // Prepare dates
 const

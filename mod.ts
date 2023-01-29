@@ -44,8 +44,11 @@ interface QueryParameters {
   biddingZoneDomain?: string;
   outDomain?: string;
   outBiddingZoneDomain?: string;
-  startDateTime: Date;
-  endDateTime: Date;
+  startDateTime?: Date;
+  endDateTime?: Date;
+  startDateTimeUpdate?: Date;
+  endDateTimeUpdate?: Date;
+  offset?: number;
 }
 
 const ComposeQuery = (securityToken: string, params: QueryParameters) : URLSearchParams => {
@@ -115,6 +118,17 @@ const ComposeQuery = (securityToken: string, params: QueryParameters) : URLSearc
     }
   }
 
+  // Validate offset, add to parameter list
+  if (params.offset !== void 0) {
+    if (params.offset > 5000) {
+      throw new Error("Offset too large");
+    }
+    if (params.offset < 0) {
+      throw new Error("Offset too small");
+    }
+    query.append("offset", params.offset.toString());
+  }
+
   // Validate outDomain, add to parameter list
   if (params.outDomain) {
     const foundOutDomain = Object.entries(Areas).find(([_key, value]) =>
@@ -139,15 +153,33 @@ const ComposeQuery = (securityToken: string, params: QueryParameters) : URLSearc
     }
   }
 
+  // Validate startDateTimeUpdate, endDateTimeUpdate, custruct timeIntervalUpdate
+  if (params.startDateTimeUpdate) {
+    if (!(params.startDateTimeUpdate instanceof Date && !isNaN(params.startDateTimeUpdate.getTime()))) {
+      throw new Error("startDateTimeUpdate not valid, should be Date object");
+    }
+    if (!(params.endDateTimeUpdate instanceof Date && !isNaN(params.endDateTimeUpdate.getTime()))) {
+      throw new Error("endDateTimeUpdate not valid, should be Date object");
+    }
+    const timeInterval = `${params.startDateTimeUpdate.toISOString()}/${params.endDateTimeUpdate.toISOString()}`;
+    query.append("TimeIntervalUpdate", timeInterval);
+  }
+  
   // Validate startDateTime, endDateTime, custruct timeInterval
-  if (!(params.startDateTime instanceof Date && !isNaN(params.startDateTime.getTime()))) {
-    throw new Error("startDateTime not valid, should be Date object");
+  if (params.startDateTime) {
+    if (!(params.startDateTime instanceof Date && !isNaN(params.startDateTime.getTime()))) {
+      throw new Error("startDateTime not valid, should be Date object");
+    }
+    if (!(params.endDateTime instanceof Date && !isNaN(params.endDateTime.getTime()))) {
+      throw new Error("endDateTime not valid, should be Date object");
+    }
+    const timeInterval = `${params.startDateTime.toISOString()}/${params.endDateTime.toISOString()}`;
+    query.append("TimeInterval", timeInterval);
   }
-  if (!(params.endDateTime instanceof Date && !isNaN(params.endDateTime.getTime()))) {
-    throw new Error("endDateTime not valid, should be Date object");
+
+  if (!params.startDateTime && !params.startDateTimeUpdate) {
+    throw new Error("startDateTime or startDateTimeUpdate must be specified");
   }
-  const timeInterval = `${params.startDateTime.toISOString()}/${params.endDateTime.toISOString()}`;
-  query.append("TimeInterval", timeInterval);
 
   return query;
 };
@@ -177,8 +209,19 @@ const QueryZipped = async (securityToken: string, params: QueryParameters): Prom
   const query = ComposeQuery(securityToken, params);
   
   // Construct url and get result
-  const result = await fetch(`${ENTSOE_ENDPOINT}?${query}`),
-    resultAB : ArrayBuffer = await result.arrayBuffer();
+  const result = await fetch(`${ENTSOE_ENDPOINT}?${query}`);
+
+  // Check for 401
+  if (result.status === 401) {
+    throw new Error("401 Unauthorized. Missing or invalid security token.");
+  }
+
+  // Check for xml - handle separately
+  if (result.headers.get('content-type') === 'application/xml') {
+    // Parse result
+    const resultJson: QueryResult = await ParseDocument(await result.text());
+    return [resultJson];
+  }
 
   // Placeholder for documents
   const documents: QueryResult[] = [];
@@ -186,7 +229,7 @@ const QueryZipped = async (securityToken: string, params: QueryParameters): Prom
   // Unzip response, which hopefully is a Uint8Array containing a zip file
   let zipReader;
   try {
-      const zipDataReader = new Uint8ArrayReader(new Uint8Array(resultAB))
+      const zipDataReader = new Uint8ArrayReader(new Uint8Array(await result.arrayBuffer()))
       zipReader = new ZipReader(zipDataReader);
       for(const xmlFileEntry of await zipReader.getEntries()) {
           // Unzip file
@@ -204,6 +247,7 @@ const QueryZipped = async (securityToken: string, params: QueryParameters): Prom
   }
 
   return documents;
+
 };
 
 export type { QueryResult };

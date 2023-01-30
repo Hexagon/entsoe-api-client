@@ -17,7 +17,7 @@ dateTomorrow.setHours(0,0,0,0);
 const result : QueryResult[] = await Query(
     Deno.env.get("API_TOKEN") as string, // Your entsoe api-token
     {
-        documentType: "A80",        // A80 - Generation unavailability
+        documentType: "A77",        // A77 - Production unavailability OR A80 - Generation unavailability
         biddingZoneDomain: "CTA|SE",  // biddingZone_Domain
         startDateTime: dateToday,   // Start date
         endDateTime: dateTomorrow,  // End date        

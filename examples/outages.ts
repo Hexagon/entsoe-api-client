@@ -1,6 +1,7 @@
-import { QueryZipped } from "https://deno.land/x/entsoe_api_client@0.2.2/mod.ts";
-import { PsrType } from "https://deno.land/x/entsoe_api_client@0.2.2/src/parameters/psrtype.js";
-import { BusinessType } from "https://deno.land/x/entsoe_api_client@0.2.2/src/parameters/businesstype.js";
+import { QueryResult, QueryZipped } from "https://deno.land/x/entsoe_api_client@0.2.3/mod.ts";
+import { PsrType } from "https://deno.land/x/entsoe_api_client@0.2.3/src/parameters/psrtype.js";
+import { BusinessType } from "https://deno.land/x/entsoe_api_client@0.2.3/src/parameters/businesstype.js";
+import { EntsoeQueryPeriod, EntsoeQueryPoint } from "https://deno.land/x/entsoe_api_client@0.2.3/src/parsedocument.ts";
 
 // Prepare dates
 const
@@ -13,8 +14,8 @@ dateTomorrow.setDate(dateToday.getDate()+30);
 dateTomorrow.setHours(0,0,0,0);
 
 // Run ENTSO-e transparency playform query
-const result : ArrayBuffer = await QueryZipped(
-    Deno.env.get("API_TOKEN"), // Your entsoe api-token
+const result : QueryResult[] = await QueryZipped(
+    Deno.env.get("API_TOKEN") as string, // Your entsoe api-token
     {
         documentType: "A80",        // A80 - Generation unavailability
         biddingZoneDomain: "CTA|SE",  // biddingZone_Domain
@@ -42,7 +43,7 @@ for(const outageDoc of result) {
                 endDate = new Date(Date.parse(outage["end_DateAndOrTime.date"] + "T00:00:00Z"));
             }
         }
-        const businessType = outage.businessType ? (BusinessType as Record<string, string>)[outage.businessType] : void 0;
+        const businessType = outage.businessType ? (BusinessType as Record<string,string>)[outage.businessType] : void 0;
         const resourceName = outage["production_RegisteredResource.name"];
         const mRID = outageDoc.mRID;
         const revision = outageDoc.revisionNumber;
@@ -66,8 +67,11 @@ for(const outageDoc of result) {
         console.log("\tNominal power:\t",powerSystemResourceNominalPower,powerSystemResourceNominalPowerUnit);
         console.log("\tReason:\t\t",reasonCode,reasonText);
         console.log("\tAvailable power:");
-        for(const avail of availablePeriodArray) {
-            console.log("\t\t",avail.timeInterval.start,"-",avail.timeInterval.end," ",avail.Point.quantity,powerSystemResourceNominalPowerUnit);
+        for(const avail of (availablePeriodArray as EntsoeQueryPeriod[])) {
+            const points : EntsoeQueryPoint[] = (avail.Point?.length ? avail.Point : [avail.Point]) as EntsoeQueryPoint[];
+            for(const point of points) {
+                console.log("\t\t",avail.timeInterval.start,"-",avail.timeInterval.end," ",point.quantity,powerSystemResourceNominalPowerUnit);
+            }
         }
     }
 }

@@ -7,6 +7,8 @@ ENTSO-e transparency platform API Client built for Deno. Complete. Easy to use. 
 
 *   Works in Deno >=1.16
 *   Supports [TypeScript](https://www.typescriptlang.org/)
+*   Support most aspects of Entso-e transparency platform REST API
+*   Unzips and parses zip-file endpoints (e.g. outage documents) transparently
 
 ### Examples
 

@@ -184,30 +184,10 @@ const ComposeQuery = (securityToken: string, params: QueryParameters) : URLSearc
   return query;
 };
 
-const Query = async (securityToken: string, params: QueryParameters): Promise<QueryResult> => {
+const Query = async (securityToken: string, params: QueryParameters): Promise<QueryResult[]> => {
 
   const query = ComposeQuery(securityToken, params);
 
-  // Construct url and get result
-  const result = await fetch(`${ENTSOE_ENDPOINT}?${query}`),
-    resultText = await result.text();
-
-  // Check for 401
-  if (result.status === 401) {
-    throw new Error("401 Unauthorized. Missing or invalid security token.");
-  }
-
-  // Parse result
-  const resultJson: QueryResult = await ParseDocument(resultText);
-
-  return resultJson;
-};
-
-
-const QueryZipped = async (securityToken: string, params: QueryParameters): Promise<QueryResult[]> => {
-
-  const query = ComposeQuery(securityToken, params);
-  
   // Construct url and get result
   const result = await fetch(`${ENTSOE_ENDPOINT}?${query}`);
 
@@ -216,39 +196,43 @@ const QueryZipped = async (securityToken: string, params: QueryParameters): Prom
     throw new Error("401 Unauthorized. Missing or invalid security token.");
   }
 
-  // Check for xml - handle separately
-  if (result.headers.get('content-type') === 'application/xml') {
-    // Parse result
-    const resultJson: QueryResult = await ParseDocument(await result.text());
-    return [resultJson];
-  }
-
   // Placeholder for documents
   const documents: QueryResult[] = [];
-  
-  // Unzip response, which hopefully is a Uint8Array containing a zip file
-  let zipReader;
-  try {
-      const zipDataReader = new Uint8ArrayReader(new Uint8Array(await result.arrayBuffer()))
-      zipReader = new ZipReader(zipDataReader);
-      for(const xmlFileEntry of await zipReader.getEntries()) {
-          // Unzip file
-          const stringDataWriter = new TextWriter();
-          await xmlFileEntry.getData(stringDataWriter);
-          const xmlFileData = await stringDataWriter.getData()
-                        
-          // Parse result
-          const resultJson: QueryResult = await ParseDocument(xmlFileData);
 
-          documents.push(resultJson);
-      }  
-  } finally {
-      await zipReader?.close();
+  // Check for xml response - parse document and return instantly
+  if (result.headers.get('content-type')?.includes('xml')) {
+    // Parse result
+    documents.push(await ParseDocument(await result.text()))
+  
+  // Check for zip response - unzip and extract documents
+  } else if (result.headers.get('content-type') === 'application/zip') {
+
+    // Unzip response, which hopefully is a Uint8Array containing a zip file
+    let zipReader;
+    try {
+        const zipDataReader = new Uint8ArrayReader(new Uint8Array(await result.arrayBuffer()))
+        zipReader = new ZipReader(zipDataReader);
+        for(const xmlFileEntry of await zipReader.getEntries()) {
+            // Unzip file
+            const stringDataWriter = new TextWriter();
+            await xmlFileEntry.getData(stringDataWriter);
+            const xmlFileData = await stringDataWriter.getData()
+                          
+            // Parse result
+            const resultJson: QueryResult = await ParseDocument(xmlFileData);
+
+            documents.push(resultJson);
+        }  
+    } finally {
+        await zipReader?.close();
+    }
+
   }
 
   return documents;
+  
 
 };
 
 export type { QueryResult };
-export { Query, QueryZipped };
+export { Query };

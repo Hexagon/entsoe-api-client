@@ -22,7 +22,7 @@ const result = await Query(
 );
 
 // Get first TimeSeries
-const ts = result.TimeSeries[0];
+const ts = result[0].TimeSeries[0];
 
 // Print meta data
 console.table({

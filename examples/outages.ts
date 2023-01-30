@@ -1,4 +1,4 @@
-import { QueryResult, QueryZipped } from "https://deno.land/x/entsoe_api_client@0.2.3/mod.ts";
+import { QueryResult, Query } from "https://deno.land/x/entsoe_api_client@0.2.3/mod.ts";
 import { PsrType } from "https://deno.land/x/entsoe_api_client@0.2.3/src/parameters/psrtype.js";
 import { BusinessType } from "https://deno.land/x/entsoe_api_client@0.2.3/src/parameters/businesstype.js";
 import { EntsoeQueryPeriod, EntsoeQueryPoint } from "https://deno.land/x/entsoe_api_client@0.2.3/src/parsedocument.ts";
@@ -14,7 +14,7 @@ dateTomorrow.setDate(dateToday.getDate()+30);
 dateTomorrow.setHours(0,0,0,0);
 
 // Run ENTSO-e transparency playform query
-const result : QueryResult[] = await QueryZipped(
+const result : QueryResult[] = await Query(
     Deno.env.get("API_TOKEN") as string, // Your entsoe api-token
     {
         documentType: "A80",        // A80 - Generation unavailability

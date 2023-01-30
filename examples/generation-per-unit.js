@@ -34,7 +34,7 @@ const output = {
     }]
 };
 
-for (const ts of result.TimeSeries) {
+if(result.length) for (const ts of result[0].TimeSeries) {
     // We expect hourly data from BZN|SE2, use PT60M and ignore other periods
     if (ts.Period.resolution==="PT60M") {
         for (const point of ts.Period.Point) {

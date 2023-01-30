@@ -1,4 +1,4 @@
-import { QueryResult, Query } from "https://deno.land/x/entsoe_api_client@0.3.0/mod.ts";
+import { QueryResult, Query } from "../mod.ts";
 import { PsrType } from "https://deno.land/x/entsoe_api_client@0.3.0/src/parameters/psrtype.js";
 import { BusinessType } from "https://deno.land/x/entsoe_api_client@0.3.0/src/parameters/businesstype.js";
 import { EntsoeQueryPeriod, EntsoeQueryPoint } from "https://deno.land/x/entsoe_api_client@0.3.0/src/parsedocument.ts";

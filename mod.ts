@@ -211,7 +211,7 @@ const Query = async (securityToken: string, params: QueryParameters): Promise<Qu
     let zipReader;
     try {
         const zipDataReader = new Uint8ArrayReader(new Uint8Array(await result.arrayBuffer()))
-        zipReader = new ZipReader(zipDataReader);
+        zipReader = new ZipReader(zipDataReader, { useWebWorkers: false });
         for(const xmlFileEntry of await zipReader.getEntries()) {
             // Unzip file
             const stringDataWriter = new TextWriter();

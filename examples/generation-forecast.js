@@ -1,4 +1,4 @@
-import { Query } from "https://deno.land/x/entsoe_api_client@0.3.0/mod.ts";
+import { QueryGL } from "https://deno.land/x/entsoe_api_client@0.4.0/mod.ts";
 
 // Prepare dates
 const
@@ -9,7 +9,7 @@ dateTomorrow.setDate(dateTomorrow.getDate()+1);
 dateTomorrow.setHours(0,0,0,0);
 
 // Run ENTSO-e transparency playform query
-const result = await Query(
+const result = await QueryGL(
     Deno.env.get("API_TOKEN"), // Your entsoe api-token
     {
         documentType: "A71",        // A71 - Generation forecast
@@ -22,15 +22,14 @@ const result = await Query(
 );
 
 // Get first TimeSeries
-const ts = result[0].TimeSeries[0];
+const ts = result[0].timeseries[0];
 
 // Print meta data
 console.table({
-    start: ts.Period.timeInterval.start,
-    end: ts.Period.timeInterval.end,
-    currency: ts["currency_Unit.name"],
-    unit: ts["price_Measure_Unit.name"]
+    start: ts.period.startDate.toISOString(),
+    end: ts.period.endDate.toISOString(),
+    unit: ts.quantityMeasureUnit,
 });
 
 // Print spot prices per hour
-console.table(ts.Period.Point);
+console.table(ts.period.points);

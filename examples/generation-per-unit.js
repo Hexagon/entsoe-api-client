@@ -1,5 +1,4 @@
-import { Query } from "https://deno.land/x/entsoe_api_client@0.3.0/mod.ts";
-import { PsrType } from "https://deno.land/x/entsoe_api_client@0.3.0/src/parameters/psrtype.js";
+import { QueryGL } from "https://deno.land/x/entsoe_api_client@0.4.0/mod.ts";
 
 // Prepare dates
 const
@@ -12,7 +11,7 @@ dateTomorrow.setDate(dateToday.getDate()+2);
 dateTomorrow.setHours(0,0,0,0);
 
 // Run ENTSO-e transparency playform query
-const result = await Query(
+const result = await QueryGL(
     Deno.env.get("API_TOKEN"), // Your entsoe api-token
     {
         documentType: "A75",        // A75 - Actual generation per type
@@ -34,21 +33,20 @@ const output = {
     }]
 };
 
-if(result.length) for (const ts of result[0].TimeSeries) {
+if(result.length) for (const ts of result[0].timeseries) {
     // We expect hourly data from BZN|SE2, use PT60M and ignore other periods
-    if (ts.Period.resolution==="PT60M") {
-        for (const point of ts.Period.Point) {
-            const psrTypeTranslation = PsrType[ts.MktPSRType.psrType];
+    if (ts.period.resolution==="PT60M") {
+        for (const point of ts.period.points) {
             output.data[0].TOTAL += point.quantity;
-            output.data[0][psrTypeTranslation] = (output.data[0][psrTypeTranslation] ?? 0) + point.quantity;
+            output.data[0][ts.mktPsrTypeDescription] = (output.data[0][ts.mktPsrTypeDescription] ?? 0) + point.quantity;
             if (output.data[point.position]) {
                 output.data[point.position].TOTAL += point.quantity;
-                output.data[point.position][psrTypeTranslation] = point.quantity;
+                output.data[point.position][ts.mktPsrTypeDescription] = point.quantity;
             } else {
                 output.data[point.position] = {
                     position: point.position,
                     date: new Date(dateToday.getTime() + 3600 * 1000 * (point.position-1)),
-                    [psrTypeTranslation]: point.quantity,
+                    [ts.mktPsrTypeDescription]: point.quantity,
                     TOTAL: point.quantity
                 }
             }

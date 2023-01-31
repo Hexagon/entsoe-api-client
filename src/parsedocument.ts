@@ -2,6 +2,7 @@ import { parse } from "https://deno.land/x/xml@2.0.4/mod.ts";
 import { PsrType } from "./parameters/psrtype.js";
 import { BusinessType } from "./parameters/businesstype.js";
 import { ProcessType } from "./parameters/processtype.js";
+import { DocumentType } from "./parameters/documenttype.js";
 
 // --- Root Source Document
 interface SourceDocument {
@@ -56,9 +57,8 @@ interface SourceAcknowledmentDocument extends SourceBaseDocument {
 // --- Publication Document
 interface SourcePublicationEntry {
   Period: SourcePeriod;
-  "outBiddingZone_Domain.mRID"?: string;
-  "inBiddingZone_Domain.mRID"?: string;
-  MktPSRType?: SourcePsrType;
+  "price_Measure_Unit.name"?: string,
+  "currency_Unit.name"?: string,
 }
 
 interface SourcePublicationDocument extends SourceBaseDocument {
@@ -67,6 +67,11 @@ interface SourcePublicationDocument extends SourceBaseDocument {
 
 // --- GL Document
 interface SourceGLEntry {
+  "outBiddingZone_Domain.mRID"?: string;
+  "inBiddingZone_Domain.mRID"?: string;
+  "quantity_Measure_Unit.name"?: string;
+  MktPSRType?: SourcePsrType;
+  Period: SourcePeriod;
 }
 interface SourceGLDocument extends SourceBaseDocument {
   TimeSeries: SourceGLEntry[] | SourceGLEntry;
@@ -109,9 +114,10 @@ interface Period {
 interface BaseDocument {
   mRID: string;
   revision: number;
+  rootType?: string;
   created?: Date;
   documentType: string;
-  documentTypeDescription: string;
+  documentTypeDescription?: string;
   processType?: string;
   processTypeDescription?: string;
   businessType?: string;
@@ -119,17 +125,21 @@ interface BaseDocument {
 }
 
 interface PublicationDocumentEntry {
-  outBiddingZone?: string;
-  inBiddingZone?: string;
-  mktPsrType?: string;
-  period: Period[];
+  currency?: string,
+  unit?: string,
+  period: Period;
 }
 interface PublicationDocument extends BaseDocument {
   timeseries: PublicationDocumentEntry[];
 }
-
+interface GLDocumentEntry {
+  mktPsrType?: string;
+  mktPsrTypeDescription?: string;
+  quantityMeasureUnit?: string;
+  period: Period;
+}
 interface GLDocument extends BaseDocument {
-  
+  timeseries: GLDocumentEntry[];
 }
 
 interface UnavailabilityDocument extends BaseDocument {
@@ -155,11 +165,11 @@ const ParseBaseDocument = (d: SourceBaseDocument) : BaseDocument => {
     revision: d.revisionNumber,
     created: d.createdDateTime ? new Date(Date.parse(d.createdDateTime)) : void 0,
     documentType: d.type,
-    documentTypeDescription: d.type ? DocumentType[d.type] : void 0,
+    documentTypeDescription: d.type ? (DocumentType as Record<string,string>)[d.type] : void 0,
     processType: d["process.processType"],
-    processTypeDescription: d["process.processType"] ? ProcessType[d["process.processType"]] : void 0,
+    processTypeDescription: d["process.processType"] ? (ProcessType as Record<string,string>)[d["process.processType"]] : void 0,
     businessType: d.businessType,
-    businessTypeDescription: d.businessType ? BusinessType[d.businessType] : void 0
+    businessTypeDescription: d.businessType ? (BusinessType as Record<string,string>)[d.businessType] : void 0
   }
   return document;
 };
@@ -174,6 +184,7 @@ const ParsePublication = (d: SourcePublicationDocument) : PublicationDocument =>
   const tsArray = Array.isArray(d.TimeSeries) ? d.TimeSeries : [d.TimeSeries];
   
   const document : PublicationDocument = Object.assign(ParseBaseDocument(d), {
+    rootType: "publication",
     timeseries: []
   });
 
@@ -185,18 +196,19 @@ const ParsePublication = (d: SourcePublicationDocument) : PublicationDocument =>
       points: []
     }
     const tsEntry = {
-      outBiddingZone: ts["outBiddingZone_Domain.mRID"],
-      inBiddingZone: ts["inBiddingZone_Domain.mRID"],
-      mktPsrType: ts.MktPSRType?.psrType,
+      currency: ts["currency_Unit.name"],
+      unit: ts["price_Measure_Unit.name"],
       period: tsPeriod
     };
     const points : SourcePoint[] = Array.isArray(ts.Period.Point) ? ts.Period.Point : [ts.Period.Point];
-    for(const p of ts.Period.Point) {
+    for(const p of points) {
       tsEntry.period.points.push({
         position: p.position,
         price: p["price.amount"]
       })
     }
+
+    document.timeseries.push(tsEntry);
 
   }
 
@@ -212,6 +224,7 @@ const ParseGL = (d: SourceGLDocument) : GLDocument => {
   const tsArray = Array.isArray(d.TimeSeries) ? d.TimeSeries : [d.TimeSeries];
   
   const document : GLDocument = Object.assign(ParseBaseDocument(d), {
+    rootType: "gl",
     timeseries: []
   });
 
@@ -226,15 +239,19 @@ const ParseGL = (d: SourceGLDocument) : GLDocument => {
       outBiddingZone: ts["outBiddingZone_Domain.mRID"],
       inBiddingZone: ts["inBiddingZone_Domain.mRID"],
       mktPsrType: ts.MktPSRType?.psrType,
+      mktPsrTypeDescription: ts.MktPSRType?.psrType ? (PsrType as Record<string,string>)[ts.MktPSRType?.psrType] : void 0,
+      quantityMeasureUnit: ts["quantity_Measure_Unit.name"],
       period: tsPeriod
     };
     const points : SourcePoint[] = Array.isArray(ts.Period.Point) ? ts.Period.Point : [ts.Period.Point];
-    for(const p of ts.Period.Point) {
+    for(const p of points) {
       tsEntry.period.points.push({
         position: p.position,
-        price: p["price.amount"]
+        quantity: p.quantity
       })
     }
+
+    document.timeseries.push(tsEntry);
   }
 
   return document;
@@ -269,8 +286,9 @@ const ParseUnavailability = (d: SourceUnavailabilityDocument) : UnavailabilityDo
   }
 
   const document : UnavailabilityDocument = Object.assign(ParseBaseDocument(d),{
-    startDate,
-    endDate,
+    startDate: startDate as Date,
+    endDate: endDate as Date,
+    rootType: "unavailability",
     resourceName: outage["production_RegisteredResource.name"],
     resourceLocation: outage["production_RegisteredResource.location.name"],
     psrName: outage["production_RegisteredResource.pSRType.powerSystemResources.name"],
@@ -307,10 +325,10 @@ const ParseUnavailability = (d: SourceUnavailabilityDocument) : UnavailabilityDo
   return document;
 };
 
-const ParseDocument = (xmlDocument: string): PublicationDocument | GLDocument | UnavailabilityDocument | undefined  => {
+const ParseDocument = (xmlDocument: string): PublicationDocument | GLDocument | UnavailabilityDocument  => {
 
   // Parse XML
-  const doc : SourceDocument = parse(xmlDocument);
+  const doc = parse(xmlDocument) as SourceDocument;
 
   // Check document type
   if (doc.Publication_MarketDocument) {
@@ -318,7 +336,6 @@ const ParseDocument = (xmlDocument: string): PublicationDocument | GLDocument | 
 
   } else if (doc.GL_MarketDocument) {
     return ParseGL(doc.GL_MarketDocument);
-    return undefined;
     
   } else if (doc.Unavailability_MarketDocument) {
     return ParseUnavailability(doc.Unavailability_MarketDocument);
@@ -334,4 +351,5 @@ const ParseDocument = (xmlDocument: string): PublicationDocument | GLDocument | 
 
 };
 
+export type { PublicationDocument, UnavailabilityDocument, GLDocument }
 export { ParseDocument };

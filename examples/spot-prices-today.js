@@ -1,4 +1,4 @@
-import { Query } from "https://deno.land/x/entsoe_api_client@0.3.0/mod.ts";
+import { QueryPublication } from "https://deno.land/x/entsoe_api_client@0.4.0/mod.ts";
 
 // Prepare dates
 const
@@ -9,7 +9,7 @@ dateTomorrow.setDate(dateTomorrow.getDate()+1);
 dateTomorrow.setHours(0,0,0,0);
 
 // Run ENTSO-e transparency playform query
-const result = await Query(
+const result = await QueryPublication(
      Deno.env.get("API_TOKEN"), // Your entsoe api-token
      {
         documentType: "A44",              // A44 - Price document
@@ -19,19 +19,19 @@ const result = await Query(
         startDateTime: dateToday,         // Start date
         endDateTime: dateTomorrow         // End date
     }
-);
+); 
 
 // Get first TimeSeries
-const ts = result[0].TimeSeries[0];
+const ts = result[0].timeseries[0];
 
 // Print meta data
 console.table({
-    start: ts.Period.timeInterval.start,
-    end: ts.Period.timeInterval.end,
-    resoluton: ts.Period.resolution,
-    currency: ts["currency_Unit.name"],
-    unit: ts["price_Measure_Unit.name"],
+    start: ts.period.startDate.toISOString(),
+    end: ts.period.endDate.toISOString(),
+    resoluton: ts.period.resolution,
+    currency: ts.currency,
+    unit: ts.unit,
 });
 
 // Print spot prices per hour
-console.table(ts.Period.Point);
+console.table(ts.period.points);

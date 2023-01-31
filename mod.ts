@@ -30,7 +30,7 @@ const ENTSOE_ENDPOINT = "https://web-api.tp.entsoe.eu/api";
 
 import { Areas } from "./src/parameters/areas.js";
 import { DocumentType } from "./src/parameters/documenttype.js";
-import { ParseDocument, QueryResult } from "./src/parsedocument.ts";
+import { GLDocument, ParseDocument, PublicationDocument, UnavailabilityDocument } from "./src/parsedocument.ts";
 import { ProcessType } from "./src/parameters/processtype.js";
 import { PsrType } from "./src/parameters/psrtype.js";
 import { ZipReader, Uint8ArrayReader, TextWriter } from "./deps.js";
@@ -184,7 +184,7 @@ const ComposeQuery = (securityToken: string, params: QueryParameters) : URLSearc
   return query;
 };
 
-const Query = async (securityToken: string, params: QueryParameters): Promise<QueryResult[]> => {
+const Query = async (securityToken: string, params: QueryParameters): Promise<(PublicationDocument|GLDocument|UnavailabilityDocument)[]> => {
 
   const query = ComposeQuery(securityToken, params);
 
@@ -197,7 +197,7 @@ const Query = async (securityToken: string, params: QueryParameters): Promise<Qu
   }
 
   // Placeholder for documents
-  const documents: QueryResult[] = [];
+  const documents = [];
 
   // Check for xml response - parse document and return instantly
   if (result.headers.get('content-type')?.includes('xml')) {
@@ -219,9 +219,9 @@ const Query = async (securityToken: string, params: QueryParameters): Promise<Qu
             const xmlFileData = await stringDataWriter.getData()
                           
             // Parse result
-            const resultJson: QueryResult = await ParseDocument(xmlFileData);
+            const result = await ParseDocument(xmlFileData);
 
-            documents.push(resultJson);
+            if (result) documents.push(result);
         }  
     } finally {
         await zipReader?.close();
@@ -230,9 +230,26 @@ const Query = async (securityToken: string, params: QueryParameters): Promise<Qu
   }
 
   return documents;
-  
 
 };
 
-export type { QueryResult };
-export { Query };
+const QueryPublication = async (securityToken: string, params: QueryParameters): Promise<PublicationDocument[]> => {
+  const result = await Query(securityToken, params);
+  if (result && Array.isArray(result) && result.length && result[0].rootType === "publication") return result as PublicationDocument[];
+  if (result && Array.isArray(result) && result.length && result[0].rootType !== "publication") throw new Error("Got " + result[0].rootType + " when expecting publication document")
+  return [];
+};
+const QueryGL = async (securityToken: string, params: QueryParameters): Promise<GLDocument[]> => {
+  const result = await Query(securityToken, params);
+  if (result && Array.isArray(result) && result.length && result[0].rootType === "gl") return result as GLDocument[];
+  if (result && Array.isArray(result) && result.length && result[0].rootType !== "gl") throw new Error("Got " + result[0].rootType + " when expecting gl document")
+  return [];
+};
+const QueryUnavailability = async (securityToken: string, params: QueryParameters): Promise<UnavailabilityDocument[]> => {
+  const result = await Query(securityToken, params);
+  if (result && Array.isArray(result) && result.length && result[0].rootType === "unavailability") return result as UnavailabilityDocument[];
+  if (result && Array.isArray(result) && result.length && result[0].rootType !== "unavailability") throw new Error("Got " + result[0].rootType + " when expecting unavailability document")
+  return [];
+};
+
+export { Query, QueryPublication, QueryGL, QueryUnavailability };

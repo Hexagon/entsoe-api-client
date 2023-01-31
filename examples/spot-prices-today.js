@@ -12,7 +12,7 @@ dateTomorrow.setHours(0,0,0,0);
 const result = await Query(
      Deno.env.get("API_TOKEN"), // Your entsoe api-token
      {
-        documentType: "A44",              // A44 - Price docuement
+        documentType: "A44",              // A44 - Price document
         processType: "A01",               // A01 - Day ahead
         inDomain: "SE2",            // In_Domain: For A44 - Electricity price area
         outDomain: "SE2",           // Out_Domain: For A44 - Electricity price area

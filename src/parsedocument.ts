@@ -67,8 +67,8 @@ interface SourcePublicationDocument extends SourceBaseDocument {
 
 // --- GL Document
 interface SourceGLEntry {
-  "outBiddingZone_Domain.mRID"?: string;
-  "inBiddingZone_Domain.mRID"?: string;
+  "outBiddingZone_Domain.mRID"?: unknown;
+  "inBiddingZone_Domain.mRID"?: unknown;
   "quantity_Measure_Unit.name"?: string;
   MktPSRType?: SourcePsrType;
   Period: SourcePeriod;
@@ -135,6 +135,8 @@ interface PublicationDocument extends BaseDocument {
 interface GLDocumentEntry {
   mktPsrType?: string;
   mktPsrTypeDescription?: string;
+  outBiddingZone?: unknown;
+  inBiddingZone?: unknown;
   quantityMeasureUnit?: string;
   period: Period;
 }

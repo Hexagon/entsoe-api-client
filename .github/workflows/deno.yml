@@ -32,3 +32,4 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           lcov-file: ./cov.lcov
+          hide-table: false

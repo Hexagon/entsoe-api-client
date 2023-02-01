@@ -15,7 +15,7 @@
     "tasks": {
         "test": "deno test --allow-read",
         "coverage": "deno test --allow-read --coverage=coverage && deno coverage coverage",
-        "coverage:ci": "deno test --allow-read --coverage=coverage && deno coverage cov_profile --lcov --output=cov.lcov",
+        "coverage:ci": "deno test --allow-read --coverage=coverage && deno coverage coverage --lcov --output=cov.lcov",
         "precommit": "deno fmt && deno lint && deno task test"
     }
 }

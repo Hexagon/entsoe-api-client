@@ -28,8 +28,6 @@ jobs:
       - name: Test and generate coverage
         run: deno task coverage:ci
       - name: Report Coverage
-        uses: manarbenkraouda/lcov-reporter-action@v0.3.5.3
+        uses: romeovs/lcov-reporter-action@v0.2.16
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           lcov-file: ./cov.lcov
-          hide-table: false

@@ -226,11 +226,8 @@ const Query = async (securityToken: string, params: QueryParameters): Promise<(P
     } finally {
         await zipReader?.close();
     }
-
   }
-
   return documents;
-
 };
 
 const QueryPublication = async (securityToken: string, params: QueryParameters): Promise<PublicationDocument[]> => {

@@ -12,7 +12,7 @@ dateTomorrow.setHours(0,0,0,0);
 
 // Run ENTSO-e transparency playform query
 const result = await QueryGL(
-    Deno.env.get("API_TOKEN"), // Your entsoe api-token
+    Deno.env.get("API_TOKEN") || "", // Your entsoe api-token
     {
         documentType: "A75",        // A75 - Actual generation per type
         processType: "A16",         // A16 - Realised
@@ -25,7 +25,7 @@ const result = await QueryGL(
 
 
 // Compose a nice result set
-const output = {
+const output : Record<string,Record<string,number|Date|unknown[]>[]> = {
     data: [{
         position: 0,
         date: new Date(dateToday),
@@ -34,20 +34,25 @@ const output = {
 };
 
 if(result.length) for (const ts of result[0].timeseries) {
-    // We expect hourly data from BZN|SE2, use PT60M and ignore other periods
-    if (ts.period.resolution==="PT60M") {
-        for (const point of ts.period.points) {
-            output.data[0].TOTAL += point.quantity;
-            output.data[0][ts.mktPsrTypeDescription] = (output.data[0][ts.mktPsrTypeDescription] ?? 0) + point.quantity;
-            if (output.data[point.position]) {
-                output.data[point.position].TOTAL += point.quantity;
-                output.data[point.position][ts.mktPsrTypeDescription] = point.quantity;
-            } else {
-                output.data[point.position] = {
-                    position: point.position,
-                    date: new Date(dateToday.getTime() + 3600 * 1000 * (point.position-1)),
-                    [ts.mktPsrTypeDescription]: point.quantity,
-                    TOTAL: point.quantity
+    for(const period of ts.periods) {
+        // We expect hourly data from BZN|SE2, use PT60M and ignore other periods
+        if (period.resolution==="PT60M") {
+            for (const point of period.points) {
+                const 
+                    quantity = point.quantity || 0,
+                    psr : string = ts.mktPsrTypeDescription || "unknown";
+                output.data[0].TOTAL = output.data[0].TOTAL as number + quantity;
+                output.data[0][psr] = (output.data[0][psr] ?? 0) as number + quantity;
+                if (output.data[point.position]) {
+                    output.data[point.position].TOTAL = output.data[point.position].TOTAL as number + quantity;
+                    output.data[point.position][psr] = quantity;
+                } else {
+                    output.data[point.position] = {
+                        position: point.position,
+                        date: point.startDate,
+                        [psr]: quantity,
+                        TOTAL: quantity
+                    }
                 }
             }
         }

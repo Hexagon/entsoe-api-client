@@ -31,3 +31,7 @@ node_modules
 testing.js
 test.js
 deno.lock
+
+# Coverage
+coverage
+cov.lcov

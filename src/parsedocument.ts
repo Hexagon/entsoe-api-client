@@ -1,8 +1,9 @@
-import { parse } from "https://deno.land/x/xml@2.0.4/mod.ts";
+import { parse } from "../deps.js";
 import { PsrType } from "./parameters/psrtype.js";
 import { BusinessType } from "./parameters/businesstype.js";
 import { ProcessType } from "./parameters/processtype.js";
 import { DocumentType } from "./parameters/documenttype.js";
+import { ISO8601DurToSec } from "./duration.ts";
 
 // --- Root Source Document
 interface SourceDocument {
@@ -46,7 +47,6 @@ interface SourceBaseDocument {
   createdDateTime?: string;
   type: string;
   "process.processType"?: string;
-  businessType?: string;
 }
 
 // --- Acknowledment Document
@@ -56,7 +56,8 @@ interface SourceAcknowledmentDocument extends SourceBaseDocument {
 
 // --- Publication Document
 interface SourcePublicationEntry {
-  Period: SourcePeriod;
+  Period: SourcePeriod | SourcePeriod[];
+  businessType?: string;
   "price_Measure_Unit.name"?: string,
   "currency_Unit.name"?: string,
 }
@@ -70,8 +71,9 @@ interface SourceGLEntry {
   "outBiddingZone_Domain.mRID"?: unknown;
   "inBiddingZone_Domain.mRID"?: unknown;
   "quantity_Measure_Unit.name"?: string;
+  businessType?: string;
   MktPSRType?: SourcePsrType;
-  Period: SourcePeriod;
+  Period: SourcePeriod | SourcePeriod[];
 }
 interface SourceGLDocument extends SourceBaseDocument {
   TimeSeries: SourceGLEntry[] | SourceGLEntry;
@@ -79,6 +81,7 @@ interface SourceGLDocument extends SourceBaseDocument {
 
 // --- UnavailabilityDocument
 interface SourceUnavailabilityEntry extends SourceBaseDocument {
+  businessType?: string;
   "start_DateAndOrTime.date"?: string;
   "start_DateAndOrTime.time"?: string;
   "end_DateAndOrTime.date"?: string;
@@ -99,6 +102,8 @@ interface SourceUnavailabilityDocument extends SourceBaseDocument {
 
 /* --- Generics */
 interface Point {
+  startDate: Date;
+  endDate: Date;
   position: number;
   price?: number;
   quantity?: number;
@@ -109,6 +114,7 @@ interface Period {
   endDate: Date,
   points: Point[];
   resolution: string;
+  resolutionSeconds?: number;
 }
 
 interface BaseDocument {
@@ -124,30 +130,33 @@ interface BaseDocument {
   businessTypeDescription?: string;
 }
 
-interface PublicationDocumentEntry {
+interface BaseEntry {
+  businessType?: string,
+  businessTypeDescription?: string,
+  periods: Period[];
+}
+
+interface PublicationDocumentEntry extends BaseEntry {
   currency?: string,
   unit?: string,
-  period: Period;
 }
 interface PublicationDocument extends BaseDocument {
   timeseries: PublicationDocumentEntry[];
 }
-interface GLDocumentEntry {
+interface GLDocumentEntry extends BaseEntry {
   mktPsrType?: string;
   mktPsrTypeDescription?: string;
   outBiddingZone?: unknown;
   inBiddingZone?: unknown;
   quantityMeasureUnit?: string;
-  period: Period;
 }
 interface GLDocument extends BaseDocument {
   timeseries: GLDocumentEntry[];
 }
 
-interface UnavailabilityDocument extends BaseDocument {
+interface UnavailabilityEntry extends BaseEntry {
   startDate: Date,
   endDate: Date,
-  businessType?: string;
   resourceName?: string;
   resourceLocation?: string;
   psrName?: string;
@@ -156,10 +165,58 @@ interface UnavailabilityDocument extends BaseDocument {
   psrNominalPowerUnit?: string;
   reasonCode?: string;
   reasonText?: string;
-  available: Period[];
+}
+interface UnavailabilityDocument extends BaseDocument {
+  timeseries: UnavailabilityEntry[];
 }
 
 /* NEW PARSING FUNCTIONS */
+const ParsePeriod = (period: SourcePeriod) : Period => {
+
+    // Extract start and end of whole period, then determine number of seconds of each interval
+    const 
+      baseDate = Date.parse(period.timeInterval.start),
+      baseEndDate = Date.parse(period.timeInterval.end),
+      periodLengthS = ISO8601DurToSec(period.resolution),
+      periodLengthSSafe = periodLengthS || 1;
+
+    // Prepare period object
+    const outputPeriod : Period = {
+      startDate: new Date(baseDate),
+      endDate: new Date(baseEndDate),
+      points: [],
+      resolution: period.resolution,
+      resolutionSeconds: periodLengthSSafe
+    };
+    
+    const points : SourcePoint[] = Array.isArray(period.Point) ? period.Point : [period.Point];
+
+    for (let i = 0; i < points.length; i++) {
+      // Determine current position, and next position (if there is one)
+      const 
+        currentPos = points[i].position - 1,
+        nextPos = points[i+1] ? points[i+1].position - 1 : undefined;
+
+      // Add point to output, if there is no next position, use base end date for period as point end date
+      const outputPoint : Point = {
+        startDate: new Date(baseDate + (currentPos) * periodLengthSSafe * 1000),
+        endDate: nextPos ? new Date(baseDate + nextPos * periodLengthSSafe * 1000) : new Date(baseEndDate),
+        position: points[i].position
+      }
+
+      // Add quanitity or price, or both?
+      if (points[i]["price.amount"]) {
+        outputPoint.price = points[i]["price.amount"];
+      }
+      if (points[i].quantity) {
+        outputPoint.quantity = points[i].quantity;
+      }
+      outputPeriod.points.push(outputPoint);
+    }
+    
+    return outputPeriod;
+
+};
 
 const ParseBaseDocument = (d: SourceBaseDocument) : BaseDocument => {
   const document : BaseDocument = {
@@ -170,8 +227,6 @@ const ParseBaseDocument = (d: SourceBaseDocument) : BaseDocument => {
     documentTypeDescription: d.type ? (DocumentType as Record<string,string>)[d.type] : void 0,
     processType: d["process.processType"],
     processTypeDescription: d["process.processType"] ? (ProcessType as Record<string,string>)[d["process.processType"]] : void 0,
-    businessType: d.businessType,
-    businessTypeDescription: d.businessType ? (BusinessType as Record<string,string>)[d.businessType] : void 0
   }
   return document;
 };
@@ -180,7 +235,7 @@ const ParsePublication = (d: SourcePublicationDocument) : PublicationDocument =>
     
   // Check that TimeSeries is ok
   if (!d.TimeSeries) {
-    throw new Error("Unavalibility document invalid, missing TimeSeries");
+    throw new Error("Publication document invalid, missing TimeSeries");
   }
 
   const tsArray = Array.isArray(d.TimeSeries) ? d.TimeSeries : [d.TimeSeries];
@@ -191,27 +246,18 @@ const ParsePublication = (d: SourcePublicationDocument) : PublicationDocument =>
   });
 
   for(const ts of tsArray) {
-    const tsPeriod : Period = {
-      startDate: new Date(Date.parse(ts.Period.timeInterval.start)),
-      endDate: new Date(Date.parse(ts.Period.timeInterval.end)),
-      resolution: ts.Period.resolution,
-      points: []
-    }
-    const tsEntry = {
+    const tsEntry : PublicationDocumentEntry = {
       currency: ts["currency_Unit.name"],
       unit: ts["price_Measure_Unit.name"],
-      period: tsPeriod
+      businessType: ts.businessType,
+      businessTypeDescription: ts.businessType ? (BusinessType as Record<string,string>)[ts.businessType] : void 0,
+      periods: []
     };
-    const points : SourcePoint[] = Array.isArray(ts.Period.Point) ? ts.Period.Point : [ts.Period.Point];
-    for(const p of points) {
-      tsEntry.period.points.push({
-        position: p.position,
-        price: p["price.amount"]
-      })
+    const periodArray = Array.isArray(ts.Period) ? ts.Period : (ts.Period ? [ts.Period] : []);
+    for(const inputPeriod of (periodArray as SourcePeriod[])) {
+      tsEntry.periods.push(ParsePeriod(inputPeriod));
     }
-
     document.timeseries.push(tsEntry);
-
   }
 
   return document;
@@ -220,7 +266,7 @@ const ParseGL = (d: SourceGLDocument) : GLDocument => {
    
   // Check that TimeSeries is ok
   if (!d.TimeSeries) {
-    throw new Error("Unavalibility document invalid, missing TimeSeries");
+    throw new Error("GL document invalid, missing TimeSeries");
   }
 
   const tsArray = Array.isArray(d.TimeSeries) ? d.TimeSeries : [d.TimeSeries];
@@ -231,31 +277,22 @@ const ParseGL = (d: SourceGLDocument) : GLDocument => {
   });
 
   for(const ts of tsArray) {
-    const tsPeriod : Period = {
-      startDate: new Date(Date.parse(ts.Period.timeInterval.start)),
-      endDate: new Date(Date.parse(ts.Period.timeInterval.end)),
-      resolution: ts.Period.resolution,
-      points: []
-    }
-    const tsEntry = {
+    const tsEntry : GLDocumentEntry = {
       outBiddingZone: ts["outBiddingZone_Domain.mRID"],
       inBiddingZone: ts["inBiddingZone_Domain.mRID"],
       mktPsrType: ts.MktPSRType?.psrType,
+      businessType: ts.businessType,
+      businessTypeDescription: ts.businessType ? (BusinessType as Record<string,string>)[ts.businessType] : void 0,
       mktPsrTypeDescription: ts.MktPSRType?.psrType ? (PsrType as Record<string,string>)[ts.MktPSRType?.psrType] : void 0,
       quantityMeasureUnit: ts["quantity_Measure_Unit.name"],
-      period: tsPeriod
+      periods: []
     };
-    const points : SourcePoint[] = Array.isArray(ts.Period.Point) ? ts.Period.Point : [ts.Period.Point];
-    for(const p of points) {
-      tsEntry.period.points.push({
-        position: p.position,
-        quantity: p.quantity
-      })
+    const periodArray = Array.isArray(ts.Period) ? ts.Period : (ts.Period ? [ts.Period] : []);
+    for(const inputPeriod of (periodArray as SourcePeriod[])) {
+      tsEntry.periods.push(ParsePeriod(inputPeriod));
     }
-
     document.timeseries.push(tsEntry);
   }
-
   return document;
 };
 const ParseUnavailability = (d: SourceUnavailabilityDocument) : UnavailabilityDocument => {
@@ -264,66 +301,55 @@ const ParseUnavailability = (d: SourceUnavailabilityDocument) : UnavailabilityDo
   if (!d.TimeSeries) {
     throw new Error("Unavalibility document invalid, missing TimeSeries");
   }
-  if (Array.isArray(d.TimeSeries) && d.TimeSeries.length > 1) {
-    throw new Error("Unavalibility document invalid, only one TimeSeries expected");
-  }
 
-  const outage = Array.isArray(d.TimeSeries) ? d.TimeSeries[0] : d.TimeSeries;
+  const tsArray = Array.isArray(d.TimeSeries) ? d.TimeSeries : [d.TimeSeries];
 
-  let startDate;
-  if (outage["start_DateAndOrTime.date"]) {
-      if (outage["start_DateAndOrTime.time"]) {
-          startDate = new Date(Date.parse(outage["start_DateAndOrTime.date"] + "T" + outage["start_DateAndOrTime.time"]));
-      } else {
-          startDate = new Date(Date.parse(outage["start_DateAndOrTime.date"] + "T00:00:00Z"));
-      }
-  }
-  let endDate;
-  if (outage["end_DateAndOrTime.date"]) {
-      if (outage["end_DateAndOrTime.time"]) {
-          endDate = new Date(Date.parse(outage["end_DateAndOrTime.date"] + "T" + outage["start_DateAndOrTime.time"]));
-      } else {
-          endDate = new Date(Date.parse(outage["end_DateAndOrTime.date"] + "T00:00:00Z"));
-      }
-  }
-
-  const document : UnavailabilityDocument = Object.assign(ParseBaseDocument(d),{
-    startDate: startDate as Date,
-    endDate: endDate as Date,
+  const document : UnavailabilityDocument = Object.assign(ParseBaseDocument(d), {
     rootType: "unavailability",
-    resourceName: outage["production_RegisteredResource.name"],
-    resourceLocation: outage["production_RegisteredResource.location.name"],
-    psrName: outage["production_RegisteredResource.pSRType.powerSystemResources.name"],
-    psrNominalPowerUnit: outage["production_RegisteredResource.pSRType.powerSystemResources.nominalP"] ? outage["production_RegisteredResource.pSRType.powerSystemResources.nominalP"]["@unit"] : void 0,
-    psrNominalPower: outage["production_RegisteredResource.pSRType.powerSystemResources.nominalP"] ? outage["production_RegisteredResource.pSRType.powerSystemResources.nominalP"]["#text"] : "0",
-    psrType: outage["production_RegisteredResource.pSRType.psrType"] ? (PsrType as Record<string,string>)[outage["production_RegisteredResource.pSRType.psrType"] as string] : void 0,
-    reasonCode: outage.Reason?.code,
-    reasonText: outage.Reason?.text,
-    available: []
+    timeseries: []
   });
 
-  const availablePeriodArray = Array.isArray(outage.Available_Period) ? outage.Available_Period : (outage.Available_Period ? [outage.Available_Period] : []);
-  for(const avail of (availablePeriodArray as SourcePeriod[])) {
-
-    const availablePeriodEntry: Period = {
-      startDate: new Date(Date.parse(avail.timeInterval.start)),
-      endDate: new Date(Date.parse(avail.timeInterval.end)),
-      points: [],
-      resolution: avail.resolution
-    };
-
-    const points : SourcePoint[] = Array.isArray(avail.Point) ? avail.Point : [avail.Point];
-    for(const point of points) {
-        availablePeriodEntry.points.push({
-          position: point.position,
-          quantity: point.quantity
-        });
+  for(const outage of tsArray) {
+      
+    let startDate;
+    if (outage["start_DateAndOrTime.date"]) {
+        if (outage["start_DateAndOrTime.time"]) {
+            startDate = new Date(Date.parse(outage["start_DateAndOrTime.date"] + "T" + outage["start_DateAndOrTime.time"]));
+        } else {
+            startDate = new Date(Date.parse(outage["start_DateAndOrTime.date"] + "T00:00:00Z"));
+        }
+    }
+    let endDate;
+    if (outage["end_DateAndOrTime.date"]) {
+        if (outage["end_DateAndOrTime.time"]) {
+            endDate = new Date(Date.parse(outage["end_DateAndOrTime.date"] + "T" + outage["start_DateAndOrTime.time"]));
+        } else {
+            endDate = new Date(Date.parse(outage["end_DateAndOrTime.date"] + "T00:00:00Z"));
+        }
     }
 
-    document.available.push(availablePeriodEntry);
-
+    const ts : UnavailabilityEntry = Object.assign(ParseBaseDocument(d),{
+      startDate: startDate as Date,
+      endDate: endDate as Date,
+      rootType: "unavailability",
+      resourceName: outage["production_RegisteredResource.name"],
+      resourceLocation: outage["production_RegisteredResource.location.name"],
+      businessType: outage.businessType,
+      businessTypeDescription: outage.businessType ? (BusinessType as Record<string,string>)[outage.businessType] : void 0,
+      psrName: outage["production_RegisteredResource.pSRType.powerSystemResources.name"],
+      psrNominalPowerUnit: outage["production_RegisteredResource.pSRType.powerSystemResources.nominalP"] ? outage["production_RegisteredResource.pSRType.powerSystemResources.nominalP"]["@unit"] : void 0,
+      psrNominalPower: outage["production_RegisteredResource.pSRType.powerSystemResources.nominalP"] ? outage["production_RegisteredResource.pSRType.powerSystemResources.nominalP"]["#text"] : "0",
+      psrType: outage["production_RegisteredResource.pSRType.psrType"] ? (PsrType as Record<string,string>)[outage["production_RegisteredResource.pSRType.psrType"] as string] : void 0,
+      reasonCode: outage.Reason?.code,
+      reasonText: outage.Reason?.text,
+      periods: []
+    });
+    const availablePeriodArray = Array.isArray(outage.Available_Period) ? outage.Available_Period : (outage.Available_Period ? [outage.Available_Period] : []);
+    for(const avail of (availablePeriodArray as SourcePeriod[])) {
+      ts.periods.push(ParsePeriod(avail));
+    }
+    document.timeseries.push(ts);
   }
-
   return document;
 };
 
@@ -347,6 +373,7 @@ const ParseDocument = (xmlDocument: string): PublicationDocument | GLDocument | 
     throw new Error(
       `Request failed. Code '${invalidRootNode.Reason.code}', Reason '${invalidRootNode.Reason.text}'`,
     );
+
   } else {
     throw new Error("Unknown XML document structure received");
   }

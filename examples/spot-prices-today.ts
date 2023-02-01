@@ -10,7 +10,7 @@ dateTomorrow.setHours(0,0,0,0);
 
 // Run ENTSO-e transparency playform query
 const result = await QueryPublication(
-     Deno.env.get("API_TOKEN"), // Your entsoe api-token
+     Deno.env.get("API_TOKEN") || "", // Your entsoe api-token
      {
         documentType: "A44",              // A44 - Price document
         processType: "A01",               // A01 - Day ahead
@@ -26,12 +26,12 @@ const ts = result[0].timeseries[0];
 
 // Print meta data
 console.table({
-    start: ts.period.startDate.toISOString(),
-    end: ts.period.endDate.toISOString(),
-    resoluton: ts.period.resolution,
+    start: ts.periods[0].startDate.toISOString(),
+    end: ts.periods[0].endDate.toISOString(),
+    resoluton: ts.periods[0].resolution,
     currency: ts.currency,
     unit: ts.unit,
 });
 
 // Print spot prices per hour
-console.table(ts.period.points);
+console.table(ts.periods[0].points);

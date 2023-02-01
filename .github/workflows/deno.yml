@@ -22,8 +22,13 @@ jobs:
         with:
           deno-version: ${{ matrix.deno-version }}
       - name: Test Deno Formatting
-        run: deno fmt --check test/deno
+        run: deno fmt --check
       - name: Test Deno Linting
-        run: deno lint test/deno
-      - name: Test Deno Module
-        run: deno task test
+        run: deno lint
+      - name: Test and generate coverage
+        run: deno task coverage:ci
+      - name: Report Coverage
+        uses: manarbenkraouda/lcov-reporter-action@v0.3.5.3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-file: ./cov.lcov

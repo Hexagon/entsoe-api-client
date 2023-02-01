@@ -6,14 +6,16 @@
     },
     "fmt": {
         "files": {
-            "include": ["test/deno"]
+            "include": ["tests"]
         },
         "options": {
             "lineWidth": 100
         }
     },
     "tasks": {
-        "test": "deno test --allow-none test/deno",
-        "build": "npm run build:docs"
+        "test": "deno test --allow-read",
+        "coverage": "deno test --allow-read --coverage=coverage && deno coverage coverage",
+        "coverage:ci": "deno test --allow-read --coverage=coverage && deno coverage cov_profile --lcov --output=cov.lcov",
+        "precommit": "deno fmt && deno lint && deno task test"
     }
 }

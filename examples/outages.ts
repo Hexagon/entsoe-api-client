@@ -21,6 +21,7 @@ const result = await QueryUnavailability(
         offset: 0
     }
 );
+
 for(const outage of result) {
     console.log("Outage: ");
     console.log(outage);

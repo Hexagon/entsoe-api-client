@@ -1,31 +1,11 @@
 /**
- * entsoe-api-client
+ * Main entrypoint of entsoe_api_client.
  * 
- * @file Main entrypoint of the library, exports all functions and interfaces from this library this is indended for public use. 
- * 
+ * Exports all functions and interfaces that is indended for public use.
+ *
+ * @module entsoe_api_client
  * @author Hexagon <hexagon@GitHub>
  * @license MIT
- * 
- * Full license:
- * 
- * Copyright (c) 2022 Hexagon <hexagon@GitHub>
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- *
  */
 
 const ENTSOE_ENDPOINT = "https://web-api.tp.entsoe.eu/api";

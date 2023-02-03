@@ -8,7 +8,7 @@
  * @license MIT
  **/
 
-import { QueryGL } from "https://deno.land/x/entsoe_api_client@0.5.0/mod.ts";
+import { QueryGL } from "https://deno.land/x/entsoe_api_client@0.5.1/mod.ts";
 
 // Prepare dates
 const

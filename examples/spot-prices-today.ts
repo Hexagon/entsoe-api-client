@@ -7,7 +7,7 @@
  * @license MIT
  **/
 
-import { QueryPublication } from "https://deno.land/x/entsoe_api_client@0.5.0/mod.ts";
+import { QueryPublication } from "https://deno.land/x/entsoe_api_client@0.5.1/mod.ts";
 
 // Prepare dates
 const

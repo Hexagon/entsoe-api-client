@@ -35,7 +35,7 @@ import { DocumentType } from "./src/parameters/documenttype.js";
 import { GLDocument, ParseDocument, PublicationDocument, UnavailabilityDocument } from "./src/parsedocument.ts";
 import { ProcessType } from "./src/parameters/processtype.js";
 import { PsrType } from "./src/parameters/psrtype.js";
-import { ZipReader, Uint8ArrayReader, TextWriter } from "./deps.js";
+import { ZipReader, Uint8ArrayReader, TextWriter } from "./deps.ts";
 
 /**
  * All available parameters
@@ -200,24 +200,20 @@ const ComposeQuery = (securityToken: string, params: QueryParameters) : URLSearc
 };
 
 /**
- * Function to request generic documents to the ENTSO-e Rest API
+ * Function to request generic documents from the ENTSO-e Rest API
  * 
- * - Identies the fetched document, validates key features of each document,
- *   and returns an array of typed documents
+ * Identifies the fetched document, validates key features and returns an array of typed documents
  * 
- * - Will throw if recieving a document other than the supported ones
+ * Will throw if recieving a document other than the ones currently supported,
+ * which is
  *   
- *   Currently supported document types:
- * 
  *   - Publication_MarketDocument
  *   - GL_MarketDocument
  *   - Unavailability_MarketDocument
  * 
- *  - Note: You should normally determine which document type you'll get
- *          and use the properly typed and validated alternative.
- * 
- *          Example: If you expect a Publication document - use `QueryPublication()`
- *          instead of `Query`
+ * Note: You should normally determine which document type you'll get
+ * and use the properly typed alternative. Example: If you expect a 
+ * Publication document - use `QueryPublication()` instead of `Query`
  * 
  * @public
  * 
@@ -273,13 +269,11 @@ const Query = async (securityToken: string, params: QueryParameters): Promise<(P
 };
 
 /**
- * Function to request a Publication_MarketDocument from the ENTSO-e Rest API
+ * Fetch and process Publication_MarketDocument(s)
  * 
- *  - Identies the fetched docuement, validates key features of each document,
- *    and returns an array of typed documents
+ * Identifies the fetched document, validates key features, and returns an array of typed documents.
  * 
- *  - If the query yield a document other than Publication_MarketDocument, an error 
- *    will be thrown.
+ * If the query yield something other than Publication_MarketDocument(s), an error will be thrown.
  * 
  * @public
  * 
@@ -296,13 +290,11 @@ const QueryPublication = async (securityToken: string, params: QueryParameters):
 };
 
 /**
- * Function to request a GL_MarketDocument from the ENTSO-e Rest API
+ * Fetch and process GL_MarketDocument(s)
  * 
- *  - Identies the fetched docuement, validates key features of each document,
- *    and returns an array of typed documents
+ * Identifies the fetched document, validates key features, and returns an array of typed documents.
  * 
- *  - If the query yield a document other than GL_MarketDocument, an error 
- *    will be thrown.
+ * If the query yield something other than GL_MarketDocument(s), an error will be thrown.
  * 
  * @public
  * 
@@ -319,13 +311,11 @@ const QueryGL = async (securityToken: string, params: QueryParameters): Promise<
 };
 
 /**
- * Function to request a Unavailability_MarketDocument from the ENTSO-e Rest API
+ * Fetch and process Unavailability_MarketDocument(s)
  * 
- *  - Identies the fetched docuement, validates key features of each document,
- *    and returns an array of typed documents
+ * Identifies the fetched docuement, validates key features, and returns an array of typed documents
  * 
- *  - If the query yield a document other than Unavailability_MarketDocument, an error 
- *    will be thrown.
+ * If the query yield smething other than Unavailability_MarketDocument(s), an error will be thrown.
  * 
  * @public
  * 
@@ -345,4 +335,4 @@ const QueryUnavailability = async (securityToken: string, params: QueryParameter
 export { Query, QueryPublication, QueryGL, QueryUnavailability };
 
 /** Export all types intended for public use */
-export type { GLDocument, PublicationDocument, UnavailabilityDocument };
+export type { GLDocument, PublicationDocument, UnavailabilityDocument, QueryParameters };

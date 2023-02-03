@@ -7,7 +7,7 @@
  * @license MIT
  **/
 
-import { parse } from "../deps.js";
+import { parse } from "../deps.ts";
 import { PsrType } from "./parameters/psrtype.js";
 import { BusinessType } from "./parameters/businesstype.js";
 import { ProcessType } from "./parameters/processtype.js";

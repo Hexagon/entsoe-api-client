@@ -1,4 +1,14 @@
-import { QueryGL } from "https://deno.land/x/entsoe_api_client@0.4.0/mod.ts";
+/**
+ * entsoe-api-client
+ * 
+ * @file Example on getting forecaster generation within a country
+ *       from ENTSO-e Rest API.
+ * 
+ * @author Hexagon <hexagon@GitHub>
+ * @license MIT
+ **/
+
+import { QueryGL } from "https://deno.land/x/entsoe_api_client@0.5.0/mod.ts";
 
 // Prepare dates
 const

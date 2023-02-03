@@ -11,13 +11,24 @@ ENTSO-e transparency platform API Client built for Deno. Complete. Easy to use. 
 *   Unzips and parses zip-file endpoints (e.g. outage documents) transparently
 *   Includes examples for getting Outages, Spot-prices, actual generation and generation forecast
 
+### Documentation
+
+Full documentation is available at [https://deno.land/x/entsoe_api_client/mod.ts](https://deno.land/x/entsoe_api_client/mod.ts)
+
+> **Note**
+> These are the document types currently supported:
+>
+> - Publication_MarketDocument
+> - GL_MarketDocument
+> - Unavailability_MarketDocument
+>
+> Contributions to handling more document types would be highly appreciated.
+
 ### Examples
 
-See [/examples](/examples) folder for complete examples.
+Examples can be found in the [/examples](/examples) directory.
 
-Pass your entso-e API key by environment variable API_TOKEN when running the examples.
-
-To get todays spot prices:
+Pass your ENTSO-e API key by environment variable API_TOKEN when running the examples.
 
 Powershell
 
@@ -33,7 +44,12 @@ API_TOKEN="your-api-token" deno run -A .\spot-prices-today.ts
 
 ## Contributing
 
-All contributions are welcome. See [Contribution Guide](/CONTRIBUTING.md)
+All contributions are welcome. 
+
+See [Contribution Guide](/CONTRIBUTING.md)
+
+> **Note**
+> Please run `deno task precommit` before each commit, to make sure every file is tested/formatted/linted to standards.
 
 ## License
 

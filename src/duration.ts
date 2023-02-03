@@ -1,3 +1,29 @@
+/**
+ * entsoe-api-client
+ * 
+ * @file Helper for ISO8601 durations
+ * 
+ * @author Hexagon <hexagon@GitHub>
+ * @license MIT
+ **/
+
+/**
+ * Helper function which parses an ISO8601 duration
+ * 
+ * Supports all time parts, negative values and decimals, example: `PT1.5D1H5M1S`
+ * 
+ * Do currently NOT support the date-part of ISO8601 durations at the moment.
+ * Throws when supplied with date-part, example: `P1M1D`
+ * 
+ * Has internal shortcuts for common durations (e.g. PT60M, PT30M etc.), to increase performance.
+ * 
+ * Throws on any type of parsing error.
+ * 
+ * Maninly intended for internal use in this library.
+ * 
+ * @param pt - ISO8601 duration expressed as a string
+ * @returns - number of seconds
+ */
 const ISO8601DurToSec = (pt: string ) => {
 
     // Make sure pt is uppercase and trimmed

@@ -1,4 +1,13 @@
-import { QueryPublication } from "https://deno.land/x/entsoe_api_client@0.4.0/mod.ts";
+/**
+ * entsoe-api-client
+ * 
+ * @file Example on getting spot prices for today and tomorrow from ENTSO-e Rest API
+ * 
+ * @author Hexagon <hexagon@GitHub>
+ * @license MIT
+ **/
+
+import { QueryPublication } from "https://deno.land/x/entsoe_api_client@0.5.0/mod.ts";
 
 // Prepare dates
 const

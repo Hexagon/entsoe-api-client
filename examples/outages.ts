@@ -1,4 +1,13 @@
-import { QueryUnavailability } from "https://deno.land/x/entsoe_api_client@0.4.0/mod.ts";
+/**
+ * entsoe-api-client
+ * 
+ * @file Example on getting active outages +/- 30 days from ENTSO-e Rest API
+ * 
+ * @author Hexagon <hexagon@GitHub>
+ * @license MIT
+ **/
+
+import { QueryUnavailability } from "https://deno.land/x/entsoe_api_client@0.5.0/mod.ts";
 
 // Prepare dates
 const
@@ -25,5 +34,6 @@ const result = await QueryUnavailability(
 for(const outage of result) {
     console.log("Outage: ");
     console.log(outage);
-    console.table(outage?.available);
+    // Print a table for first returned timeseries and period
+    console.table(outage?.timeseries[0].periods[0]);
 }

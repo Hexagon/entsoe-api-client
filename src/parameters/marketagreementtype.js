@@ -1,4 +1,10 @@
 /**
+ * entsoe-api-client
+ * @author Hexagon <hexagon@GitHub>
+ * @license MIT
+ **/
+
+/**
  * Enum for ENTSO-e Contract_MarketAgreement.Type and Type_MarketAgreement.Type with description
  * @readonly
  * @enum {string}

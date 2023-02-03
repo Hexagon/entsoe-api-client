@@ -1,4 +1,10 @@
 /**
+ * entsoe-api-client
+ * @author Hexagon <hexagon@GitHub>
+ * @license MIT
+ **/
+
+/**
  * Enum for ENTSO-e Document Type used for getting description
  * @readonly
  * @enum {string}

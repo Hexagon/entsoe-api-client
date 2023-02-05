@@ -21,6 +21,7 @@ Full documentation is available at [https://deno.land/x/entsoe_api_client/mod.ts
 > - Publication_MarketDocument
 > - GL_MarketDocument
 > - Unavailability_MarketDocument
+> - Configuration_MarketDocument
 >
 > Contributions to handling more document types would be highly appreciated.
 

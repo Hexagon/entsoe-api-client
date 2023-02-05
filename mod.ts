@@ -1,7 +1,7 @@
 /**
  * Main entrypoint of entsoe_api_client.
  * 
- * Exports all functions and interfaces that is indended for public use.
+ * Exports all functions and interfaces that are indended for public use.
  *
  * @module entsoe_api_client
  * @author Hexagon <hexagon@GitHub>
@@ -12,28 +12,61 @@ const ENTSOE_ENDPOINT = "https://web-api.tp.entsoe.eu/api";
 
 import { Areas } from "./src/parameters/areas.js";
 import { DocumentType } from "./src/parameters/documenttype.js";
-import { GLDocument, ParseDocument, PublicationDocument, UnavailabilityDocument } from "./src/parsedocument.ts";
+import { ConfigurationDocument, GLDocument, ParseDocument, PublicationDocument, UnavailabilityDocument } from "./src/parsedocument.ts";
 import { ProcessType } from "./src/parameters/processtype.js";
 import { PsrType } from "./src/parameters/psrtype.js";
 import { ZipReader, Uint8ArrayReader, TextWriter } from "./deps.ts";
+import { BusinessType } from "./src/parameters/businesstype.js";
 
 /**
  * All available parameters
  */
 interface QueryParameters {
+
+  /** DocumentType */
   documentType: string;
+
+  /** ProcessType */
   processType?: string;
+
+  /** BusinessType */
+  businessType?: string;
+  
+  /** PsrType */
   psrType?: string;
+  
+  /** In_Domain */
   inDomain?: string;
+  
+  /** InBiddingZone_Domain */
   inBiddingZoneDomain?: string;
+
+  /** BiddingZone_Domain */
   biddingZoneDomain?: string;
+  
+  /** Out_Domain */
   outDomain?: string;
+
+  /** OutBiddingZone_Domain */
   outBiddingZoneDomain?: string;
+
+  /** Combine with endDateTime to construct a TimeInterval */
   startDateTime?: Date;
+
+  /** Combine with startDateTime to construct a TimeInterval  */
   endDateTime?: Date;
+
+  /** Combine with endDateTimeUpdate to cnstruct a TimeIntervalUpdate */
   startDateTimeUpdate?: Date;
+
+  /** Combine with startDateTimeUpdate to cnstruct a TimeIntervalUpdate */
   endDateTimeUpdate?: Date;
+
+  /** Offset - Enables fetching more than X documents by using "pagination" */
   offset?: number;
+
+  /** Implementation_DateAndOrTime, ISO8601 string */
+  implementationDateAndOrTime?: string;
 }
 
 /**
@@ -65,6 +98,15 @@ const ComposeQuery = (securityToken: string, params: QueryParameters) : URLSearc
       throw new Error("Invalid process type requested");
     } else {
       query.append("ProcessType", params.processType);
+    }
+  }
+
+  // Validate businessType if requested , add to parameter list
+  if (params.businessType !== undefined) {
+    if (!(params.businessType in BusinessType)) {
+      throw new Error("Invalid business type requested");
+    } else {
+      query.append("BusinessType", params.businessType);
     }
   }
 
@@ -172,8 +214,16 @@ const ComposeQuery = (securityToken: string, params: QueryParameters) : URLSearc
     query.append("TimeInterval", timeInterval);
   }
 
-  if (!params.startDateTime && !params.startDateTimeUpdate) {
-    throw new Error("startDateTime or startDateTimeUpdate must be specified");
+  // Validate implementationDateAndOrTime, add to parameters
+  if (params.implementationDateAndOrTime) {
+    if (typeof params.implementationDateAndOrTime !== "string") {
+      throw new Error("implementationDateAndOrTime not valid, should be string in ISO8601 format");
+    }
+    query.append("Implementation_DateAndOrTime", params.implementationDateAndOrTime);
+  }
+
+  if (!params.startDateTime && !params.startDateTimeUpdate && !params.implementationDateAndOrTime) {
+    throw new Error("startDateTime, startDateTimeUpdate or implementationDateAndOrTime must be specified");
   }
 
   return query;
@@ -218,7 +268,9 @@ const Query = async (securityToken: string, params: QueryParameters): Promise<(P
   const documents = [];
 
   // Check for xml response - parse document and return instantly
-  if (result.headers.get('content-type')?.includes('xml')) {
+  // Some endpoints do not respond with a content-type, assume XML om these too
+  if (result.headers.get('content-type')?.includes('xml') || !result.headers.has('content-type')) {
+
     // Parse result
     documents.push(await ParseDocument(await result.text()))
   
@@ -311,8 +363,29 @@ const QueryUnavailability = async (securityToken: string, params: QueryParameter
   return [];
 };
 
+/**
+ * Fetch and process Configuration_MarketDocument(s)
+ * 
+ * Identifies the fetched docuement, validates key features, and returns an array of typed documents
+ * 
+ * If the query yield smething other than Configuration_MarketDocument(s), an error will be thrown.
+ * 
+ * @public
+ * 
+ * @param securityToken - Entsoe API security token/key
+ * @param params - Object with all requested parameters
+ * 
+ * @returns - Array of typed documents 
+ */
+const QueryConfiguration = async (securityToken: string, params: QueryParameters): Promise<ConfigurationDocument[]> => {
+  const result = await Query(securityToken, params);
+  if (result && Array.isArray(result) && result.length && result[0].rootType === "configuration") return result as ConfigurationDocument[];
+  if (result && Array.isArray(result) && result.length && result[0].rootType !== "configuration") throw new Error("Got " + result[0].rootType + " when expecting configuration document")
+  return [];
+};
+
 /** Export all functions intended for public use */
-export { Query, QueryPublication, QueryGL, QueryUnavailability };
+export { Query, QueryPublication, QueryGL, QueryUnavailability, QueryConfiguration };
 
 /** Export all types intended for public use */
-export type { GLDocument, PublicationDocument, UnavailabilityDocument, QueryParameters };
+export type { GLDocument, PublicationDocument, UnavailabilityDocument, ConfigurationDocument, QueryParameters };

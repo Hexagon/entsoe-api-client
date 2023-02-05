@@ -7,7 +7,7 @@
  * @license MIT
  **/
 
-import { QueryUnavailability } from "https://deno.land/x/entsoe_api_client@0.5.1/mod.ts";
+import { QueryUnavailability } from "https://deno.land/x/entsoe_api_client@0.6.0/mod.ts";
 
 // Prepare dates
 const

@@ -25,6 +25,7 @@ interface SourceDocument {
   GL_MarketDocument?: SourceGLDocument;
   Unavailability_MarketDocument?: SourceUnavailabilityDocument;
   Acknowledgement_MarketDocument?: SourceAcknowledmentDocument;
+  Configuration_MarketDocument?: SourceConfigurationDocument;
 }
 
 /** Generic sections of a source document */
@@ -34,10 +35,19 @@ interface SourceReasonDetails {
 }
 interface SourcePsrType {
   psrType: string;
+  "production_PowerSystemResources.highVoltageLimit"?: SourceUnitTextEntry;
+  "nominalIP_PowerSystemResources.nominalP"?: SourceUnitTextEntry;
 }
-interface SourceNominalPowerEntry {
+interface SourceUnitTextEntry {
   "@unit": string;
   "#text": string;
+}
+interface SourceCodingSchemeTextEntry {
+  "@codingScheme": string;
+  "#text": string;
+}
+interface MRIDEntry {
+  mRID: SourceCodingSchemeTextEntry
 }
 interface SourceTimeInterval {
   start: string;
@@ -57,7 +67,7 @@ interface SourcePeriod {
 /** Common base for source documents (below root node) */
 interface SourceBaseDocument {
   mRID: string;
-  revisionNumber: number;
+  revisionNumber?: number;
   createdDateTime?: string;
   type: string;
   "process.processType"?: string;
@@ -107,10 +117,39 @@ interface SourceUnavailabilityEntry extends SourceBaseDocument {
   "production_RegisteredResource.name"?: string;
   "production_RegisteredResource.location.name"?: string;
   "production_RegisteredResource.pSRType.powerSystemResources.name"?: string;
-  "production_RegisteredResource.pSRType.powerSystemResources.nominalP"?: SourceNominalPowerEntry;
+  "production_RegisteredResource.pSRType.powerSystemResources.nominalP"?: SourceUnitTextEntry;
   "production_RegisteredResource.pSRType.psrType"?: string;
   Reason?: SourceReasonDetails;
   Available_Period?: SourcePeriod | SourcePeriod[];
+}
+
+/** Spefifics for source Configuration_MarketDocument, extending SourceBaseDocument */
+interface SourceConfigurationDocument extends SourceBaseDocument {
+  "sender_MarketParticipant.mRID"?: SourceCodingSchemeTextEntry;
+  "sender_MarketParticipant.marketRole.type"?: string;
+  "receiver_MarketParticipant.mRID"?: SourceCodingSchemeTextEntry;
+  "receiver_MarketParticipant.marketRole.type"?: string;
+  TimeSeries: SourceConfigurationEntry[] | SourceConfigurationEntry;
+}
+interface SourceGeneratingUnit {
+  mRID?: SourceCodingSchemeTextEntry,
+  name?: string,
+  nominalP?: SourceUnitTextEntry,
+  "generatingUnit_PSRType.psrType"?: string,
+  "generatingUnit_Location.name"?: string
+}
+interface SourceConfigurationEntry extends SourceBaseDocument {
+  businessType?: string;
+  "implementation_DateAndOrTime.date"?: string;
+  "implementation_DateAndOrTime.time"?: string;
+  "biddingZone_Domain.mRID"?: SourceCodingSchemeTextEntry;
+  "registeredResource.mRID"?: SourceCodingSchemeTextEntry;
+  "ControlArea_Domain"?: MRIDEntry;
+  "Provider_MarketParticipant"?: MRIDEntry;
+  "registeredResource.name"?: string;
+  "registeredResource.location.name"?: string;
+  "MktPSRType"?: SourcePsrType;
+  "GeneratingUnit_PowerSystemResources"?: SourceGeneratingUnit[];
 }
 
 /* ------------------------------------------------------------------------------------
@@ -138,8 +177,8 @@ interface Period {
 
 interface BaseDocument {
   mRID: string;
-  revision: number;
-  rootType?: string;
+  revision?: number;
+  rootType?: "configuration" | "gl" | "unavailability" | "publication";
   created?: Date;
   documentType: string;
   documentTypeDescription?: string;
@@ -152,7 +191,7 @@ interface BaseDocument {
 interface BaseEntry {
   businessType?: string,
   businessTypeDescription?: string,
-  periods: Period[];
+  periods?: Period[];
 }
 
 /** Specifics for parsed Publication document */
@@ -192,6 +231,40 @@ interface UnavailabilityEntry extends BaseEntry {
   psrNominalPowerUnit?: string;
   reasonCode?: string;
   reasonText?: string;
+}
+
+/** Specifics for parsed Configuration document */
+interface ConfigurationDocument extends BaseDocument {
+  senderMarketParticipantId?: string;
+  senderMarketParticipantRoleType?: string;
+  receiverMarketParticipantId?: string;
+  receiverMarketParticipantRoleType?: string;
+  timeseries: ConfigurationEntry[];
+}
+interface GeneratingUnit {
+  id?: string,
+  name?: string,
+  nominalPower?: string,
+  nominalPowerUnit?: string,
+  psrType?: string,
+  locationName?: string
+}
+interface ConfigurationEntry extends BaseEntry {
+  implementationDate?: Date,
+  biddingZoneDomain?: string,
+  businessType?: string,
+  businessTypeDescription?: string;
+  registeredResourceId?: string;
+  registeredResourceName?: string;
+  registeredResourceLocation?: string;
+  controlAreaDomain?: string;
+  providerMarketParticipant?: string;
+  psrType?: string;
+  psrNominalPower?: string;
+  psrNominalPowerUnit?: string;
+  psrHighvoltageLimit?: string;
+  psrHighvoltageLimitUnit?: string;
+  generatingUnit?: GeneratingUnit[];
 }
 
 /* ------------------------------------------------------------------------------------
@@ -307,7 +380,7 @@ const ParsePublication = (d: SourcePublicationDocument) : PublicationDocument =>
     };
     const periodArray = Array.isArray(ts.Period) ? ts.Period : (ts.Period ? [ts.Period] : []);
     for(const inputPeriod of (periodArray as SourcePeriod[])) {
-      tsEntry.periods.push(ParsePeriod(inputPeriod));
+      tsEntry.periods?.push(ParsePeriod(inputPeriod));
     }
     document.timeseries.push(tsEntry);
   }
@@ -351,7 +424,7 @@ const ParseGL = (d: SourceGLDocument) : GLDocument => {
     };
     const periodArray = Array.isArray(ts.Period) ? ts.Period : (ts.Period ? [ts.Period] : []);
     for(const inputPeriod of (periodArray as SourcePeriod[])) {
-      tsEntry.periods.push(ParsePeriod(inputPeriod));
+      tsEntry.periods?.push(ParsePeriod(inputPeriod));
     }
     document.timeseries.push(tsEntry);
   }
@@ -418,7 +491,77 @@ const ParseUnavailability = (d: SourceUnavailabilityDocument) : UnavailabilityDo
     });
     const availablePeriodArray = Array.isArray(outage.Available_Period) ? outage.Available_Period : (outage.Available_Period ? [outage.Available_Period] : []);
     for(const avail of (availablePeriodArray as SourcePeriod[])) {
-      ts.periods.push(ParsePeriod(avail));
+      ts.periods?.push(ParsePeriod(avail));
+    }
+    document.timeseries.push(ts);
+  }
+  return document;
+};
+
+/**
+ * Parses everything below to the root node of a source Configuration_MarketDocument
+ * 
+ * @private
+ * 
+ * @param d - Everything below to the root node of a source Configuration_MarketDocument
+ * 
+ * @returns - Typed, cleaned and validated Unavailability document
+ */
+const ParseConfiguration = (d: SourceConfigurationDocument) : ConfigurationDocument => {
+  
+  // Check that TimeSeries is ok
+  if (!d.TimeSeries) {
+    throw new Error("Unavalibility document invalid, missing TimeSeries");
+  }
+
+  const tsArray = Array.isArray(d.TimeSeries) ? d.TimeSeries : [d.TimeSeries];
+
+  const document : ConfigurationDocument = Object.assign(ParseBaseDocument(d), {
+    rootType: "configuration",  
+    senderMarketParticipantId: d["sender_MarketParticipant.mRID"]?.["#text"],
+    senderMarketParticipantRoleType: d["sender_MarketParticipant.marketRole.type"],
+    receiverMarketParticipantId: d["receiver_MarketParticipant.mRID"]?.["#text"],
+    receiverMarketParticipantRoleType: d["receiver_MarketParticipant.marketRole.type"],
+    timeseries: []
+  });
+
+  for(const configuration of tsArray) {
+      
+    let implementationDate;
+    if (configuration["implementation_DateAndOrTime.date"]) {
+        if (configuration["implementation_DateAndOrTime.time"]) {
+          implementationDate = new Date(Date.parse(configuration["implementation_DateAndOrTime.date"] + "T" + configuration["implementation_DateAndOrTime.time"]));
+        } else {
+          implementationDate = new Date(Date.parse(configuration["implementation_DateAndOrTime.date"] + "T00:00:00Z"));
+        }
+    }
+    const ts : ConfigurationEntry = Object.assign(ParseBaseDocument(d),{
+      implementationDate,
+      businessType: configuration.businessType,
+      businessTypeDescription: configuration.businessType ? (BusinessType as Record<string,string>)[configuration.businessType] : void 0,
+      biddingZoneDomain: configuration["biddingZone_Domain.mRID"]?.["#text"],
+      registeredResourceId: configuration["registeredResource.mRID"]?.["#text"],
+      registeredResourceName: configuration["registeredResource.name"],
+      registeredResourceLocation: configuration["registeredResource.location.name"],
+      controlAreaDomain: configuration.ControlArea_Domain?.mRID?.["#text"],
+      providerMarketParticipant: configuration["Provider_MarketParticipant"]?.mRID?.["#text"],
+      psrType: configuration.MktPSRType?.psrType,
+      psrHighvoltageLimit: configuration.MktPSRType?.["production_PowerSystemResources.highVoltageLimit"]?.["#text"],
+      psrHighvoltageLimitUnit: configuration.MktPSRType?.["production_PowerSystemResources.highVoltageLimit"]?.["@unit"],
+      psrNominalPower: configuration.MktPSRType?.["nominalIP_PowerSystemResources.nominalP"]?.["#text"],
+      psrNominalPowerUnit: configuration.MktPSRType?.["nominalIP_PowerSystemResources.nominalP"]?.["@unit"],
+      generatingUnit: []
+    });
+    if (configuration.GeneratingUnit_PowerSystemResources?.length) for(const gu of configuration.GeneratingUnit_PowerSystemResources) {
+      const guResult = {
+        nominalPower: gu.nominalP?.["#text"],
+        nominalPowerUnit: gu.nominalP?.["@unit"],
+        name: gu.name,
+        locationName: gu["generatingUnit_Location.name"],
+        psrType: gu["generatingUnit_PSRType.psrType"],
+        id: gu.mRID?.["#text"]
+      };
+      ts.generatingUnit?.push(guResult);
     }
     document.timeseries.push(ts);
   }
@@ -449,6 +592,9 @@ const ParseDocument = (xmlDocument: string): PublicationDocument | GLDocument | 
     
   } else if (doc.Unavailability_MarketDocument) {
     return ParseUnavailability(doc.Unavailability_MarketDocument);
+
+  } else if (doc.Configuration_MarketDocument) {
+    return ParseConfiguration(doc.Configuration_MarketDocument);
     
   } else if (doc.Acknowledgement_MarketDocument) {
     const invalidRootNode = doc.Acknowledgement_MarketDocument;
@@ -462,5 +608,5 @@ const ParseDocument = (xmlDocument: string): PublicationDocument | GLDocument | 
 
 };
 
-export type { PublicationDocument, UnavailabilityDocument, GLDocument }
+export type { PublicationDocument, UnavailabilityDocument, GLDocument, ConfigurationDocument }
 export { ParseDocument };

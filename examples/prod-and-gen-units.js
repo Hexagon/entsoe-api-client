@@ -7,7 +7,10 @@
  * @license MIT
  **/
 
-import { QueryConfiguration } from "https://deno.land/x/entsoe_api_client@0.6.0/mod.ts";
+import { QueryConfiguration } from "https://deno.land/x/entsoe_api_client/mod.ts";
+
+// Node import:
+// import { QueryConfiguration } from "entsoe-api-client";
 
 // Prepare dates
 const
@@ -15,7 +18,9 @@ const
 
 // Run ENTSO-e transparency playform query
 const result = await QueryConfiguration(
-    Deno.env.get("API_TOKEN") || "", // Your entsoe api-token
+    process ?  // Your entsoe api-token by environment variable
+        process.env.API_TOKEN // ... in Node
+        : Deno.env.get("API_TOKEN"), // ... in Deno
     {
         documentType: "A95",
         businessType: "B11",

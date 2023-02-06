@@ -13,9 +13,10 @@
         }
     },
     "tasks": {
-        "test": "deno test --allow-read",
+        "test": "deno test tests --allow-read",
         "coverage": "deno test --allow-read --coverage=coverage && deno coverage coverage",
         "coverage:ci": "deno test --allow-read --coverage=coverage && deno coverage coverage --lcov --output=cov.lcov",
-        "precommit": "deno fmt && deno lint && deno task test"
+        "precommit": "deno fmt && deno lint && deno task test && deno task build",
+        "build": "deno run -A scripts/build_npm.ts"
     }
 }

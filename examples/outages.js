@@ -7,7 +7,11 @@
  * @license MIT
  **/
 
-import { QueryUnavailability } from "https://deno.land/x/entsoe_api_client@0.6.0/mod.ts";
+// Deno:
+import { QueryUnavailability } from "https://deno.land/x/entsoe_api_client/mod.ts";
+
+// Node: 
+// import { QueryUnavailability } from "entsoe-api-client";
 
 // Prepare dates
 const
@@ -21,7 +25,9 @@ dateTomorrow.setHours(0,0,0,0);
 
 // Run ENTSO-e transparency playform query
 const result = await QueryUnavailability(
-    Deno.env.get("API_TOKEN") as string, // Your entsoe api-token
+    process ?  // Your entsoe api-token by environment variable
+        process.env.API_TOKEN // ... in Node
+        : Deno.env.get("API_TOKEN"), // ... in Deno
     {
         documentType: "A77",        // A77 - Production unavailability OR A80 - Generation unavailability
         biddingZoneDomain: "CTA|SE",  // biddingZone_Domain
@@ -35,5 +41,5 @@ for(const outage of result) {
     console.log("Outage: ");
     console.log(outage);
     // Print a table for first returned timeseries and period
-    console.table(outage?.timeseries[0].periods[0]);
+    console.table(outage.timeseries[0].periods[0]);
 }

@@ -35,3 +35,6 @@ deno.lock
 # Coverage
 coverage
 cov.lcov
+
+# NPM package
+npm

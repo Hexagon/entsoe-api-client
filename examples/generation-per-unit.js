@@ -8,7 +8,11 @@
  * @license MIT
  **/
 
-import { QueryGL } from "https://deno.land/x/entsoe_api_client@0.6.0/mod.ts";
+// Deno import:
+import { QueryGL } from "https://deno.land/x/entsoe_api_client/mod.ts";
+
+// Node import:
+// import { QueryGL } from "entsoe-api-client";
 
 // Prepare dates
 const
@@ -22,7 +26,9 @@ dateTomorrow.setHours(0,0,0,0);
 
 // Run ENTSO-e transparency playform query
 const result = await QueryGL(
-    Deno.env.get("API_TOKEN") || "", // Your entsoe api-token
+    process ?  // Your entsoe api-token by environment variable
+        process.env.API_TOKEN // ... in Node
+        : Deno.env.get("API_TOKEN"), // ... in Deno
     {
         documentType: "A75",        // A75 - Actual generation per type
         processType: "A16",         // A16 - Realised
@@ -35,7 +41,7 @@ const result = await QueryGL(
 
 
 // Compose a nice result set
-const output : Record<string,Record<string,number|Date|unknown[]>[]> = {
+const output = {
     data: [{
         position: 0,
         date: new Date(dateToday),
@@ -50,11 +56,11 @@ if(result.length) for (const ts of result[0].timeseries) {
             for (const point of period.points) {
                 const 
                     quantity = point.quantity || 0,
-                    psr : string = ts.mktPsrTypeDescription || "unknown";
-                output.data[0].TOTAL = output.data[0].TOTAL as number + quantity;
-                output.data[0][psr] = (output.data[0][psr] ?? 0) as number + quantity;
+                    psr = ts.mktPsrTypeDescription || "unknown";
+                output.data[0].TOTAL = output.data[0].TOTAL + quantity;
+                output.data[0][psr] = (output.data[0][psr] ?? 0) + quantity;
                 if (output.data[point.position]) {
-                    output.data[point.position].TOTAL = output.data[point.position].TOTAL as number + quantity;
+                    output.data[point.position].TOTAL = output.data[point.position].TOTAL + quantity;
                     output.data[point.position][psr] = quantity;
                 } else {
                     output.data[point.position] = {

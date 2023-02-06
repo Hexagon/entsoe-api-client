@@ -14,7 +14,7 @@
  * @private 
  * @ignore
  * */
-export { parse } from "https://deno.land/x/xml@2.1.0/mod.ts";
+export { XMLParser } from "https://esm.sh/fast-xml-parser@4.1.1";
 
 /** 
  * @private 

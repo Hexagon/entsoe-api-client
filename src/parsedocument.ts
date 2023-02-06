@@ -7,7 +7,7 @@
  * @license MIT
  **/
 
-import { parse } from "../deps.ts";
+import { XMLParser } from "../deps.ts";
 import { PsrType } from "./parameters/psrtype.js";
 import { BusinessType } from "./parameters/businesstype.js";
 import { ProcessType } from "./parameters/processtype.js";
@@ -581,7 +581,11 @@ const ParseConfiguration = (d: SourceConfigurationDocument) : ConfigurationDocum
 const ParseDocument = (xmlDocument: string): PublicationDocument | GLDocument | UnavailabilityDocument  => {
 
   // Parse XML
-  const doc = parse(xmlDocument) as SourceDocument;
+  const parser = new XMLParser({
+      ignoreAttributes: false,
+      attributeNamePrefix : "@"
+  });
+  const doc = parser.parse(xmlDocument) as SourceDocument;
 
   // Check document type
   if (doc.Publication_MarketDocument) {

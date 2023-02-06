@@ -7,7 +7,11 @@
  * @license MIT
  **/
 
+// Deno import:
 import { QueryPublication } from "https://deno.land/x/entsoe_api_client@0.6.0/mod.ts";
+
+// Node import:
+// import { QueryPublication } from "entsoe-api-client";
 
 // Prepare dates
 const
@@ -19,7 +23,9 @@ dateTomorrow.setHours(0,0,0,0);
 
 // Run ENTSO-e transparency playform query
 const result = await QueryPublication(
-     Deno.env.get("API_TOKEN") || "", // Your entsoe api-token
+    process ?  // Your entsoe api-token by environment variable
+        process.env.API_TOKEN // ... in Node
+        : Deno.env.get("API_TOKEN"), // ... in Deno
      {
         documentType: "A44",              // A44 - Price document
         processType: "A01",               // A01 - Day ahead

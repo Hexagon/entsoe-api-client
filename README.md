@@ -76,7 +76,9 @@ API_TOKEN="your-api-token" node .\spot-prices-today.ts
 
 ## Contributing
 
-All contributions are welcome. 
+All contributions are welcome.
+
+Module developed for Deno. Node module is *generated* by dnt, using [scripts/build_npm.ts](/scripts/build_npm.ts).
 
 See [Contribution Guide](/CONTRIBUTING.md)
 

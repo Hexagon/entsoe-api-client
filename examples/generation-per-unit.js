@@ -26,7 +26,7 @@ dateTomorrow.setHours(0,0,0,0);
 
 // Run ENTSO-e transparency playform query
 const result = await QueryGL(
-    process ?  // Your entsoe api-token by environment variable
+    typeof process !== "undefined" ?  // Your entsoe api-token by environment variable
         process.env.API_TOKEN // ... in Node
         : Deno.env.get("API_TOKEN"), // ... in Deno
     {

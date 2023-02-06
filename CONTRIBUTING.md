@@ -24,7 +24,7 @@ Scan through our [existing issues](https://github.com/hexagon/entsoe-api-client/
 
 #### Setting up the environment
 
-Se recommend using VS Code with eslint extensions, which will automatically check your code against THE defined rules as you write it.
+We recommend using VS Code with the deno extensions, which will automatically check your code against the defined rules as you write it.
 
 1. Fork the repository.
 - Using GitHub Desktop:
@@ -34,15 +34,17 @@ Se recommend using VS Code with eslint extensions, which will automatically chec
 - Using the command line:
   - [Fork the repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo#fork-an-example-repository) so that you can make your changes without affecting the original project until you're ready to merge them.
 
-3. Install or update to **Node.js v16**. 
+2. Install **Deno** 
 
-3. Create a working branch ```feature/my-cool-feature``` or ```bugfix/issue-14``` and start with your changes!
+3. Install or update to **Node.js v18** (node is used for generating and testing the node-part of the module) 
+
+4. Create a working branch ```feature/my-cool-feature``` or ```bugfix/issue-14``` and start with your changes!
 
 ### Commit your update
 
-Please run ```npm run build``` before committing, to update the dist-files, and to make sure every test and check passes. If you make changes to any function Interface, or to JSDoc in general, you should also run ```npm run build:docs``` to update the generated documentation.
+Please run ```deno task precommit``` before committing, to make sure every test and check passes.
 
-See [package.json](/package.json) scripts section for all available scripts.
+See [deno.jsonc](/deno.jsonc) scripts section for all available scripts.
 
 Then, commit the changes once you are happy with them. 
 

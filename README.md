@@ -3,6 +3,10 @@
 Unofficial ENTSO-e transparency platform API Client for Deno and Node. Complete. Easy to use. Minimal.
 
 [![Deno CI](https://github.com/Hexagon/entsoe-api-client/actions/workflows/deno.yml/badge.svg)](https://github.com/Hexagon/entsoe-api-client/actions/workflows/deno.yml) 
+[![Node CI](https://github.com/Hexagon/entsoe-api-client/actions/workflows/nodejs.yml/badge.svg)](https://github.com/Hexagon/entsoe-api-client/actions/workflows/nodejs.yml) 
+[![Module type: CJS+ESM](https://img.shields.io/badge/npm-cjs%2Besm-brightgreen)](https://www.npmjs.org/package/entsoe-api-client)
+[![Deno.land/x](https://img.shields.io/badge/Deno.land%20entsoe_api_client-brightblue)](https://deno.land/x/entsoe_api_client)
+[![NPM Downloads](https://img.shields.io/npm/dm/entsoe-api-client.svg)](https://www.npmjs.org/package/entsoe-api-client)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Hexagon/entsoe-api-client/blob/master/LICENSE) 
 
 *   Works in Deno >=1.26
@@ -19,7 +23,7 @@ Full library documentation is available at [https://deno.land/x/entsoe_api_clien
 
 See [ENTSO-e REST API documentation](https://transparency.entsoe.eu/content/static_content/Static%20content/web%20api/Guide.html) for documentation on which parameters to use for each endpoint. 
 
-All names, both parameters and output object keys, are simplified in this implementation, as an example `receiver_MarketParticipant.mRID` become `receiverMarketParticipantId`.
+All names, both parameters and output object keys, are simplified in this implementation. As an example `receiver_MarketParticipant.mRID` become `receiverMarketParticipantId`.
 
 > **Note**
 > These are the document types currently supported:

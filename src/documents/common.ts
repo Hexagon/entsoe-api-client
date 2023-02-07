@@ -123,7 +123,7 @@ interface Period {
 interface BaseDocument {
   mRID: string;
   revision?: number;
-  rootType?: "configuration" | "gl" | "unavailability" | "publication";
+  rootType?: "configuration" | "gl" | "unavailability" | "publication" | "balancing" | "criticalnetworkelement" | "transmissionnetwork";
   created?: Date;
   documentType: string;
   documentTypeDescription?: string;

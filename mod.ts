@@ -473,8 +473,72 @@ const QueryConfiguration = async (securityToken: string, params: QueryParameters
   return [];
 };
 
+/**
+ * Fetch and process Balancing_MarketDocument(s)
+ * 
+ * Identifies the fetched docuement, validates key features, and returns an array of typed documents
+ * 
+ * If the query yield smething other than Balancing_MarketDocument(s), an error will be thrown.
+ * 
+ * @public
+ * 
+ * @param securityToken - Entsoe API security token/key
+ * @param params - Object with all requested parameters
+ * 
+ * @returns - Array of typed documents 
+ */
+const QueryBalancing = async (securityToken: string, params: QueryParameters): Promise<BalancingDocument[]> => {
+  const result = await Query(securityToken, params);
+  if (result && Array.isArray(result) && result.length && result[0].rootType === "balancing") return result as BalancingDocument[];
+  if (result && Array.isArray(result) && result.length && result[0].rootType !== "balancing") throw new Error("Got " + result[0].rootType + " when expecting balancing document")
+  return [];
+};
+
+/**
+ * Fetch and process TransmissionNetwork_MarketDocument(s)
+ * 
+ * Identifies the fetched docuement, validates key features, and returns an array of typed documents
+ * 
+ * If the query yield smething other than TransmissionNetwork_MarketDocument(s), an error will be thrown.
+ * 
+ * @public
+ * 
+ * @param securityToken - Entsoe API security token/key
+ * @param params - Object with all requested parameters
+ * 
+ * @returns - Array of typed documents 
+ */
+const QueryTransmissionNetwork = async (securityToken: string, params: QueryParameters): Promise<TransmissionNetworkDocument[]> => {
+  const result = await Query(securityToken, params);
+  if (result && Array.isArray(result) && result.length && result[0].rootType === "transmissionnetwork") return result as TransmissionNetworkDocument[];
+  if (result && Array.isArray(result) && result.length && result[0].rootType !== "transmissionnetwork") throw new Error("Got " + result[0].rootType + " when expecting transmissionnetwork document")
+  return [];
+};
+
+/**
+ * Fetch and process CriticalNetworkElement_MarketDocument(s)
+ * 
+ * Identifies the fetched docuement, validates key features, and returns an array of typed documents
+ * 
+ * If the query yield smething other than CriticalNetworkElement_MarketDocument(s), an error will be thrown.
+ * 
+ * @public
+ * 
+ * @param securityToken - Entsoe API security token/key
+ * @param params - Object with all requested parameters
+ * 
+ * @returns - Array of typed documents 
+ */
+const QueryCriticalNetworkElement = async (securityToken: string, params: QueryParameters): Promise<CriticalNetworkElementDocument[]> => {
+  const result = await Query(securityToken, params);
+  if (result && Array.isArray(result) && result.length && result[0].rootType === "criticalnetworkelement") return result as CriticalNetworkElementDocument[];
+  if (result && Array.isArray(result) && result.length && result[0].rootType !== "criticalnetworkelement") throw new Error("Got " + result[0].rootType + " when expecting criticalnetworkelement document")
+  return [];
+};
+
+
 /** Export all functions intended for public use */
-export { Query, QueryPublication, QueryGL, QueryUnavailability, QueryConfiguration };
+export { Query, QueryPublication, QueryGL, QueryUnavailability, QueryConfiguration, QueryBalancing, QueryTransmissionNetwork, QueryCriticalNetworkElement };
 
 /** Export all types intended for public use */
 export type { GLDocument, PublicationDocument, UnavailabilityDocument, ConfigurationDocument, QueryParameters, TransmissionNetworkDocument, CriticalNetworkElementDocument, BalancingDocument};

@@ -12,7 +12,7 @@ await build({
   entryPoints: ["./mod.ts"],
   outDir: "./npm",
   shims: {
-    deno: "dev",
+    deno: true,
     undici: true // Undici is for fetch support in old node versions
   },
   package: {

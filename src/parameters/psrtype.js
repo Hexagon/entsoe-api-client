@@ -2,7 +2,7 @@
  * entsoe-api-client
  * @author Hexagon <hexagon@GitHub>
  * @license MIT
- **/
+ */
 
 /**
  * Enum for ENTSO-e PsrType with description

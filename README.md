@@ -7,24 +7,26 @@ ENTSO-e transparency platform API Client. Complete. Easy to use. Minimal.
 
 *   Works in Deno >=1.16
 *   Works in Node >=14
+*   Native [TypeScript](https://www.typescriptlang.org/) typings
 *   Support most aspects of Entso-e transparency platform REST API
 *   Unzips and parses zip-file endpoints (e.g. outage documents) transparently
+*   ESM (Deno, Node) and CommonJS (Node) support
 *   Includes examples for getting Outages, Spot-prices, actual generation and generation forecast
-*   Native [TypeScript](https://www.typescriptlang.org/) typings
 
 ### Documentation
 
 Full documentation is available at [https://deno.land/x/entsoe_api_client/mod.ts](https://deno.land/x/entsoe_api_client/mod.ts)
 
 > **Note**
-> These are the document types currently supported:
+> These are the document types currently supported (should be all):
 >
 > - Publication_MarketDocument
 > - GL_MarketDocument
 > - Unavailability_MarketDocument
 > - Configuration_MarketDocument
->
-> Contributions to handling more document types would be highly appreciated.
+> - Balancing_MarketDocument
+> - CriticalNetworkElement_MarketDocument
+> - TransmissinNetwork_MarketDocument
 
 ### Installation
 
@@ -78,7 +80,7 @@ API_TOKEN="your-api-token" node .\spot-prices-today.ts
 
 All contributions are welcome.
 
-Module developed for Deno. Node module is *generated* by dnt, using [scripts/build_npm.ts](/scripts/build_npm.ts).
+Module developed for Deno. Node module is *generated* by [dnt](https://deno.land/manual@v1.30.3/advanced/publishing/dnt), using [scripts/build_npm.ts](/scripts/build_npm.ts).
 
 See [Contribution Guide](/CONTRIBUTING.md)
 

@@ -1,8 +1,4 @@
-import {
-  assert,
-  assertEquals,
-  assertThrows,
-} from "https://deno.land/std@0.128.0/testing/asserts.ts";
+import { assertEquals, assertThrows } from "https://deno.land/std@0.128.0/testing/asserts.ts";
 import { ISO8601DurToSec } from "../src/duration.ts";
 
 Deno.test("Test shortcuts", async function (t) {

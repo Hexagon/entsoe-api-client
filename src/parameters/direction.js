@@ -2,7 +2,7 @@
  * entsoe-api-client
  * @author Hexagon <hexagon@GitHub>
  * @license MIT
- **/
+ */
 
 /**
  * Enum for ENTSO-e Direction with description
@@ -10,10 +10,10 @@
  * @enum {string}
  */
 const Direction = {
-	/** Up */
-	A01: "Up",
-	/** Down */
-	A02: "Down"
+  /** Up */
+  A01: "Up",
+  /** Down */
+  A02: "Down",
 };
 
 export { Direction };

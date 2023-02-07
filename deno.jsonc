@@ -1,15 +1,15 @@
 {
     "lint": {
         "files": {
-            "include": ["src","test/deno"]
+            "include": ["src"]
         }
     },
     "fmt": {
         "files": {
-            "include": ["tests"]
+            "include": ["tests","src"]
         },
         "options": {
-            "lineWidth": 100
+            "lineWidth": 150
         }
     },
     "tasks": {

@@ -6,7 +6,7 @@ Unofficial ENTSO-e transparency platform API Client for Deno and Node. Complete.
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Hexagon/entsoe-api-client/blob/master/LICENSE) 
 
 *   Works in Deno >=1.26
-*   Works in Node >=16
+*   Works in Node >=18
 *   Native [TypeScript](https://www.typescriptlang.org/) typings
 *   Support most aspects of Entso-e transparency platform REST API
 *   Unzips and parses zip-file endpoints (e.g. outage documents) transparently

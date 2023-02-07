@@ -12,7 +12,7 @@ const ENTSOE_ENDPOINT = "https://web-api.tp.entsoe.eu/api";
 
 import { Areas } from "./src/parameters/areas.js";
 import { DocumentType } from "./src/parameters/documenttype.js";
-import { ConfigurationDocument, GLDocument, ParseDocument, PublicationDocument, UnavailabilityDocument } from "./src/parsedocument.ts";
+import { ConfigurationDocument, GLDocument, ParseDocument, PublicationDocument, UnavailabilityDocument, TransmissionNetworkDocument, CriticalNetworkElementDocument, BalancingDocument } from "./src/parsedocument.ts";
 import { ProcessType } from "./src/parameters/processtype.js";
 import { PsrType } from "./src/parameters/psrtype.js";
 import { ZipReader, Uint8ArrayReader, TextWriter } from "./deps.ts";
@@ -67,6 +67,40 @@ interface QueryParameters {
 
   /** Implementation_DateAndOrTime, ISO8601 string */
   implementationDateAndOrTime?: string;
+
+  /** Contract_MarketAgreement.Type */
+  contractMarketAgreementType?: string;
+
+  /** Auction.Type */
+  auctionType?: string;
+
+  /** Auction.Category */
+  auctionCategory?: string;
+
+  /** ClassificationSequence_AttributeInstanceComponent.Position */
+  classificationSequenceAICPosition?: string;
+
+  /** connecting_Domain */
+  connectingDomain?: string;
+
+  /** Standard_MarketProduct */
+  standardMarketProduct?: string;
+
+  /** Original_MarketProduct */
+  originalMarketProduct?: string;
+
+  /** registeredResource */
+  registeredResource?: string;
+
+  /** Acquiring_Domain */
+  acquiringDomain?: string;
+
+  /** mRID */
+  mRID?: string;
+
+  /** DocStatus */
+  docStatus?: string;
+  
 }
 
 /**
@@ -178,7 +212,7 @@ const ComposeQuery = (securityToken: string, params: QueryParameters) : URLSearc
     }
   }
 
-  // Validate outDomain, add to parameter list
+  // Validate outBiddingZoneDomain, add to parameter list
   if (params.outBiddingZoneDomain) {
     const foundOutDomain = Object.entries(Areas).find(([_key, value]) => 
       params.outBiddingZoneDomain && value.includes(params.outBiddingZoneDomain)
@@ -190,6 +224,61 @@ const ComposeQuery = (securityToken: string, params: QueryParameters) : URLSearc
     }
   }
 
+  // Validate contractMarketAgreementType, add to parameter list
+  if (params.contractMarketAgreementType) {
+      query.append("Contract_MarketAgreement.Type", params.contractMarketAgreementType);
+  }
+
+  // Validate auctionType, add to parameter list
+  if (params.auctionType) {
+      query.append("Auction.Type", params.auctionType);
+  }
+  
+  // Validate classificationSequenceAICPosition, add to parameter list
+  if (params.classificationSequenceAICPosition) {
+    query.append("ClassificationSequence_AttributeInstanceComponent.Position", params.classificationSequenceAICPosition);
+  }
+
+  // Validate auctionCategory, add to parameter list
+  if (params.auctionCategory) {
+    query.append("Auction.Category", params.auctionCategory);
+  }
+
+  // Validate connectingDomain, add to parameter list
+  if (params.connectingDomain) {
+    query.append("connecting_Domain", params.connectingDomain);
+  }
+  
+  // Validate standardMarketProduct, add to parameter list
+  if (params.standardMarketProduct) {
+    query.append("Standard_MarketProduct", params.standardMarketProduct);
+  }
+
+  // Validate connectingDomain, add to parameter list
+  if (params.originalMarketProduct) {
+    query.append("Original_MarketProduct", params.originalMarketProduct);
+  }
+
+  // Validate connectingDomain, add to parameter list
+  if (params.registeredResource) {
+    query.append("registeredResource", params.registeredResource);
+  }
+
+  // Validate connectingDomain, add to parameter list
+  if (params.acquiringDomain) {
+    query.append("Acquiring_Domain", params.acquiringDomain);
+  }
+  
+  // Validate mRID, add to parameter list
+  if (params.mRID) {
+    query.append("mRID", params.mRID);
+  }
+
+  // Validate docStatus, add to parameter list
+  if (params.docStatus) {
+    query.append("DocStatus", params.docStatus);
+  }
+  
   // Validate startDateTimeUpdate, endDateTimeUpdate, custruct timeIntervalUpdate
   if (params.startDateTimeUpdate) {
     if (!(params.startDateTimeUpdate instanceof Date && !isNaN(params.startDateTimeUpdate.getTime()))) {
@@ -388,4 +477,4 @@ const QueryConfiguration = async (securityToken: string, params: QueryParameters
 export { Query, QueryPublication, QueryGL, QueryUnavailability, QueryConfiguration };
 
 /** Export all types intended for public use */
-export type { GLDocument, PublicationDocument, UnavailabilityDocument, ConfigurationDocument, QueryParameters };
+export type { GLDocument, PublicationDocument, UnavailabilityDocument, ConfigurationDocument, QueryParameters, TransmissionNetworkDocument, CriticalNetworkElementDocument, BalancingDocument};

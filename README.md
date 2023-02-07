@@ -1,6 +1,6 @@
 # entsoe-api-client
 
-ENTSO-e transparency platform API Client. Complete. Easy to use. Minimal.
+Unofficial ENTSO-e transparency platform API Client for Deno and Node. Complete. Easy to use. Minimal.
 
 [![Deno CI](https://github.com/Hexagon/entsoe-api-client/actions/workflows/deno.yml/badge.svg)](https://github.com/Hexagon/entsoe-api-client/actions/workflows/deno.yml) 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Hexagon/entsoe-api-client/blob/master/LICENSE) 
@@ -15,10 +15,14 @@ ENTSO-e transparency platform API Client. Complete. Easy to use. Minimal.
 
 ### Documentation
 
-Full documentation is available at [https://deno.land/x/entsoe_api_client/mod.ts](https://deno.land/x/entsoe_api_client/mod.ts)
+Full library documentation is available at [https://deno.land/x/entsoe_api_client/mod.ts](https://deno.land/x/entsoe_api_client/mod.ts)
+
+See [ENTSO-e REST API documentation](https://transparency.entsoe.eu/content/static_content/Static%20content/web%20api/Guide.html) for documentation on which parameters to use for each endpoint. 
+
+All names, both parameters and output object keys, are simplified in this implementation, as an example `receiver_MarketParticipant.mRID` become `receiverMarketParticipantId`.
 
 > **Note**
-> These are the document types currently supported (should be all):
+> These are the document types currently supported:
 >
 > - Publication_MarketDocument
 > - GL_MarketDocument
@@ -26,7 +30,7 @@ Full documentation is available at [https://deno.land/x/entsoe_api_client/mod.ts
 > - Configuration_MarketDocument
 > - Balancing_MarketDocument
 > - CriticalNetworkElement_MarketDocument
-> - TransmissinNetwork_MarketDocument
+> - TransmissionNetwork_MarketDocument
 
 ### Installation
 

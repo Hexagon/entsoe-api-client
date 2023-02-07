@@ -5,7 +5,6 @@ Unofficial ENTSO-e transparency platform API Client for Deno and Node. Complete.
 [![Deno CI](https://github.com/Hexagon/entsoe-api-client/actions/workflows/deno.yml/badge.svg)](https://github.com/Hexagon/entsoe-api-client/actions/workflows/deno.yml) 
 [![Node CI](https://github.com/Hexagon/entsoe-api-client/actions/workflows/nodejs.yml/badge.svg)](https://github.com/Hexagon/entsoe-api-client/actions/workflows/nodejs.yml) 
 [![Module type: CJS+ESM](https://img.shields.io/badge/npm-cjs%2Besm-brightgreen)](https://www.npmjs.org/package/entsoe-api-client)
-[![Deno.land/x](https://img.shields.io/badge/Deno.land%20entsoe_api_client-brightblue)](https://deno.land/x/entsoe_api_client)
 [![NPM Downloads](https://img.shields.io/npm/dm/entsoe-api-client.svg)](https://www.npmjs.org/package/entsoe-api-client)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Hexagon/entsoe-api-client/blob/master/LICENSE) 
 

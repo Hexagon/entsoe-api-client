@@ -26,6 +26,5 @@ jobs:
         uses: actions/setup-node@v3.5.1
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
       - name: Run DNT build, test node cjs and esm
         run: deno task precommit

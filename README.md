@@ -1,104 +1,99 @@
 # entsoe-api-client
 
-Unofficial ENTSO-e transparency platform API Client for Deno and Node. Complete. Easy to use. Minimal.
+Unofficial ENTSO-e REST API Client for Deno and Node. Complete. Easy to use. Minimal.
 
-[![Deno CI](https://github.com/Hexagon/entsoe-api-client/actions/workflows/deno.yml/badge.svg)](https://github.com/Hexagon/entsoe-api-client/actions/workflows/deno.yml) 
-[![Node CI](https://github.com/Hexagon/entsoe-api-client/actions/workflows/nodejs.yml/badge.svg)](https://github.com/Hexagon/entsoe-api-client/actions/workflows/nodejs.yml) 
 [![Module type: CJS+ESM](https://img.shields.io/badge/npm-cjs%2Besm-brightgreen)](https://www.npmjs.org/package/entsoe-api-client)
 [![NPM Downloads](https://img.shields.io/npm/dm/entsoe-api-client.svg)](https://www.npmjs.org/package/entsoe-api-client)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Hexagon/entsoe-api-client/blob/master/LICENSE) 
 
-*   Works in Deno >=1.26
-*   Works in Node >=18
-*   Native [TypeScript](https://www.typescriptlang.org/) typings
-*   Support most aspects of Entso-e transparency platform REST API
-*   Unzips and parses zip-file endpoints (e.g. outage documents) transparently
-*   ESM (Deno, Node) and CommonJS (Node) support
-*   Includes examples for getting Outages, Spot-prices, actual generation and generation forecast
 
-### Documentation
+## Features
 
-Full library documentation is available at [https://deno.land/x/entsoe_api_client/mod.ts](https://deno.land/x/entsoe_api_client/mod.ts)
+  * Supports all requests listed in [Entso-e REST API Documentation](https://transparency.entsoe.eu/content/static_content/Static%20content/web%20api/Guide.html)
+  * Support zip-file endpoints, unzips documents transparently
+  * [Examples](/examples) written to support both Node and Deno
+  * Supports Deno *and* Node
+  * Fully Typed, written in [TypeScript](https://www.typescriptlang.org/)
+  * ESM (Deno, Node) and CommonJS (Node) support
+  * Adds description to codes while parsing the documents
 
-See [ENTSO-e REST API documentation](https://transparency.entsoe.eu/content/static_content/Static%20content/web%20api/Guide.html) for documentation on which parameters to use for each endpoint. 
 
-All names, both parameters and output object keys, are simplified in this implementation. As an example `receiver_MarketParticipant.mRID` become `receiverMarketParticipantId`.
+## Installation
 
-> **Note**
-> These are the document types currently supported:
->
-> - Publication_MarketDocument
-> - GL_MarketDocument
-> - Unavailability_MarketDocument
-> - Configuration_MarketDocument
-> - Balancing_MarketDocument
-> - CriticalNetworkElement_MarketDocument
-> - TransmissionNetwork_MarketDocument
+Make sure to use a recent version of your runtime, Node.js `>=18` and Deno `>=1.26` is supported.
 
-### Installation
-
-#### Deno
-
+**Deno**
 ```javascript
 import { QueryConfiguration } from "https://deno.land/x/entsoe_api_client/mod.ts";
 ```
 
-#### Node
-
+**Node**
 ```
 npm install entsoe-api-client --save
 ```
 
-### Examples
+
+## Documentation
+
+Library and method documentation can be found at [deno.land/x/entsoe_api_client](https://deno.land/x/entsoe_api_client@0.9.4/mod.ts).
+
+Documents structure and parameters returned by this library closely resemble what you find in [ENTSO-e REST API documentation](https://transparency.entsoe.eu/content/static_content/Static%20content/web%20api/Guide.html), so have a look there too.
+
+If you want a `Publication_MarketDocument`, the corresponding function in this library is `QueryPublication`. In the resulting document (object), the key `receiver_MarketParticipant.mRID` will become `receiverMarketParticipantId`. The same goes for parameters. We recommend have auto-completion enabled in your editor, the types will give great help in navigating the parameters and document objects.
+
+Another difference compared to source documents is that most ids automatically get a complementary description, where applicable. 
+As an example `businessType`=`B33` in the raw xml will result in keys `businessType: "B33"` and `businessTypeDescription: "Area Control Error"` in the output.
+
+
+## Examples
 
 Examples can be found in the [/examples](/examples) directory.
 
-Pass your ENTSO-e API key by environment variable API_TOKEN when running the examples.
+To run the examples, pass your ENTSO-e API key by environment variable `API_TOKEN`.
 
-#### Deno
+**Deno**
 
 Powershell
-
 ```
 $env:API_TOKEN="your-api-token"; deno run -A .\spot-prices-today.ts
 ```
-
 Bash
-
 ```
 API_TOKEN="your-api-token" deno run -A .\spot-prices-today.ts
 ```
 
-#### Node
+**Node**
 
 Powershell
-
 ```
 $env:API_TOKEN="your-api-token"; node .\spot-prices-today.ts
 ```
-
 Bash
-
 ```
 API_TOKEN="your-api-token" node .\spot-prices-today.ts
 ```
 
 ## Contributing
 
+[![Deno CI](https://github.com/Hexagon/entsoe-api-client/actions/workflows/deno.yml/badge.svg)](https://github.com/Hexagon/entsoe-api-client/actions/workflows/deno.yml) 
+[![Node CI](https://github.com/Hexagon/entsoe-api-client/actions/workflows/nodejs.yml/badge.svg)](https://github.com/Hexagon/entsoe-api-client/actions/workflows/nodejs.yml) 
+
 All contributions are welcome.
 
-Module developed for Deno. Node module is *generated* by [dnt](https://deno.land/manual@v1.30.3/advanced/publishing/dnt), using [scripts/build_npm.ts](/scripts/build_npm.ts).
+Module is developed in Deno. Node module is generated by [dnt](https://deno.land/manual@v1.30.3/advanced/publishing/dnt), using [scripts/build_npm.ts](/scripts/build_npm.ts).
 
 See [Contribution Guide](/CONTRIBUTING.md)
 
 > **Note**
 > Please run `deno task precommit` before each commit, to make sure every file is tested/formatted/linted to standards.
 
+
 ## Donations
 
 Sponsor me on GitHub, or
 
 <a href='https://ko-fi.com/C1C7IEEYF' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi1.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+
 
 ## License
 

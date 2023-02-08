@@ -15,6 +15,12 @@ await build({
     deno: "dev",
     undici: true // Undici is for fetch support in old node versions
   },
+  mappings: {
+    "https://deno.land/x/zipjs@v2.6.63/index.js": {
+      name: "@zip.js/zip.js",
+      version: "^2.6.63"
+    },
+  },
   package: {
     // package.json properties
     name: "entsoe-api-client",

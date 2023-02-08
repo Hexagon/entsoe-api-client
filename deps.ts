@@ -20,4 +20,4 @@ export { XMLParser } from "https://esm.sh/fast-xml-parser@4.1.1";
  * @private 
  * @ignore
  * */
-export { ZipReader, Uint8ArrayReader, TextWriter } from "https://deno.land/x/zipjs@v2.6.61/index.js"
+export { ZipReader, Uint8ArrayReader, TextWriter } from "https://deno.land/x/zipjs@v2.6.63/index.js"

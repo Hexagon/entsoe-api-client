@@ -45,7 +45,7 @@ console.table({
     end: ts.periods[0].endDate.toISOString(),
     resoluton: ts.periods[0].resolution,
     currency: ts.currency,
-    unit: ts.unit,
+    unit: ts.priceMeasureUnit,
 });
 
 // Print spot prices per hour

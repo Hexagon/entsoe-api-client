@@ -42,3 +42,12 @@ await build({
 // post build steps
 Deno.copyFileSync("LICENSE", "npm/LICENSE");
 Deno.copyFileSync("README.md", "npm/README.md");
+
+// npmignore test data
+// ensure the test data is ignored in the `.npmignore` file
+// so it doesn't get published with your npm package
+await Deno.writeTextFile(
+  "npm/.npmignore",
+  "esm/tests/data\nscript/tests/data\n",
+  { append: true },
+);

@@ -10,7 +10,7 @@
 import { QueryConfiguration, BusinessType, DocumentType, Area } from "https://deno.land/x/entsoe_api_client/mod.ts";
 
 // Node import:
-// import { QueryConfiguration } from "entsoe-api-client";
+// import { QueryConfiguration, BusinessType, DocumentType, Area } from "entsoe-api-client";
 
 // Prepare dates
 const

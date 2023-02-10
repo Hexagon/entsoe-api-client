@@ -11,7 +11,7 @@
 import { QueryUnavailability, DocumentType, Area } from "https://deno.land/x/entsoe_api_client/mod.ts";
 
 // Node: 
-// import { QueryUnavailability } from "entsoe-api-client";
+// import { QueryUnavailability, DocumentType, Area } from "entsoe-api-client";
 
 // Prepare dates
 const

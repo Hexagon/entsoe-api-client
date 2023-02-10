@@ -11,7 +11,7 @@
 import { QueryPublication, Area } from "https://deno.land/x/entsoe_api_client/mod.ts";
 
 // Node import:
-// import { QueryPublication } from "entsoe-api-client";
+// import { QueryPublication, Area } from "entsoe-api-client";
 
 // Prepare dates
 const

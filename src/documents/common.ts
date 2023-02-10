@@ -12,9 +12,9 @@ import { SourceConfigurationDocument } from "./configuration.ts";
 import { SourceGLDocument } from "./gl.ts";
 import { SourcePublicationDocument } from "./publication.ts";
 import { SourceUnavailabilityDocument } from "./unavailability.ts";
-import { DocumentType } from "../definitions/documenttype.js";
+import { DocumentTypes } from "../definitions/documenttypes.ts";
 import { ISO8601DurToSec } from "../helpers/duration.ts";
-import { ProcessType } from "../definitions/processtype.js";
+import { ProcessTypes } from "../definitions/processtypes.ts";
 import { SourceTransmissionNetworkDocument } from "./transmittionnetwork.ts";
 import { SourceBalancingDocument } from "./balancing.ts";
 import { SourceCriticalNetworkElementDocument } from "./criticalnetworkelement.ts";
@@ -212,9 +212,9 @@ const ParseBaseDocument = (d: SourceBaseDocument): BaseDocument => {
     revision: d.revisionNumber,
     created: d.createdDateTime ? new Date(Date.parse(d.createdDateTime)) : void 0,
     documentType: d.type,
-    documentTypeDescription: d.type ? (DocumentType as Record<string, string>)[d.type] : void 0,
+    documentTypeDescription: d.type ? (DocumentTypes as Record<string, string>)[d.type] : void 0,
     processType: d["process.processType"],
-    processTypeDescription: d["process.processType"] ? (ProcessType as Record<string, string>)[d["process.processType"]] : void 0,
+    processTypeDescription: d["process.processType"] ? (ProcessTypes as Record<string, string>)[d["process.processType"]] : void 0,
     senderMarketParticipantId: d["sender_MarketParticipant.mRID"]?.["#text"],
     senderMarketParticipantRoleType: d["sender_MarketParticipant.marketRole.type"],
     receiverMarketParticipantId: d["receiver_MarketParticipant.mRID"]?.["#text"],

@@ -7,7 +7,7 @@
  * @license MIT
  **/
 
-import { QueryConfiguration, FirstAreaByIdentifier } from "https://deno.land/x/entsoe_api_client/mod.ts";
+import { QueryConfiguration, BusinessType, DocumentType, Area } from "https://deno.land/x/entsoe_api_client/mod.ts";
 
 // Node import:
 // import { QueryConfiguration } from "entsoe-api-client";
@@ -22,9 +22,9 @@ const result = await QueryConfiguration(
         process.env.API_TOKEN // ... in Node
         : Deno.env.get("API_TOKEN"), // ... in Deno
     {
-        documentType: "A95",
-        businessType: "B11",
-        biddingZoneDomain: FirstAreaByIdentifier("BZN|SE3"),  
+        documentType: DocumentType("Configuration document"), // A95 - Configuration document
+        businessType: BusinessType("Production unit"), // B11 - Production unit
+        biddingZoneDomain: Area("BZN|SE3"),  
         implementationDateAndOrTime: dateToday.toLocaleDateString('sv-SE') // sv-SE yields a date in format YYYY-MM-DD
     }
 );

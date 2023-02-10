@@ -9,7 +9,7 @@
  * @readonly
  * @enum {string}
  */
-const BusinessType = {
+const BusinessTypes = {
   /** General Capacity Information */
   A25: "General Capacity Information",
   /** Already allocated capacity (AAC) */
@@ -68,4 +68,19 @@ const BusinessType = {
   C24: "Actual reserve capacity",
 };
 
-export { BusinessType };
+/**
+ * Helper function to find business type by name
+ *
+ * @public
+ * @category Helpers
+ *
+ * @param identifier - Name of the business type (Example: "Shared Balancing Reserve Capacity")
+ *
+ * @returns - Business Type (example: C22)
+ */
+const BusinessType = (name: string): string | undefined => {
+  const foundBusinessTypes: [string, string] | undefined = Object.entries(BusinessTypes).find(([_key, value]) => value.toLowerCase().trim() == name.toLowerCase().trim());
+  return foundBusinessTypes ? foundBusinessTypes[0] : undefined;
+};
+
+export { BusinessTypes, BusinessType };

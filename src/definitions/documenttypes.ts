@@ -9,7 +9,7 @@
  * @readonly
  * @enum {string}
  */
-const DocumentType = {
+const DocumentTypes = {
   /** Finalised schedule */
   A09: "Finalised schedule",
   /** Aggregated energy data report */
@@ -100,4 +100,19 @@ const DocumentType = {
   B45: "Bid Availability Document",
 };
 
-export { DocumentType };
+/**
+ * Helper function to find document type by name
+ *
+ * @public
+ * @category Helpers
+ *
+ * @param identifier - Name of the document type (Example: "Bid Availability Document")
+ *
+ * @returns - Document Type (example: B45)
+ */
+const DocumentType = (name: string): string | undefined => {
+  const foundDocumentTypes: [string, string] | undefined = Object.entries(DocumentTypes).find(([_key, value]) => value.toLowerCase().trim() == name.toLowerCase().trim());
+  return foundDocumentTypes ? foundDocumentTypes[0] : undefined;
+};
+
+export { DocumentType, DocumentTypes };

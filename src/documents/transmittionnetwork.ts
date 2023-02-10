@@ -7,8 +7,8 @@
  * @license MIT
  */
 
-import { BusinessType } from "../definitions/businesstype.js";
-import { PsrType } from "../definitions/psrtype.js";
+import { BusinessTypes } from "../definitions/businesstypes.ts";
+import { PsrTypes } from "../definitions/psrtypes.ts";
 import {
   BaseDocument,
   BaseEntry,
@@ -139,11 +139,11 @@ const ParseTransmissionNetwork = (d: SourceTransmissionNetworkDocument): Transmi
       businessType: ts.businessType,
       inDomain: ts["in_Domain.mRID"]?.["#text"],
       outDomain: ts["out_Domain.mRID"]?.["#text"],
-      businessTypeDescription: ts.businessType ? (BusinessType as Record<string, string>)[ts.businessType] : void 0,
+      businessTypeDescription: ts.businessType ? (BusinessTypes as Record<string, string>)[ts.businessType] : void 0,
       assetRegisteredResourceId: ts.Asset_RegisteredResource?.mRID?.["#text"],
       assetRegisteredResourcePsrType: ts.Asset_RegisteredResource?.["pSRType.psrType"],
       assetRegisteredResourcePsrTypeDescription: ts.Asset_RegisteredResource?.["pSRType.psrType"]
-        ? (PsrType as Record<string, string>)[ts.Asset_RegisteredResource?.["pSRType.psrType"]]
+        ? (PsrTypes as Record<string, string>)[ts.Asset_RegisteredResource?.["pSRType.psrType"]]
         : void 0,
       assetRegisteredResourceLocationName: ts.Asset_RegisteredResource?.["location.name"],
       periods: [],

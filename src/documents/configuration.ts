@@ -18,7 +18,7 @@ import {
   SourceGeneratingUnit,
   SourcePsrType,
 } from "./common.ts";
-import { BusinessType } from "../definitions/businesstype.js";
+import { BusinessTypes } from "../definitions/businesstypes.ts";
 
 /**
  * Specifics for source Configuration_MarketDocument, extending SourceBaseDocument
@@ -123,7 +123,7 @@ const ParseConfiguration = (d: SourceConfigurationDocument): ConfigurationDocume
     const ts: ConfigurationEntry = Object.assign(ParseBaseDocument(d), {
       implementationDate,
       businessType: configuration.businessType,
-      businessTypeDescription: configuration.businessType ? (BusinessType as Record<string, string>)[configuration.businessType] : void 0,
+      businessTypeDescription: configuration.businessType ? (BusinessTypes as Record<string, string>)[configuration.businessType] : void 0,
       biddingZoneDomain: configuration["biddingZone_Domain.mRID"]?.["#text"],
       registeredResourceId: configuration["registeredResource.mRID"]?.["#text"],
       registeredResourceName: configuration["registeredResource.name"],

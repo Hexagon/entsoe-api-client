@@ -274,8 +274,8 @@ const Areas = {
  *
  * @returns - Undefined, or array containing matching ids of the area of interest, example ["10Y1001A1001A47J","10Y1001C--00038X"]
  */
-const AllAreasByIdentifier = (identifier: string): string[] | undefined => {
-  return Object.entries(Areas).find(([_key, value]) => value.includes(identifier));
+const AllAreas = (identifier: string): string[] | undefined => {
+  return Object.entries(Areas).filter(([_key, value]) => value.includes(identifier)).map((e) => e[0]);
 };
 
 /**
@@ -297,13 +297,14 @@ const AllAreasByIdentifier = (identifier: string): string[] | undefined => {
  *    SNA — Synchronous Area
  *
  * @public
+ * @category Helpers
  *
  * @param identifier - identifier/descriptor of the area of interest, example: BZN|SE4
  *
  * @returns - Id of the area of interest, example "10Y1001A1001A47J", or undefined
  */
-const FirstAreaByIdentifier = (identifier: string): string | undefined => {
-  return AllAreasByIdentifier(identifier)?.[0];
+const Area = (identifier: string): string | undefined => {
+  return AllAreas(identifier)?.[0];
 };
 
-export { AllAreasByIdentifier, Areas, FirstAreaByIdentifier };
+export { AllAreas, Area, Areas };

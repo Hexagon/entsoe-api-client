@@ -10,7 +10,7 @@
 const ENTSOE_ENDPOINT = "https://web-api.tp.entsoe.eu/api";
 
 import { Areas } from "./definitions/areas.ts";
-import { DocumentType } from "./definitions/documenttype.js";
+import { DocumentTypes } from "./definitions/documenttypes.ts";
 import {
   BalancingDocument,
   ConfigurationDocument,
@@ -21,10 +21,10 @@ import {
   TransmissionNetworkDocument,
   UnavailabilityDocument,
 } from "./documents.ts";
-import { ProcessType } from "./definitions/processtype.js";
-import { PsrType } from "./definitions/psrtype.js";
+import { ProcessTypes } from "./definitions/processtypes.ts";
+import { PsrTypes } from "./definitions/psrtypes.ts";
 import { TextWriter, Uint8ArrayReader, ZipReader } from "../deps.ts";
-import { BusinessType } from "./definitions/businesstype.js";
+import { BusinessTypes } from "./definitions/businesstypes.ts";
 import { QueryParameters } from "./parameters.ts";
 
 /**
@@ -44,7 +44,7 @@ const ComposeQuery = (securityToken: string, params: QueryParameters, force?: bo
   });
 
   // Validate documentType, add to parameter list
-  if (!(params.documentType in DocumentType) && !force) {
+  if (!(params.documentType in DocumentTypes) && !force) {
     throw new Error("Invalid document type requested");
   } else {
     query.append("DocumentType", params.documentType);
@@ -52,7 +52,7 @@ const ComposeQuery = (securityToken: string, params: QueryParameters, force?: bo
 
   // Validate processType if requested , add to parameter list
   if (params.processType !== undefined) {
-    if (!(params.processType in ProcessType) && !force) {
+    if (!(params.processType in ProcessTypes) && !force) {
       throw new Error("Invalid process type requested");
     } else {
       query.append("ProcessType", params.processType);
@@ -61,7 +61,7 @@ const ComposeQuery = (securityToken: string, params: QueryParameters, force?: bo
 
   // Validate businessType if requested , add to parameter list
   if (params.businessType !== undefined) {
-    if (!(params.businessType in BusinessType) && !force) {
+    if (!(params.businessType in BusinessTypes) && !force) {
       throw new Error("Invalid business type requested");
     } else {
       query.append("BusinessType", params.businessType);
@@ -70,7 +70,7 @@ const ComposeQuery = (securityToken: string, params: QueryParameters, force?: bo
 
   // Validate processType if requested , add to parameter list
   if (params.psrType !== undefined) {
-    if (!(params.psrType in PsrType) && !force) {
+    if (!(params.psrType in PsrTypes) && !force) {
       throw new Error("Invalid psr type requested");
     } else {
       query.append("PsrType", params.psrType);

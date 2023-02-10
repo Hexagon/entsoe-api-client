@@ -7,7 +7,7 @@
  * @license MIT
  */
 
-import { BusinessType } from "../definitions/businesstype.js";
+import { BusinessTypes } from "../definitions/businesstypes.ts";
 import {
   BaseDocument,
   BaseEntry,
@@ -129,7 +129,7 @@ const ParsePublication = (d: SourcePublicationDocument): PublicationDocument => 
       auctionCategory: ts["auction.category"],
       contractMarketAgreementType: ts["contract_MarketAgreement.type"],
       classificationSequenceAICPosition: ts["classificationSequence_AttributeInstanceComponent.position"],
-      businessTypeDescription: ts.businessType ? (BusinessType as Record<string, string>)[ts.businessType] : void 0,
+      businessTypeDescription: ts.businessType ? (BusinessTypes as Record<string, string>)[ts.businessType] : void 0,
       periods: [],
     };
     const periodArray = Array.isArray(ts.Period) ? ts.Period : (ts.Period ? [ts.Period] : []);

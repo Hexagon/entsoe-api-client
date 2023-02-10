@@ -7,7 +7,7 @@
  * @license MIT
  */
 
-import { BusinessType } from "../definitions/businesstype.js";
+import { BusinessTypes } from "../definitions/businesstypes.ts";
 import {
   BaseDocument,
   BaseEntry,
@@ -104,7 +104,7 @@ const ParseBalancing = (d: SourceBalancingDocument): BalancingDocument => {
       curveType: ts.curveType,
       businessType: ts.businessType,
       flowDirection: ts["flowDirection.direction"],
-      businessTypeDescription: ts.businessType ? (BusinessType as Record<string, string>)[ts.businessType] : void 0,
+      businessTypeDescription: ts.businessType ? (BusinessTypes as Record<string, string>)[ts.businessType] : void 0,
       periods: [],
     };
     const periodArray = Array.isArray(ts.Period) ? ts.Period : (ts.Period ? [ts.Period] : []);

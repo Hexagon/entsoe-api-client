@@ -9,7 +9,7 @@
  **/
 
 // Deno import:
-import { QueryGL, FirstAreaByIdentifier } from "https://deno.land/x/entsoe_api_client/mod.ts";
+import { QueryGL, Area, DocumentType, ProcessType } from "https://deno.land/x/entsoe_api_client/mod.ts";
 
 // Node import:
 // import { QueryGL } from "entsoe-api-client";
@@ -30,10 +30,10 @@ const result = await QueryGL(
         process.env.API_TOKEN // ... in Node
         : Deno.env.get("API_TOKEN"), // ... in Deno
     {
-        documentType: "A75",        // A75 - Actual generation per type
-        processType: "A16",         // A16 - Realised
-        inDomain: FirstAreaByIdentifier("BZN|SE2"),         // In_Domain
-        outDomain: FirstAreaByIdentifier("BZN|SE2"),        // Out_Domain
+        documentType: DocumentType("Actual generation per type"),
+        processType: ProcessType("Realised"),
+        inDomain: Area("BZN|SE2"),         // In_Domain
+        outDomain: Area("BZN|SE2"),        // Out_Domain
         startDateTime: dateToday,   // Start date
         endDateTime: dateTomorrow,  // End date
     }

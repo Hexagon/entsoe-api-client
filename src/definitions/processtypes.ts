@@ -9,7 +9,7 @@
  * @readonly
  * @enum {string}
  */
-const ProcessType = {
+const ProcessTypes = {
   /** Day ahead */
   A01: "Day ahead",
   /** Intra day incremental */
@@ -48,4 +48,19 @@ const ProcessType = {
   A68: "Local Selection aFRR",
 };
 
-export { ProcessType };
+/**
+ * Helper function to find process type by name
+ *
+ * @public
+ * @category Helpers
+ * 
+ * @param identifier - Name of the process type
+ *
+ * @returns - Process type identifier
+ */
+const ProcessType = (name: string): string | undefined => {
+  const foundProcessTypes: [string, string] | undefined = Object.entries(ProcessTypes).find(([_key, value]) => value.toLowerCase().trim() == name.toLowerCase().trim());
+  return foundProcessTypes ? foundProcessTypes[0] : undefined;
+};
+
+export { ProcessType, ProcessTypes };

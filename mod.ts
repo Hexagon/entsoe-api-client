@@ -14,5 +14,14 @@ export type { QueryParameters } from "./src/parameters.ts";
 export { ParseDocument } from "./src/documents.ts";
 export type { ConfigurationDocument, GLDocument, PublicationDocument, UnavailabilityDocument, TransmissionNetworkDocument, CriticalNetworkElementDocument, BalancingDocument } from "./src/documents.ts";
 
-export { FirstAreaByIdentifier } from "./src/definitions/areas.ts";
-export { AllAreasByIdentifier } from "./src/definitions/areas.ts";
+export { Area, AllAreas } from "./src/definitions/areas.ts";
+export { DocumentType } from "./src/definitions/documenttypes.ts";
+export { ProcessType } from "./src/definitions/processtypes.ts";
+export { BusinessType } from "./src/definitions/businesstypes.ts";
+export { PsrType } from "./src/definitions/psrtypes.ts";
+export { AuctionType } from "./src/definitions/auctiontypes.ts";
+export { AuctionCategory } from "./src/definitions/auctioncategories.ts";
+export { Direction } from "./src/definitions/directions.ts";
+export { DocStatus } from "./src/definitions/docstatuses.ts";
+export { MarketAgreementType } from "./src/definitions/marketagreementtypes.ts";
+export { MarketProduct } from "./src/definitions/marketproducts.ts";

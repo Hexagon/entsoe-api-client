@@ -9,7 +9,7 @@
  **/
 
 // Deno import:
-import { QueryGL, FirstAreaByIdentifier } from "../mod.ts";
+import { QueryGL, Area, ProcessType } from "../mod.ts";
 
 // Node import:
 // import { QueryGL } from "entsoe-api-client";
@@ -28,10 +28,10 @@ const result = await QueryGL(
         process.env.API_TOKEN // ... in Node
         : Deno.env.get("API_TOKEN"), // ... in Deno
     {
-        documentType: "A71",        // A71 - Generation forecast
-        processType: "A01",         // A01 - Day ahead
-        inDomain: FirstAreaByIdentifier("Sweden (SE)"), // FistAreaByIdentifier resolves to "10YSE-1--------K" which is also CTA|SE, MBA|SE etc...
-        outDomain: FirstAreaByIdentifier("Sweden (SE)"),   
+        documentType: DocumentType("Generation forecast"),        // A71 - Generation forecast
+        processType: ProcessType("Day ahead"),         // A01 - Day ahead
+        inDomain: Area("Sweden (SE)"), // FistAreaByIdentifier resolves to "10YSE-1--------K" which is also CTA|SE, MBA|SE etc...
+        outDomain: Area("Sweden (SE)"),   
         startDateTime: dateToday,   // Start date
         endDateTime: dateTomorrow   // End date
     }

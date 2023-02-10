@@ -8,7 +8,7 @@
  **/
 
 // Deno import:
-import { QueryPublication, FirstAreaByIdentifier } from "https://deno.land/x/entsoe_api_client/mod.ts";
+import { QueryPublication, Area } from "https://deno.land/x/entsoe_api_client/mod.ts";
 
 // Node import:
 // import { QueryPublication } from "entsoe-api-client";
@@ -29,8 +29,8 @@ const result = await QueryPublication(
      {
         documentType: "A44",              // A44 - Price document
         processType: "A01",               // A01 - Day ahead
-        inDomain: FirstAreaByIdentifier("BZN|SE2"),            // In_Domain: For A44 - Electricity price area
-        outDomain: FirstAreaByIdentifier("BZN|SE2"),           // Out_Domain: For A44 - Electricity price area
+        inDomain: Area("BZN|SE2"),            // In_Domain: For A44 - Electricity price area
+        outDomain: Area("BZN|SE2"),           // Out_Domain: For A44 - Electricity price area
         startDateTime: dateToday,         // Start date
         endDateTime: dateTomorrow         // End date
     }

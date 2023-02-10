@@ -9,7 +9,7 @@
  * @readonly
  * @enum {string}
  */
-const PsrType = {
+const PsrTypes = {
   A03: "Mixed",
   A04: "Generation",
   A05: "Load",
@@ -39,4 +39,19 @@ const PsrType = {
   B24: "Transformer",
 };
 
-export { PsrType };
+/**
+ * Helper function to find Psr type by name
+ *
+ * @public
+ * @category Helpers
+ *
+ * @param identifier - Name of the Psr type (Example: "Shared Balancing Reserve Capacity")
+ *
+ * @returns - Psr Type (example: C22)
+ */
+const PsrType = (name: string): string | undefined => {
+  const foundPsrTypes: [string, string] | undefined = Object.entries(PsrTypes).find(([_key, value]) => value.toLowerCase().trim() == name.toLowerCase().trim());
+  return foundPsrTypes ? foundPsrTypes[0] : undefined;
+};
+
+export { PsrTypes, PsrType };

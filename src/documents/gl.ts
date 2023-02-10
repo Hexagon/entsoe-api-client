@@ -19,8 +19,8 @@ import {
   SourceTimeInterval,
   TimeInterval,
 } from "./common.ts";
-import { BusinessType } from "../definitions/businesstype.js";
-import { PsrType } from "../definitions/psrtype.js";
+import { BusinessTypes } from "../definitions/businesstypes.ts";
+import { PsrTypes } from "../definitions/psrtypes.ts";
 
 /**
  * Source GL_MarketDocument document
@@ -115,8 +115,8 @@ const ParseGL = (d: SourceGLDocument): GLDocument => {
       objectAggregation: ts.objectAggregation,
       mktPsrType: ts.MktPSRType?.psrType,
       businessType: ts.businessType,
-      businessTypeDescription: ts.businessType ? (BusinessType as Record<string, string>)[ts.businessType] : void 0,
-      mktPsrTypeDescription: ts.MktPSRType?.psrType ? (PsrType as Record<string, string>)[ts.MktPSRType?.psrType] : void 0,
+      businessTypeDescription: ts.businessType ? (BusinessTypes as Record<string, string>)[ts.businessType] : void 0,
+      mktPsrTypeDescription: ts.MktPSRType?.psrType ? (PsrTypes as Record<string, string>)[ts.MktPSRType?.psrType] : void 0,
       quantityMeasureUnit: ts["quantity_Measure_Unit.name"],
       periods: [],
     };

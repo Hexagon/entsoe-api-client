@@ -7,8 +7,8 @@
  * @license MIT
  */
 
-import { BusinessType } from "../definitions/businesstype.js";
-import { PsrType } from "../definitions/psrtype.js";
+import { BusinessTypes } from "../definitions/businesstypes.ts";
+import { PsrTypes } from "../definitions/psrtypes.ts";
 import {
   BaseDocument,
   BaseEntry,
@@ -147,7 +147,7 @@ const ParseUnavailability = (d: SourceUnavailabilityDocument): UnavailabilityDoc
       resourceName: outage["production_RegisteredResource.name"],
       resourceLocation: outage["production_RegisteredResource.location.name"],
       businessType: outage.businessType,
-      businessTypeDescription: outage.businessType ? (BusinessType as Record<string, string>)[outage.businessType] : void 0,
+      businessTypeDescription: outage.businessType ? (BusinessTypes as Record<string, string>)[outage.businessType] : void 0,
       psrName: outage["production_RegisteredResource.pSRType.powerSystemResources.name"],
       psrNominalPowerUnit: outage["production_RegisteredResource.pSRType.powerSystemResources.nominalP"]
         ? outage["production_RegisteredResource.pSRType.powerSystemResources.nominalP"]["@unit"]
@@ -156,7 +156,7 @@ const ParseUnavailability = (d: SourceUnavailabilityDocument): UnavailabilityDoc
         ? outage["production_RegisteredResource.pSRType.powerSystemResources.nominalP"]["#text"]
         : "0",
       psrType: outage["production_RegisteredResource.pSRType.psrType"]
-        ? (PsrType as Record<string, string>)[
+        ? (PsrTypes as Record<string, string>)[
           outage["production_RegisteredResource.pSRType.psrType"] as string
         ]
         : void 0,

@@ -47,6 +47,7 @@ As an example `businessType`=`B33` in the raw xml will result in keys `businessT
 
 ### Methods
 
+**Querying**
 | Method                      | Interface                                                                               | Description                                                                                                        |
 |-----------------------------|-----------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | Query                       | (securityToken, params)<br>=><br>Promise<unknown[]>                  | Fetch any document, and return a array of typed and<br>parsed JavaScript object(s). Primarily internal, but exported. |
@@ -57,11 +58,36 @@ As an example `businessType`=`B33` in the raw xml will result in keys `businessT
 | QueryBalancing              | (securityToken, params)<br>=><br>Promise<BalancingDocument[]>        | Same, for Balancing_MarketDocument(s)                                                                              |
 | QueryTransmissionNetwork    | (securityToken, params)<br>=><br>Promise<TransmissionNetworkD...>    | Same, for Transmission_MarketDocument(s)                                                                           |
 | QueryCriticalNetworkElement | (securityToken, params)<br>=><br>Promise<CriticalNetworkEleme...>    | Same, for CriticalNetworkElement_MarketDocument(s)                                                                 |
-| ParseDocument               | (xmlDocument)<br>=><br>PublicationDocument\|BalancingDoc...                           | Parses raw XML into a typed object. <br>Primarily internal, but exported and usable.                               |
-| FirstAreaByIdentifier       | (identifier)<br>=><br>string[] \| undefined                                           | Finds internal id (10YL-1001A00074) of all areas<br> having aspecific identier (CTA\|SE, BZN\|DE-LU etc...)        |
-| AllAreasByIdentifier        | (identifier)<br>=><br>string \| undefined                                             | Same as above, but return first match                                                                              |
 
-### Parameters
+**Translations**
+
+Helper functions for translate human readable descriptions to ids usable by the api.
+
+| Method                      | Interface                                                                               | Description                                                                                                        |
+|-----------------------------|-----------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| Area       | (identifier)<br>=><br>string[] \| undefined                                           | Finds internal id (10YL-1001A00074) of all areas<br> having aspecific identier (CTA\|SE, BZN\|DE-LU etc...)        |
+| AllAreas        | (identifier)<br>=><br>string \| undefined                                             | Same as above, but return first match                                                                              |
+| DocumentType        | (name)<br>=><br>string \| undefined                                             | Get document type from Document name                                                                              |
+| ProcessType        | (name)<br>=><br>string \| undefined                                             | Get process type from process name                                                                              |
+| BusinessType        | (name)<br>=><br>string \| undefined                                             | Get business type from business name                                                                              |
+| PsrType        | (name)<br>=><br>string \| undefined                                             | Get psr type from psr name                                                                              |
+| AuctionType        | (name)<br>=><br>string \| undefined                                             | Get auction type from auction name                                                                              |
+| AuctionCategory        | (name)<br>=><br>string \| undefined                                             | Get auction category type from auction category name                                                                              |
+| Direction        | (name)<br>=><br>string \| undefined                                             | Get direction id from direction name                                                                              |
+| DocStatus        | (name)<br>=><br>string \| undefined                                             | Get document status id from document status name                                                                              |
+| MarketAgreementType        | (name)<br>=><br>string \| undefined                                             | Get market agreement type id from market agreement type name                                                                              |
+| MarketProduct        | (name)<br>=><br>string \| undefined                                             | Get Market product id from market product name                                                                              |
+
+**Parsing**
+
+| Method                      | Interface                                                                               | Description                                                                                                        |
+|-----------------------------|-----------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| ParseDocument               | (xmlDocument)<br>=><br>PublicationDocument\|BalancingDoc...                           | Parses raw XML into a typed object. <br>Primarily internal, but exported and usable.                               |
+
+> **Note**
+> The parsing function is mainly intended for internal use in the library
+
+### Query Parameters
 
 All parameters that can be passes to `Query()`, `QueryPublication()` etc.
 

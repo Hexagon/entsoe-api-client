@@ -9,7 +9,7 @@
  **/
 
 // Deno import:
-import { QueryGL } from "https://deno.land/x/entsoe_api_client/mod.ts";
+import { QueryGL, FirstAreaByIdentifier } from "../mod.ts";
 
 // Node import:
 // import { QueryGL } from "entsoe-api-client";
@@ -30,8 +30,8 @@ const result = await QueryGL(
     {
         documentType: "A71",        // A71 - Generation forecast
         processType: "A01",         // A01 - Day ahead
-        inDomain: "Sweden (SE)",    
-        outDomain: "Sweden (SE)",   
+        inDomain: FirstAreaByIdentifier("Sweden (SE)"), // FistAreaByIdentifier resolves to "10YSE-1--------K" which is also CTA|SE, MBA|SE etc...
+        outDomain: FirstAreaByIdentifier("Sweden (SE)"),   
         startDateTime: dateToday,   // Start date
         endDateTime: dateTomorrow   // End date
     }

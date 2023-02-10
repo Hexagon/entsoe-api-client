@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.128.0/testing/asserts.ts";
-import { ParseDocument } from "../src/parsedocument.ts";
+import { ParseDocument } from "../src/documents.ts";
 
 Deno.test(
   "Unavalability document (and combinations of single/multiple ts/periods)",

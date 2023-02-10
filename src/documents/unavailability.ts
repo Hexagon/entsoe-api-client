@@ -7,8 +7,8 @@
  * @license MIT
  */
 
-import { BusinessType } from "../parameters/businesstype.js";
-import { PsrType } from "../parameters/psrtype.js";
+import { BusinessType } from "../definitions/businesstype.js";
+import { PsrType } from "../definitions/psrtype.js";
 import {
   BaseDocument,
   BaseEntry,
@@ -22,11 +22,23 @@ import {
   TimeInterval,
 } from "./common.ts";
 
-/** Spefifics for source Unavailability_MarketDocument, extending SourceBaseDocument */
+/**
+ * Source Unavailability_MarketDocument document, extending SourceBaseDocument
+ *
+ * @private
+ * @category Source Document Interfaces
+ */
 interface SourceUnavailabilityDocument extends SourceBaseDocument {
   "unavailability_Time_Period.timeInterval"?: SourceTimeInterval;
   TimeSeries: SourceUnavailabilityEntry[] | SourceUnavailabilityEntry;
 }
+
+/**
+ * Source Unavailability_MarketDocument TimeSeries Entry
+ *
+ * @private
+ * @category Source Document Interfaces
+ */
 interface SourceUnavailabilityEntry extends SourceBaseDocument {
   businessType?: string;
   "start_DateAndOrTime.date"?: string;
@@ -42,10 +54,22 @@ interface SourceUnavailabilityEntry extends SourceBaseDocument {
   Available_Period?: SourcePeriod | SourcePeriod[];
 }
 
-/** Specifics for parsed Unavailability document */
+/**
+ * Parsed Unavailability document, extendíng BaseDocument
+ *
+ * @public
+ * @category Document Interfaces
+ */
 interface UnavailabilityDocument extends BaseDocument {
   timeseries: UnavailabilityEntry[];
 }
+
+/**
+ * Parsed Unavailability document timeseries entry
+ *
+ * @public
+ * @category Document Interfaces
+ */
 interface UnavailabilityEntry extends BaseEntry {
   startDate: Date;
   endDate: Date;

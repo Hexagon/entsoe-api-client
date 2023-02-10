@@ -7,7 +7,7 @@
  * @license MIT
  */
 
-import { BusinessType } from "../parameters/businesstype.js";
+import { BusinessType } from "../definitions/businesstype.js";
 import {
   BaseDocument,
   BaseEntry,
@@ -20,12 +20,23 @@ import {
   TimeInterval,
 } from "./common.ts";
 
-/** Spefifics for source Publication_MarketDocument, extending SourceBaseDocument */
+/**
+ * Source Publication_MarketDocument document, extending SourceBaseDocument
+ *
+ * @private
+ * @category Source Document Interfaces
+ */
 interface SourcePublicationDocument extends SourceBaseDocument {
   "period.timeInterval"?: SourceTimeInterval;
   TimeSeries: SourcePublicationEntry[] | SourcePublicationEntry;
 }
 
+/**
+ * Source Publication_MarketDocument document TimeZone entries
+ *
+ * @private
+ * @category Source Document Interfaces
+ */
 interface SourcePublicationEntry {
   Period: SourcePeriod | SourcePeriod[];
   businessType?: string;
@@ -42,11 +53,22 @@ interface SourcePublicationEntry {
   "classificationSequence_AttributeInstanceComponent.position"?: number;
 }
 
-/** Specifics for parsed Publication document */
+/**
+ * Parssed Publication document, extending BaseDocument
+ *
+ * @public
+ * @category Document Interfaces
+ */
 interface PublicationDocument extends BaseDocument {
   timeseries: PublicationDocumentEntry[];
 }
 
+/**
+ * Parssed Publication document timeseries entry
+ *
+ * @public
+ * @category Document Interfaces
+ */
 interface PublicationDocumentEntry extends BaseEntry {
   currency?: string;
   priceMeasureUnit?: string;

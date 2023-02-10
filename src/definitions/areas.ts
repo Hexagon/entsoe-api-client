@@ -9,7 +9,7 @@
  *
  * Descriptor description:
  *
- *    BZ — Bidding Zone
+ *    BZN — Bidding Zone
  *    BZA — Bidding Zone Aggregation
  *    CA — Control Area
  *    MBA — Market Balance Area
@@ -263,4 +263,47 @@ const Areas = {
   "IS": "Iceland (IS)",
 };
 
-export { Areas };
+/**
+ * Helper function to find all areas having a specific identier
+ *
+ * Example, to find all ids for bidding zone SE4, pass identifier SE4
+ *
+ * @public
+ *
+ * @param identifier - identifier/descriptor of the area of interest, example: SE4
+ *
+ * @returns - Undefined, or array containing matching ids of the area of interest, example ["10Y1001A1001A47J","10Y1001C--00038X"]
+ */
+const AllAreasByIdentifier = (identifier: string): string[] | undefined => {
+  return Object.entries(Areas).find(([_key, value]) => value.includes(identifier));
+};
+
+/**
+ * Helper function to find first area having a specific identier
+ *
+ * Example, to find first id matching bidding zone SE4, pass identifier BZN|SE4
+ *
+ * Where
+ *    BZN — Bidding Zone
+ *    BZA — Bidding Zone Aggregation
+ *    CA — Control Area
+ *    MBA — Market Balance Area
+ *    IBA — Imbalance Area
+ *    IPA — Imbalance Price Area
+ *    LFA — Load Frequency Control Area
+ *    LFB — Load Frequency Control Block
+ *    REG — Region
+ *    SCA — Scheduling Area
+ *    SNA — Synchronous Area
+ *
+ * @public
+ *
+ * @param identifier - identifier/descriptor of the area of interest, example: BZN|SE4
+ *
+ * @returns - Id of the area of interest, example "10Y1001A1001A47J", or undefined
+ */
+const FirstAreaByIdentifier = (identifier: string): string | undefined => {
+  return AllAreasByIdentifier(identifier)?.[0];
+};
+
+export { AllAreasByIdentifier, Areas, FirstAreaByIdentifier };

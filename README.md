@@ -35,8 +35,6 @@ npm install entsoe-api-client --save
 
 ## Documentation
 
-Library and method documentation can be found at [deno.land/x/entsoe_api_client](https://deno.land/x/entsoe_api_client@0.9.4/mod.ts).
-
 Documents structure and parameters returned by this library closely resemble what you find in [ENTSO-e REST API documentation](https://transparency.entsoe.eu/content/static_content/Static%20content/web%20api/Guide.html), so have a look there too.
 
 If you want a `Publication_MarketDocument`, the corresponding function in this library is `QueryPublication`. In the resulting document (object), the key `receiver_MarketParticipant.mRID` will become `receiverMarketParticipantId`. The same goes for parameters. We recommend have auto-completion enabled in your editor, the types will give great help in navigating the parameters and document objects.
@@ -44,6 +42,57 @@ If you want a `Publication_MarketDocument`, the corresponding function in this l
 Another difference compared to source documents is that most ids automatically get a complementary description, where applicable. 
 As an example `businessType`=`B33` in the raw xml will result in keys `businessType: "B33"` and `businessTypeDescription: "Area Control Error"` in the output.
 
+> **Note** 
+> Full library and method documentation can be found at [deno.land/x/entsoe_api_client](https://deno.land/x/entsoe_api_client@0.9.4/mod.ts).
+
+### Methods
+
+| Method                      | Interface                                                                               | Description                                                                                                        |
+|-----------------------------|-----------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| Query                       | (securityToken, params)<br>=><br>Promise<unknown[]>                  | Fetch any document, and return a array of typed and<br>parsed JavaScript object(s). Primarily internal, but exported. |
+| QueryPublication            | (securityToken, params)<br>=><br>Promise<PublicationDocument[]>      | Request Publication_MarketDocument(s), and return<br>a array of typed and parsed JavaScript object(s)                 |
+| QueryGL                     | (securityToken, params)<br>=><br>Promise<GLDocument[]>               | Same, for GL_MarketDocument                                                                                        |
+| QueryUnavailability         | (securityToken, params)<br>=><br>Promise<UnavailabilityDocument[]>   | Same, for Unavailability_MarketDocument                                                                            |
+| QueryConfiguration          | (securityToken, params)<br>=><br>Promise<ConfigurationDocument[]>    | Same, for Configuration_MarketDocument                                                                             |
+| QueryBalancing              | (securityToken, params)<br>=><br>Promise<BalancingDocument[]>        | Same, for Balancing_MarketDocument(s)                                                                              |
+| QueryTransmissionNetwork    | (securityToken, params)<br>=><br>Promise<TransmissionNetworkD...>    | Same, for Transmission_MarketDocument(s)                                                                           |
+| QueryCriticalNetworkElement | (securityToken, params)<br>=><br>Promise<CriticalNetworkEleme...>    | Same, for CriticalNetworkElement_MarketDocument(s)                                                                 |
+| ParseDocument               | (xmlDocument)<br>=><br>PublicationDocument\|BalancingDoc...                           | Parses raw XML into a typed object. <br>Primarily internal, but exported and usable.                               |
+| FirstAreaByIdentifier       | (identifier)<br>=><br>string[] \| undefined                                           | Finds internal id (10YL-1001A00074) of all areas<br> having aspecific identier (CTA\|SE, BZN\|DE-LU etc...)        |
+| AllAreasByIdentifier        | (identifier)<br>=><br>string \| undefined                                             | Same as above, but return first match                                                                              |
+
+### Parameters
+
+All parameters that can be passes to `Query()`, `QueryPublication()` etc.
+
+| Parameter Name                         | Type   | Name in ENSO-e REST API                     | Note                                                       |
+|----------------------------------------|--------|---------------------------------------------|------------------------------------------------------------|
+| documentType                           | string | DocumentType                                |                                                            |
+| processType (optional)                 | string | ProcessType                                 |                                                            |
+| businessType (optional)                | string | BusinessType                                |                                                            |
+| psrType (optional)                     | string | PsrType                                     |                                                            |
+| inDomain (optional)                    | string | In_Domain                                   |                                                            |
+| inBiddingZoneDomain (optional)         | string | InBiddingZone_Domain                        |                                                            |
+| biddingZoneDomain (optional)           | string | BiddingZone_Domain                          |                                                            |
+| outDomain (optional)                   | string | Out_Domain                                  |                                                            |
+| outBiddingZoneDomain (optional)        | string | OutBiddingZone_Domain                       |                                                            |
+| startDateTime(optional)                | Date   | TimeInterval                                | ISO8601 string                                             |
+| endDateTime (optional)                 | Date   | TimeInterval                                | ISO8601 string                                             |
+| startDateTimeUpdate (optional)         | Date   | TimeIntervalUpdate                          | ISO8601 string                                             |
+| endDateTimeUpdate (optional)           | Date   | TimeIntervalUpdate                          | ISO8601 string                                             |
+| offset (optional)                      | number | Offset                                      | Enables fetching more than x documents by using pagination |
+| implementationDateAndOrTime (optional) | string | Implementation_DateAndOrTime                | ISO8601 string                                             |
+| contractMarketAgreementType (optional) | string | Contract_MarketAgreement.Type               |                                                            |
+| auctionType (optional)                 | string | Auction.Type                                |                                                            |
+| auctionCategory (optional)             | string | Auction.Category                            |                                                            |
+| classificationSequenceAICPosition (optional)| string | ClassificationSequence_(...).Position  |                                                            |
+| connectingDomain (optional)            | string | connecting_Domain                           |                                                            |
+| standardMarketProduct (optional)       | string | Standard_MarketProduct                      |                                                            |
+| originalMarketProduct(optional)        | string | Original_MarketProduct                      |                                                            |
+| registeredResource (optional)          | string | registeredResource                          |                                                            |
+| acquiringDomain (optional)             | string | Acquiring_Domain                            |                                                            |
+| mRID (optional)                        | string | mRID                                        |                                                            |
+| docStatus (optional)                   | string | DocStatus                                   |                                                            |
 
 ## Examples
 

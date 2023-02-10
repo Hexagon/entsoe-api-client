@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.128.0/testing/asserts.ts";
-import { CriticalNetworkElementDocument, ParseDocument } from "../src/parsedocument.ts";
+import { CriticalNetworkElementDocument, ParseDocument } from "../src/documents.ts";
 
 Deno.test("Test parsing of CriticalNetworkElement", async function (t) {
   const xml = await Deno.readTextFile("./tests/data/criticalnetworkelement.xml");

@@ -19,15 +19,26 @@ import {
   SourceTimeInterval,
   TimeInterval,
 } from "./common.ts";
-import { BusinessType } from "../parameters/businesstype.js";
-import { PsrType } from "../parameters/psrtype.js";
+import { BusinessType } from "../definitions/businesstype.js";
+import { PsrType } from "../definitions/psrtype.js";
 
-/** Spefifics for source GL_MarketDocument, extending SourceBaseDocument */
+/**
+ * Source GL_MarketDocument document
+ *
+ * @private
+ * @category Source Document Interfaces
+ */
 interface SourceGLDocument extends SourceBaseDocument {
   "time_Period.timeInterval"?: SourceTimeInterval;
   TimeSeries: SourceGLEntry[] | SourceGLEntry;
 }
 
+/**
+ * Source GL_MarketDocument document TimeSeries entries
+ *
+ * @private
+ * @category Source Document Interfaces
+ */
 interface SourceGLEntry {
   "outBiddingZone_Domain.mRID"?: SourceCodingSchemeTextEntry;
   "inBiddingZone_Domain.mRID"?: SourceCodingSchemeTextEntry;
@@ -39,10 +50,22 @@ interface SourceGLEntry {
   Period: SourcePeriod | SourcePeriod[];
 }
 
-/** Specifics for parsed GL document */
+/**
+ * Parsed GL document
+ *
+ * @public
+ * @category Document Interfaces
+ */
 interface GLDocument extends BaseDocument {
   timeseries: GLDocumentEntry[];
 }
+
+/**
+ * Parsed GL timeseries entries
+ *
+ * @public
+ * @category Document Interfaces
+ */
 interface GLDocumentEntry extends BaseEntry {
   mktPsrType?: string;
   mktPsrTypeDescription?: string;

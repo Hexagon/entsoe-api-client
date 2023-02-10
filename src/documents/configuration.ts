@@ -18,13 +18,24 @@ import {
   SourceGeneratingUnit,
   SourcePsrType,
 } from "./common.ts";
-import { BusinessType } from "../parameters/businesstype.js";
+import { BusinessType } from "../definitions/businesstype.js";
 
-/** Spefifics for source Configuration_MarketDocument, extending SourceBaseDocument */
+/**
+ * Specifics for source Configuration_MarketDocument, extending SourceBaseDocument
+ *
+ * @private
+ * @category Source Document Interfaces
+ */
 interface SourceConfigurationDocument extends SourceBaseDocument {
   TimeSeries: SourceConfigurationEntry[] | SourceConfigurationEntry;
 }
-interface SourceConfigurationEntry extends SourceBaseDocument {
+/**
+ * Specifics for source Configuration_MarketDocument TimeSeries entries
+ *
+ * @private
+ * @category Source Document Interfaces
+ */
+interface SourceConfigurationEntry {
   businessType?: string;
   "implementation_DateAndOrTime.date"?: string;
   "implementation_DateAndOrTime.time"?: string;
@@ -38,10 +49,21 @@ interface SourceConfigurationEntry extends SourceBaseDocument {
   "GeneratingUnit_PowerSystemResources"?: SourceGeneratingUnit[];
 }
 
-/** Specifics for parsed Configuration document */
+/**
+ * Parsed Configuration document
+ *
+ * @public
+ * @category Document Interfaces
+ */
 interface ConfigurationDocument extends BaseDocument {
   timeseries: ConfigurationEntry[];
 }
+/**
+ * Parsed Configuration timeseries entries
+ *
+ * @public
+ * @category Document Interfaces
+ */
 interface ConfigurationEntry extends BaseEntry {
   implementationDate?: Date;
   biddingZoneDomain?: string;

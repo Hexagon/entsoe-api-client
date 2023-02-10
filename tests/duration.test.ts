@@ -1,5 +1,5 @@
 import { assertEquals, assertThrows } from "https://deno.land/std@0.128.0/testing/asserts.ts";
-import { ISO8601DurToSec } from "../src/duration.ts";
+import { ISO8601DurToSec } from "../src/helpers/duration.ts";
 
 Deno.test("Test shortcuts", async function (t) {
   assertEquals(ISO8601DurToSec("P1D"), 86400);

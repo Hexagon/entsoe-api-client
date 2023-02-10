@@ -7,7 +7,7 @@
  * @license MIT
  */
 
-import { BusinessType } from "../parameters/businesstype.js";
+import { BusinessType } from "../definitions/businesstype.js";
 import {
   BaseDocument,
   BaseEntry,
@@ -20,12 +20,21 @@ import {
   TimeInterval,
 } from "./common.ts";
 
-/** Spefifics for source Balancing_MarketDocument, extending SourceBaseDocument */
+/** Source Balancing_MarketDocument, extending SourceBaseDocument
+ *
+ * @private
+ * @category Source Document Interfaces
+ */
 interface SourceBalancingDocument extends SourceBaseDocument {
   "period.timeInterval"?: SourceTimeInterval;
   "area_Domain.mRID"?: SourceCodingSchemeTextEntry;
   TimeSeries: SourceBalancingEntry[] | SourceBalancingEntry;
 }
+/** Source Balancing_MarketDocument TimeSeries entry
+ *
+ * @private
+ * @category Source Document Interfaces
+ */
 interface SourceBalancingEntry {
   businessType?: string;
   "flowDirection.direction"?: string;
@@ -34,12 +43,21 @@ interface SourceBalancingEntry {
   Period: SourcePeriod | SourcePeriod[];
 }
 
-/** Specifics for parsed Balancing document */
+/** Parsed Balancing document
+ *
+ * @public
+ * @category Document Interfaces
+ */
 interface BalancingDocument extends BaseDocument {
   areaDomainId?: string;
   timeseries: BalancingDocumentEntry[];
 }
 
+/** Parsed Balancing document entry
+ *
+ * @public
+ * @category Document Interfaces
+ */
 interface BalancingDocumentEntry extends BaseEntry {
   quantityMeasureUnit?: string;
   flowDirection?: string;
@@ -50,6 +68,7 @@ interface BalancingDocumentEntry extends BaseEntry {
  * Parses everything below to the root node of a source Balancing_MarketDocument
  *
  * @private
+ * @category Parsing
  *
  * @param d - Everything below to the root node of a source Balancing_MarketDocument
  *

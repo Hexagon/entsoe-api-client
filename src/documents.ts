@@ -18,12 +18,15 @@ import { BalancingDocument, ParseBalancing } from "./documents/balancing.ts";
 import { CriticalNetworkElementDocument, ParseCriticalNetworkElement } from "./documents/criticalnetworkelement.ts";
 
 /**
- * Takes a full source document from ENTSO-e Rest API, checks the document type, parses using
+ * Takes raw XML from ENTSO-e Rest API, checks the document type, parses using
  * the appropiate parser, ant returns a typed and cleaned object representing the document.
  *
- * Mainly intended to be used internally in this library by the `Query` function.
+ * Mainly intended to be used internally in entsoe-api-client library through the `Query` function.
  *
- * @param d - Everything below to the root node of a unknown source document
+ * @public
+ * @category Parsing
+ *
+ * @param d - Raw XML from ENTSO-e Rest API
  *
  * @returns - Typed, cleaned and validated document
  */

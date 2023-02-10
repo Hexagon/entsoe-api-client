@@ -12,9 +12,9 @@ import { SourceConfigurationDocument } from "./configuration.ts";
 import { SourceGLDocument } from "./gl.ts";
 import { SourcePublicationDocument } from "./publication.ts";
 import { SourceUnavailabilityDocument } from "./unavailability.ts";
-import { DocumentType } from "../parameters/documenttype.js";
-import { ISO8601DurToSec } from "../duration.ts";
-import { ProcessType } from "../parameters/processtype.js";
+import { DocumentType } from "../definitions/documenttype.js";
+import { ISO8601DurToSec } from "../helpers/duration.ts";
+import { ProcessType } from "../definitions/processtype.js";
 import { SourceTransmissionNetworkDocument } from "./transmittionnetwork.ts";
 import { SourceBalancingDocument } from "./balancing.ts";
 import { SourceCriticalNetworkElementDocument } from "./criticalnetworkelement.ts";
@@ -148,6 +148,7 @@ interface BaseEntry {
  * Internal helper function to parse a Period-section of a source document, common to all source document types
  *
  * @private
+ * @category Parsing
  *
  * @param period - Period section from a source XML document represented by an object
  * @returns - Parsed and validated Period object
@@ -200,6 +201,7 @@ const ParsePeriod = (period: SourcePeriod): Period => {
  * Parses the common features below the root node of any source document
  *
  * @private
+ * @category Parsing
  *
  * @param d - The common features below the root node of any source document represented by an object
  * @returns - Parsed base document

@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.128.0/testing/asserts.ts";
-import { ParseDocument, PublicationDocument } from "../src/parsedocument.ts";
+import { ParseDocument, PublicationDocument } from "../src/documents.ts";
 
 Deno.test("Test parsing of Publication, and root document feaures", async function (t) {
   const xml = await Deno.readTextFile("./tests/data/publication.explicitallocations.xml");

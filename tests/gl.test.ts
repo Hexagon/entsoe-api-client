@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.128.0/testing/asserts.ts";
-import { GLDocument, ParseDocument } from "../src/parsedocument.ts";
+import { GLDocument, ParseDocument } from "../src/documents.ts";
 
 Deno.test("Test parsing of GLDocument", async function (t) {
   const xml = await Deno.readTextFile("./tests/data/gl.load.singlepoint.xml");

@@ -9,7 +9,11 @@
 
 import { SourceBaseDocument, SourceReasonDetails } from "./common.ts";
 
-/** Spefifics for source Acknowledgement_MarketDocument, extending SourceBaseDocument */
+/** Source Acknowledgement_MarketDocument, extending SourceBaseDocument
+ *
+ * @private
+ * @category Source Document Interfaces
+ */
 interface SourceAcknowledmentDocument extends SourceBaseDocument {
   Reason: SourceReasonDetails;
 }

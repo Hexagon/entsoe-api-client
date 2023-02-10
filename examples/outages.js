@@ -8,7 +8,7 @@
  **/
 
 // Deno:
-import { QueryUnavailability } from "https://deno.land/x/entsoe_api_client/mod.ts";
+import { QueryUnavailability, FirstAreaByIdentifier } from "https://deno.land/x/entsoe_api_client/mod.ts";
 
 // Node: 
 // import { QueryUnavailability } from "entsoe-api-client";
@@ -30,7 +30,7 @@ const result = await QueryUnavailability(
         : Deno.env.get("API_TOKEN"), // ... in Deno
     {
         documentType: "A77",        // A77 - Production unavailability OR A80 - Generation unavailability
-        biddingZoneDomain: "CTA|SE",  // biddingZone_Domain
+        biddingZoneDomain: FirstAreaByIdentifier("CTA|SE"),  // biddingZone_Domain
         startDateTime: dateToday,   // Start date
         endDateTime: dateTomorrow,  // End date        
         offset: 0

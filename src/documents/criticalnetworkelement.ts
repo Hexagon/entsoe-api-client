@@ -7,7 +7,7 @@
  * @license MIT
  */
 
-import { BusinessType } from "../parameters/businesstype.js";
+import { BusinessType } from "../definitions/businesstype.js";
 import {
   BaseDocument,
   BaseEntry,
@@ -19,22 +19,40 @@ import {
   TimeInterval,
 } from "./common.ts";
 
-/** Spefifics for source CriticalNetworkElement_MarketDocument, extending SourceBaseDocument */
+/**
+ * Source CriticalNetworkElement_MarketDocument, extending SourceBaseDocument
+ *
+ * @private
+ * @category Source Document Interfaces
+ */
 interface SourceCriticalNetworkElementDocument extends SourceBaseDocument {
   "time_Period.timeInterval"?: SourceTimeInterval;
   TimeSeries: SourceCriticalNetworkElementEntry[] | SourceCriticalNetworkElementEntry;
 }
+/**
+ * Source CriticalNetworkElement_MarketDocument TimeSeries Entry
+ * @private
+ * @category Source Document Interfaces
+ */
 interface SourceCriticalNetworkElementEntry {
   businessType?: string;
   curveType?: string;
   Period: SourcePeriod | SourcePeriod[];
 }
 
-/** Specifics for parsed CriticalNetworkElement document */
+/** Parsed CriticalNetworkElement document
+ *
+ * @public
+ * @category Document Interfaces
+ */
 interface CriticalNetworkElementDocument extends BaseDocument {
   timeseries: CriticalNetworkElementDocumentEntry[];
 }
-
+/** Parsed CriticalNetworkElement document timeseries entry
+ *
+ * @public
+ * @category Document Interfaces
+ */
 interface CriticalNetworkElementDocumentEntry extends BaseEntry {
   curveType?: string;
 }

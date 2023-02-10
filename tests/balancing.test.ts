@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.128.0/testing/asserts.ts";
-import { BalancingDocument, ParseDocument } from "../src/parsedocument.ts";
+import { BalancingDocument, ParseDocument } from "../src/documents.ts";
 
 Deno.test("Test parsing of Balancing", async function (t) {
   const xml = await Deno.readTextFile("./tests/data/balancing.xml");

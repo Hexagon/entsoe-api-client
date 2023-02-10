@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.128.0/testing/asserts.ts";
-import { ConfigurationDocument, ParseDocument } from "../src/parsedocument.ts";
+import { ConfigurationDocument, ParseDocument } from "../src/documents.ts";
 
 Deno.test(
   "Configuration document",

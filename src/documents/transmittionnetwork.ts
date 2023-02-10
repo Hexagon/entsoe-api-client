@@ -7,8 +7,8 @@
  * @license MIT
  */
 
-import { BusinessType } from "../parameters/businesstype.js";
-import { PsrType } from "../parameters/psrtype.js";
+import { BusinessType } from "../definitions/businesstype.js";
+import { PsrType } from "../definitions/psrtype.js";
 import {
   BaseDocument,
   BaseEntry,
@@ -21,16 +21,29 @@ import {
   TimeInterval,
 } from "./common.ts";
 
-/** Spefifics for source TransmissionNetwork_MarketDocument, extending SourceBaseDocument */
 interface SourceAssetRegisteredResource {
   mRID?: SourceCodingSchemeTextEntry;
   "pSRType.psrType"?: string;
   "location.name"?: string;
 }
+
+/**
+ * Source TransmissionNetwork_MarketDocument document, extending SourceBaseDocument
+ *
+ * @private
+ * @category Source Document Interfaces
+ */
 interface SourceTransmissionNetworkDocument extends SourceBaseDocument {
   "period.timeInterval"?: SourceTimeInterval;
   TimeSeries: SourceTransmissionNetworkEntry[] | SourceTransmissionNetworkEntry;
 }
+
+/**
+ * Source TransmissionNetwork_MarketDocument TimeSeries Entry
+ *
+ * @private
+ * @category Source Document Interfaces
+ */
 interface SourceTransmissionNetworkEntry {
   businessType?: string;
   "in_Domain.mRID"?: SourceCodingSchemeTextEntry;
@@ -43,11 +56,22 @@ interface SourceTransmissionNetworkEntry {
   "Asset_RegisteredResource"?: SourceAssetRegisteredResource;
 }
 
-/** Specifics for parsed TransmissionNetwork document */
+/**
+ * Parsed TransmissionNetwork document, extendíng BaseDocument
+ *
+ * @public
+ * @category Document Interfaces
+ */
 interface TransmissionNetworkDocument extends BaseDocument {
   timeseries: TransmissionNetworkDocumentEntry[];
 }
 
+/**
+ * Parsed TransmissionNetwork document timeseries entry
+ *
+ * @public
+ * @category Document Interfaces
+ */
 interface TransmissionNetworkDocumentEntry extends BaseEntry {
   quantityMeasureUnit?: string;
   inDomain?: string;

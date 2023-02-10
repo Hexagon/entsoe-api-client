@@ -50,8 +50,10 @@ const PsrTypes = {
  * @returns - Psr Type (example: C22)
  */
 const PsrType = (name: string): string | undefined => {
-  const foundPsrTypes: [string, string] | undefined = Object.entries(PsrTypes).find(([_key, value]) => value.toLowerCase().trim() == name.toLowerCase().trim());
+  const foundPsrTypes: [string, string] | undefined = Object.entries(PsrTypes).find(([_key, value]) =>
+    value.toLowerCase().trim() == name.toLowerCase().trim()
+  );
   return foundPsrTypes ? foundPsrTypes[0] : undefined;
 };
 
-export { PsrTypes, PsrType };
+export { PsrType, PsrTypes };

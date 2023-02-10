@@ -31,7 +31,9 @@ const AuctionCategories = {
  * @returns - Auction Category (example: A04)
  */
 const AuctionCategory = (name: string): string | undefined => {
-  const foundAuctionCategories: [string, string] | undefined = Object.entries(AuctionCategories).find(([_key, value]) => value.toLowerCase().trim() == name.toLowerCase().trim());
+  const foundAuctionCategories: [string, string] | undefined = Object.entries(AuctionCategories).find(([_key, value]) =>
+    value.toLowerCase().trim() == name.toLowerCase().trim()
+  );
   return foundAuctionCategories ? foundAuctionCategories[0] : undefined;
 };
 

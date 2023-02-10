@@ -35,8 +35,10 @@ const DocStatuses = {
  * @returns - Document status id (example: X01)
  */
 const DocStatus = (name: string): string | undefined => {
-  const foundDocStatuss: [string, string] | undefined = Object.entries(DocStatuses).find(([_key, value]) => value.toLowerCase().trim() == name.toLowerCase().trim());
+  const foundDocStatuss: [string, string] | undefined = Object.entries(DocStatuses).find(([_key, value]) =>
+    value.toLowerCase().trim() == name.toLowerCase().trim()
+  );
   return foundDocStatuss ? foundDocStatuss[0] : undefined;
 };
 
-export { DocStatuses, DocStatus };
+export { DocStatus, DocStatuses };

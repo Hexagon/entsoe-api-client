@@ -39,8 +39,10 @@ const MarketAgreementTypes = {
  * @returns - MarketAgreement Type (example: A13)
  */
 const MarketAgreementType = (name: string): string | undefined => {
-  const foundMarketAgreementTypes: [string, string] | undefined = Object.entries(MarketAgreementTypes).find(([_key, value]) => value.toLowerCase().trim() == name.toLowerCase().trim());
+  const foundMarketAgreementTypes: [string, string] | undefined = Object.entries(MarketAgreementTypes).find(([_key, value]) =>
+    value.toLowerCase().trim() == name.toLowerCase().trim()
+  );
   return foundMarketAgreementTypes ? foundMarketAgreementTypes[0] : undefined;
 };
 
-export { MarketAgreementTypes, MarketAgreementType };
+export { MarketAgreementType, MarketAgreementTypes };

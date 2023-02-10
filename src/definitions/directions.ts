@@ -27,8 +27,10 @@ const Directions = {
  * @returns - Direction id (example: A02)
  */
 const Direction = (name: string): string | undefined => {
-  const foundDirections: [string, string] | undefined = Object.entries(Directions).find(([_key, value]) => value.toLowerCase().trim() == name.toLowerCase().trim());
+  const foundDirections: [string, string] | undefined = Object.entries(Directions).find(([_key, value]) =>
+    value.toLowerCase().trim() == name.toLowerCase().trim()
+  );
   return foundDirections ? foundDirections[0] : undefined;
 };
 
-export { Directions, Direction };
+export { Direction, Directions };

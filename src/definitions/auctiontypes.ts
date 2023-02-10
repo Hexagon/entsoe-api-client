@@ -27,8 +27,10 @@ const AuctionTypes = {
  * @returns - Auction Type (example: C22)
  */
 const AuctionType = (name: string): string | undefined => {
-  const foundAuctionTypes: [string, string] | undefined = Object.entries(AuctionTypes).find(([_key, value]) => value.toLowerCase().trim() == name.toLowerCase().trim());
+  const foundAuctionTypes: [string, string] | undefined = Object.entries(AuctionTypes).find(([_key, value]) =>
+    value.toLowerCase().trim() == name.toLowerCase().trim()
+  );
   return foundAuctionTypes ? foundAuctionTypes[0] : undefined;
 };
 
-export { AuctionTypes, AuctionType };
+export { AuctionType, AuctionTypes };

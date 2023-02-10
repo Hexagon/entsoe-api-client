@@ -79,8 +79,10 @@ const BusinessTypes = {
  * @returns - Business Type (example: C22)
  */
 const BusinessType = (name: string): string | undefined => {
-  const foundBusinessTypes: [string, string] | undefined = Object.entries(BusinessTypes).find(([_key, value]) => value.toLowerCase().trim() == name.toLowerCase().trim());
+  const foundBusinessTypes: [string, string] | undefined = Object.entries(BusinessTypes).find(([_key, value]) =>
+    value.toLowerCase().trim() == name.toLowerCase().trim()
+  );
   return foundBusinessTypes ? foundBusinessTypes[0] : undefined;
 };
 
-export { BusinessTypes, BusinessType };
+export { BusinessType, BusinessTypes };

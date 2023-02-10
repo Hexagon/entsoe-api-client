@@ -53,13 +53,15 @@ const ProcessTypes = {
  *
  * @public
  * @category Helpers
- * 
+ *
  * @param identifier - Name of the process type
  *
  * @returns - Process type identifier
  */
 const ProcessType = (name: string): string | undefined => {
-  const foundProcessTypes: [string, string] | undefined = Object.entries(ProcessTypes).find(([_key, value]) => value.toLowerCase().trim() == name.toLowerCase().trim());
+  const foundProcessTypes: [string, string] | undefined = Object.entries(ProcessTypes).find(([_key, value]) =>
+    value.toLowerCase().trim() == name.toLowerCase().trim()
+  );
   return foundProcessTypes ? foundProcessTypes[0] : undefined;
 };
 

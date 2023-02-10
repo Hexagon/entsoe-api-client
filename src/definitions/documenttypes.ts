@@ -111,7 +111,9 @@ const DocumentTypes = {
  * @returns - Document Type (example: B45)
  */
 const DocumentType = (name: string): string | undefined => {
-  const foundDocumentTypes: [string, string] | undefined = Object.entries(DocumentTypes).find(([_key, value]) => value.toLowerCase().trim() == name.toLowerCase().trim());
+  const foundDocumentTypes: [string, string] | undefined = Object.entries(DocumentTypes).find(([_key, value]) =>
+    value.toLowerCase().trim() == name.toLowerCase().trim()
+  );
   return foundDocumentTypes ? foundDocumentTypes[0] : undefined;
 };
 

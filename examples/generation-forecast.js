@@ -9,7 +9,7 @@
  **/
 
 // Deno import:
-import { QueryGL, Area, ProcessType } from "https://deno.land/x/entsoe_api_client/mod.ts";
+import { QueryGL, Area, ProcessType } from "https://deno.land/x/entsoe_api_client@0.9.6/mod.ts";
 
 // Node import:
 // import { QueryGL, Area, ProcessType } from "entsoe-api-client";

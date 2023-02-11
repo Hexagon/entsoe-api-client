@@ -38,8 +38,5 @@ const result = await QueryUnavailability(
 );
 
 for(const outage of result) {
-    console.log("Outage: ");
-    console.log(outage);
-    // Print a table for first returned timeseries and period
-    console.table(outage.timeseries[0].periods[0]);
+    console.log("Outage: ", outage);
 }

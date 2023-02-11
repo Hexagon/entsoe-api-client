@@ -1,6 +1,6 @@
 # entsoe-api-client
 
-Unofficial ENTSO-e REST API Client for Deno and Node. Complete. Easy to use. Minimal.
+Unofficial ENTSO-e REST API Client for Deno and Node. Comprehensive. User-friendly. Minimalistic.
 
 [![Module type: CJS+ESM](https://img.shields.io/badge/npm-cjs%2Besm-brightgreen)](https://www.npmjs.org/package/entsoe-api-client)
 [![NPM Downloads](https://img.shields.io/npm/dm/entsoe-api-client.svg)](https://www.npmjs.org/package/entsoe-api-client)
@@ -10,17 +10,17 @@ Unofficial ENTSO-e REST API Client for Deno and Node. Complete. Easy to use. Min
 ## Features
 
   * Supports all requests listed in [Entso-e REST API Documentation](https://transparency.entsoe.eu/content/static_content/Static%20content/web%20api/Guide.html)
-  * Support zip-file endpoints, unzips documents transparently
-  * [Examples](/examples) written to support both Node and Deno
-  * Supports Deno *and* Node
-  * Fully Typed, written in [TypeScript](https://www.typescriptlang.org/)
-  * ESM (Deno, Node) and CommonJS (Node) support
-  * Adds description to codes while parsing the documents
+  * Supports zip-file endpoints and transparently unzips documents
+  * Includes [examples](/examples) that support both Deno and Node
+  * Supports both Deno and Node
+  * Written in fully typed [TypeScript](https://www.typescriptlang.org/)
+  * Offers ESM (for Deno and Node) and CommonJS (for Node) support
+  * Adds descriptions to codes while parsing the documents
 
 
 ## Installation
 
-Make sure to use a recent version of your runtime, Node.js `>=18` and Deno `>=1.26` is supported.
+Make sure to use a recent version of your runtime. Node.js `>=18` and Deno `>=1.26` are supported.
 
 **Deno**
 ```javascript
@@ -35,15 +35,14 @@ npm install entsoe-api-client --save
 
 ## Documentation
 
-Documents structure and parameters returned by this library closely resemble what you find in [ENTSO-e REST API documentation](https://transparency.entsoe.eu/content/static_content/Static%20content/web%20api/Guide.html), so have a look there too.
+The structure of the documents and the parameters returned by this library closely resemble what you can find in the [ENTSO-e REST API documentation](https://transparency.entsoe.eu/content/static_content/Static%20content/web%20api/Guide.html). It is recommended that you also take a look there.
 
-If you want a `Publication_MarketDocument`, the corresponding function in this library is `QueryPublication`. In the resulting document (object), the key `receiver_MarketParticipant.mRID` will become `receiverMarketParticipantId`. The same goes for parameters. We recommend have auto-completion enabled in your editor, the types will give great help in navigating the parameters and document objects.
+If you want a Publication_MarketDocument, the corresponding function in this library is queryPublication. In the resulting document (object), the key receiver_MarketParticipant.mRID will become receiverMarketParticipantId. The same transformation applies to the parameters. We recommend enabling auto-completion in your editor, as the types will provide great help in navigating the parameters and document objects.
 
-Another difference compared to source documents is that most ids automatically get a complementary description, where applicable. 
-As an example `businessType`=`B33` in the raw xml will result in keys `businessType: "B33"` and `businessTypeDescription: "Area Control Error"` in the output.
+Another difference compared to the source documents is that most IDs automatically come with a complementary description, where applicable. For example, `<businessType>B33</..` in the raw XML will result in the keys businessType: "B33" and businessTypeDescription: "Area Control Error" in the output.
 
 > **Note** 
-> Full library and method documentation can be found at [deno.land/x/entsoe_api_client](https://deno.land/x/entsoe_api_client@0.9.4/mod.ts).
+> The full library and method documentation can be found at [deno.land/x/entsoe_api_client](https://deno.land/x/entsoe_api_client@0.9.4/mod.ts).
 
 ### Methods
 
@@ -61,7 +60,7 @@ As an example `businessType`=`B33` in the raw xml will result in keys `businessT
 
 **Translations**
 
-Helper functions for translate human readable descriptions to ids usable by the api.
+Helper functions for translating human-readable descriptions to IDs that can be used by the API.
 
 | Method                      | Interface                                                                               | Description                                                                                                        |
 |-----------------------------|-----------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
@@ -85,11 +84,11 @@ Helper functions for translate human readable descriptions to ids usable by the 
 | ParseDocument               | (xmlDocument)<br>=><br>PublicationDocument\|BalancingDoc...                           | Parses raw XML into a typed object. <br>Primarily internal, but exported and usable.                               |
 
 > **Note**
-> The parsing function is mainly intended for internal use in the library
+> The parsing function is mainly intended for internal use within the library.
 
 ### Query Parameters
 
-All parameters that can be passes to `Query()`, `QueryPublication()` etc.
+All parameters that can be passed to Query(), QueryPublication(), etc.
 
 | Parameter Name                         | Type   | Name in ENSO-e REST API                     | Note                                                       |
 |----------------------------------------|--------|---------------------------------------------|------------------------------------------------------------|
@@ -124,8 +123,7 @@ All parameters that can be passes to `Query()`, `QueryPublication()` etc.
 
 Examples can be found in the [/examples](/examples) directory.
 
-To run the examples, pass your ENTSO-e API key by environment variable `API_TOKEN`.
-
+To run the examples, pass your ENTSO-e API key as an environment variable called `API_TOKEN`.
 **Deno**
 
 Powershell
@@ -155,12 +153,12 @@ API_TOKEN="your-api-token" node .\spot-prices-today.ts
 
 All contributions are welcome.
 
-Module is developed in Deno. Node module is generated by [dnt](https://deno.land/manual@v1.30.3/advanced/publishing/dnt), using [scripts/build_npm.ts](/scripts/build_npm.ts).
+The module is developed in Deno. The Node module is generated using [dnt](https://deno.land/manual@v1.30.3/advanced/publishing/dnt), as described in [scripts/build_npm.ts](/scripts/build_npm.ts).
 
-See [Contribution Guide](/CONTRIBUTING.md)
+For more information, please refer to the [Contribution Guide](/CONTRIBUTING.md).
 
 > **Note**
-> Please run `deno task precommit` before each commit, to make sure every file is tested/formatted/linted to standards.
+> Please run deno task precommit before each commit to ensure that every file is tested, formatted, and linted to standards.
 
 
 ## Donations
@@ -172,4 +170,4 @@ Sponsor me on GitHub, or
 
 ## License
 
-MIT
+MIT License

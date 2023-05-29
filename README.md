@@ -32,6 +32,8 @@ import { QueryConfiguration } from "https://deno.land/x/entsoe_api_client/mod.ts
 npm install entsoe-api-client --save
 ```
 
+### Note
+Using an older version of Node.js? Use 0.x versions of this library for fetch compatibility.
 
 ## Documentation
 

@@ -13,7 +13,6 @@ await build({
   outDir: "./npm",
   shims: {
     deno: "dev",
-    undici: true // Undici is for fetch support in old node versions
   },
   mappings: {
     "https://deno.land/x/zipjs@v2.6.63/index.js": {

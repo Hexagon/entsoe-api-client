@@ -256,6 +256,7 @@ const Query = async (securityToken: string, params: QueryParameters): Promise<(P
   const query = ComposeQuery(securityToken, params);
 
   // Construct url and get result
+  // @ts-expect-error fetch is not recognised as a valid global.
   const result = await fetch(`${ENTSOE_ENDPOINT}?${query}`);
 
   // Check for 401
@@ -282,6 +283,9 @@ const Query = async (securityToken: string, params: QueryParameters): Promise<(P
       for (const xmlFileEntry of await zipReader.getEntries()) {
         // Unzip file
         const stringDataWriter = new TextWriter();
+
+        if (typeof xmlFileEntry.getData !== "function") break;
+
         await xmlFileEntry.getData(stringDataWriter);
         const xmlFileData = await stringDataWriter.getData();
 

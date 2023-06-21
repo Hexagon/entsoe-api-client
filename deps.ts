@@ -14,7 +14,7 @@
  * @private 
  * @ignore
  * */
-export { XMLParser } from "https://esm.sh/fast-xml-parser@4.1.1";
+export { XMLParser } from "https://esm.sh/fast-xml-parser@4.2.4";
 
 /** 
  * @private 

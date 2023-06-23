@@ -1,5 +1,4 @@
-import { build, emptyDir } from "https://deno.land/x/dnt@0.33.1/mod.ts";
-import { copy } from "https://deno.land/std@0.176.0/fs/mod.ts";
+import { build, emptyDir, copy } from "./deps.ts";
 
 // Clear NPM directory
 await emptyDir("./npm");
@@ -15,9 +14,9 @@ await build({
     deno: "dev",
   },
   mappings: {
-    "https://deno.land/x/zipjs@v2.6.63/index.js": {
+    "https://deno.land/x/zipjs@v2.7.17/index.js": {
       name: "@zip.js/zip.js",
-      version: "^2.6.63"
+      version: "^2.7.17"
     },
   },
   package: {

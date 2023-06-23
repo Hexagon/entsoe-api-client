@@ -14,10 +14,10 @@
  * @private 
  * @ignore
  * */
-export { XMLParser } from "https://esm.sh/fast-xml-parser@4.2.4";
+export { XMLParser } from "https://esm.sh/fast-xml-parser@4.2.5";
 
 /** 
  * @private 
  * @ignore
  * */
-export { ZipReader, Uint8ArrayReader, TextWriter } from "https://deno.land/x/zipjs@v2.6.63/index.js"
+export { ZipReader, Uint8ArrayReader, TextWriter } from "https://deno.land/x/zipjs@v2.7.17/index.js"

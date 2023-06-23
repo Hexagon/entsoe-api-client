@@ -1,16 +1,10 @@
 {
     "lint": {
-        "files": {
-            "include": ["src"]
-        }
+        "include": ["src"]
     },
     "fmt": {
-        "files": {
-            "include": ["tests","src"]
-        },
-        "options": {
-            "lineWidth": 150
-        }
+        "include": ["tests","src"],
+        "lineWidth": 150
     },
     "tasks": {
         "clean": "deno run -A ./scripts/clean.ts",
@@ -18,6 +12,7 @@
         "coverage": "deno task clean && deno test tests --allow-read --coverage=coverage && deno coverage coverage",
         "coverage:ci": "deno task clean && deno test tests --allow-read --coverage=coverage && deno coverage coverage --lcov --output=cov.lcov",
         "precommit": "deno task clean && deno fmt && deno lint && deno task test && deno task build",
+        "update-deps": "deno run --allow-read=. --allow-net=deno.land,cdn.deno.land,unpkg.com https://deno.land/x/udd/main.ts --dry-run deps.ts scripts/deps.ts",
         "build": "deno run -A scripts/build_npm.ts"
     }
 }

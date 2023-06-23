@@ -12,7 +12,7 @@ Unofficial ENTSO-e REST API Client for Deno and Node. Comprehensive. User-friend
   * Supports all requests listed in [Entso-e REST API Documentation](https://transparency.entsoe.eu/content/static_content/Static%20content/web%20api/Guide.html)
   * Supports zip-file endpoints and transparently unzips documents
   * Includes [examples](/examples) that support both Deno and Node
-  * Supports both Deno and Node
+  * Supports both Deno and Node (>=18.0)
   * Written in fully typed [TypeScript](https://www.typescriptlang.org/)
   * Offers ESM (for Deno and Node) and CommonJS (for Node) support
   * Adds descriptions to codes while parsing the documents

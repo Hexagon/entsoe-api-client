@@ -48,6 +48,10 @@ See [deno.jsonc](/deno.jsonc) scripts section for all available scripts.
 
 Then, commit the changes once you are happy with them. 
 
+### Updating dependencies
+
+If you're updating dependencies, use `deno task update-deps` to check for the latest versions. Then update `deps.ts`, `scripts/deps.ts` and finally update any mapping in `scripts/build_npm.ts`.
+
 ### Pull Request
 
 When you're finished with the changes, create a pull request, also known as a PR.

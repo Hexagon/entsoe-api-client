@@ -1,4 +1,12 @@
-# Welcome to entsoe-api-client contributing guide
+---
+layout: page
+title: "Contribution Guide"
+nav_order: 4
+---
+
+# entsoe-api-client contributing guide
+
+---
 
 ## New contributor guide
 
@@ -44,7 +52,7 @@ We recommend using VS Code with the deno extensions, which will automatically ch
 
 Please run ```deno task precommit``` before committing, to make sure every test and check passes.
 
-See [deno.jsonc](/deno.jsonc) scripts section for all available scripts.
+See the scripts section of [/deno.jsonc](https://github.com/Hexagon/entsoe-api-client/blob/main/deno.jsonc) int the GitHub repository for all available scripts.
 
 Then, commit the changes once you are happy with them. 
 

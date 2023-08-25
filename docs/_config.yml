@@ -1,0 +1,18 @@
+title: Entso-e API Client
+
+description: Unofficial JavaScript/TypeScript ENTSO-e REST API Client for Deno and Node. Comprehensive. User-friendly. Minimalistic.
+
+remote_theme: just-the-docs/just-the-docs
+
+url: https://entsoe-api-client.56k.guru
+
+aux_links:
+  GitHub Repository: https://github.com/hexagon/entsoe-api-client
+  NPM Library: https://npmjs.com/package/entsoe-api-client
+  Deno Library: https://deno.land/x/entsoe_api_client
+
+plugins:
+  - jekyll-relative-links
+  - jekyll-default-layout
+
+# color_scheme: dark

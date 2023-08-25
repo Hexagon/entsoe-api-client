@@ -178,7 +178,7 @@ const ParsePeriod = (period: SourcePeriod): Period => {
 
     // Add point to output, if there is no next position, use base end date for period as point end date
     const outputPoint: Point = {
-      startDate: new Date(baseDate + (currentPos) * periodLengthSSafe * 1000),
+      startDate: new Date(baseDate + currentPos * periodLengthSSafe * 1000),
       endDate: nextPos ? new Date(baseDate + nextPos * periodLengthSSafe * 1000) : new Date(baseEndDate),
       position: points[i].position,
       constraintTimeSeries: points[i].Constraint_TimeSeries,

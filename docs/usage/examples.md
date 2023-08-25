@@ -1,7 +1,8 @@
 ---
 layout: page
 title: "Examples"
-nav_order: 2
+parent: Usage
+nav_order: 2  
 ---
 
 # Examples

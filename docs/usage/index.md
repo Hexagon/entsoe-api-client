@@ -21,16 +21,17 @@ Another difference compared to the source documents is that most IDs automatical
 ## Methods
 
 **Querying**
-| Method                      | Interface                                                                               | Description                                                                                                        |
-|-----------------------------|-----------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| Query                       | (securityToken, params)<br>=><br>Promise<unknown[]>                  | Fetch any document, and return a array of typed and<br>parsed JavaScript object(s). Primarily internal, but exported. |
-| QueryPublication            | (securityToken, params)<br>=><br>Promise<PublicationDocument[]>      | Request Publication_MarketDocument(s), and return<br>a array of typed and parsed JavaScript object(s)                 |
-| QueryGL                     | (securityToken, params)<br>=><br>Promise<GLDocument[]>               | Same, for GL_MarketDocument                                                                                        |
-| QueryUnavailability         | (securityToken, params)<br>=><br>Promise<UnavailabilityDocument[]>   | Same, for Unavailability_MarketDocument                                                                            |
-| QueryConfiguration          | (securityToken, params)<br>=><br>Promise<ConfigurationDocument[]>    | Same, for Configuration_MarketDocument                                                                             |
-| QueryBalancing              | (securityToken, params)<br>=><br>Promise<BalancingDocument[]>        | Same, for Balancing_MarketDocument(s)                                                                              |
-| QueryTransmissionNetwork    | (securityToken, params)<br>=><br>Promise<TransmissionNetworkD...>    | Same, for Transmission_MarketDocument(s)                                                                           |
-| QueryCriticalNetworkElement | (securityToken, params)<br>=><br>Promise<CriticalNetworkEleme...>    | Same, for CriticalNetworkElement_MarketDocument(s)                                                                 |
+
+| Method                      | Interface                                 | Description                                                   |
+|-----------------------------|-------------------------------------------|---------------------------------------------------------------|
+| Query                       | `(securityToken, params) => Promise<unknown[]>`                  | Fetch documents, return array of JS objects. Internal, but exported.   |
+| QueryPublication            | `(securityToken, params) => Promise<PublicationDocument[]>`      | Request Publication_MarketDocument(s).                        |
+| QueryGL                     | `(securityToken, params) => Promise<GLDocument[]>`               | For GL_MarketDocument.                                        |
+| QueryUnavailability         | `(securityToken, params) => Promise<UnavailabilityDocument[]>`   | For Unavailability_MarketDocument.                            |
+| QueryConfiguration          | `(securityToken, params) => Promise<ConfigurationDocument[]>`    | For Configuration_MarketDocument.                             |
+| QueryBalancing              | `(securityToken, params) => Promise<BalancingDocument[]>`        | For Balancing_MarketDocument(s).                              |
+| QueryTransmissionNetwork    | `(securityToken, params) => Promise<TransmissionNetworkDoc...>`  | For Transmission_MarketDocument(s).                           |
+| QueryCriticalNetworkElement | `(securityToken, params) => Promise<CriticalNetworkElemen...>`   | For CriticalNetworkElement_MarketDocument(s).                 |
 
 **Translations**
 

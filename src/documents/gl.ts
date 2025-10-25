@@ -20,6 +20,7 @@ import {
   TimeInterval,
 } from "./common.ts";
 import { BusinessTypes } from "../definitions/businesstypes.ts";
+import { CurveTypes } from "../definitions/curvetypes.ts";
 import { PsrTypes } from "../definitions/psrtypes.ts";
 
 /**
@@ -74,6 +75,7 @@ interface GLDocumentEntry extends BaseEntry {
   quantityMeasureUnit?: string;
   objectAggregation?: string;
   curveType?: string;
+  curveTypeDescription?: string;
 }
 /**
  * Parses everything below to the root node of a source GL_MarketDocument
@@ -112,6 +114,7 @@ const ParseGL = (d: SourceGLDocument): GLDocument => {
       outBiddingZone: ts["outBiddingZone_Domain.mRID"]?.["#text"],
       inBiddingZone: ts["inBiddingZone_Domain.mRID"]?.["#text"],
       curveType: ts.curveType,
+      curveTypeDescription: ts.curveType ? (CurveTypes as Record<string, string>)[ts.curveType] : void 0,
       objectAggregation: ts.objectAggregation,
       mktPsrType: ts.MktPSRType?.psrType,
       businessType: ts.businessType,
@@ -122,7 +125,7 @@ const ParseGL = (d: SourceGLDocument): GLDocument => {
     };
     const periodArray = Array.isArray(ts.Period) ? ts.Period : (ts.Period ? [ts.Period] : []);
     for (const inputPeriod of (periodArray as SourcePeriod[])) {
-      tsEntry.periods?.push(ParsePeriod(inputPeriod));
+      tsEntry.periods?.push(ParsePeriod(inputPeriod, ts.curveType));
     }
     document.timeseries.push(tsEntry);
   }

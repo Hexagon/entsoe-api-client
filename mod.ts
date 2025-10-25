@@ -25,3 +25,4 @@ export { Direction } from "./src/definitions/directions.ts";
 export { DocStatus } from "./src/definitions/docstatuses.ts";
 export { MarketAgreementType } from "./src/definitions/marketagreementtypes.ts";
 export { MarketProduct } from "./src/definitions/marketproducts.ts";
+export { CurveType } from "./src/definitions/curvetypes.ts";

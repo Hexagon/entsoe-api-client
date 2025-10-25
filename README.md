@@ -17,6 +17,7 @@ Check out the full documentation at [https://entsoe-api-client.56k.guru](https:/
   * Written in fully typed [TypeScript](https://www.typescriptlang.org/)
   * Offers ESM (for Deno and Node) and CommonJS (for Node) support
   * Adds descriptions to codes while parsing the documents
+  * Supports curve type A03 with automatic forward fill
 
 ## Quick usage
 

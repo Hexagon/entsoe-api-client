@@ -8,6 +8,7 @@
  */
 
 import { BusinessTypes } from "../definitions/businesstypes.ts";
+import { CurveTypes } from "../definitions/curvetypes.ts";
 import {
   BaseDocument,
   BaseEntry,
@@ -80,6 +81,7 @@ interface PublicationDocumentEntry extends BaseEntry {
   auctionCategory?: string;
   contractMarketAgreementType?: string;
   curveType?: string;
+  curveTypeDescription?: string;
   classificationSequenceAICPosition?: number;
 }
 
@@ -121,6 +123,7 @@ const ParsePublication = (d: SourcePublicationDocument): PublicationDocument => 
       priceMeasureUnit: ts["price_Measure_Unit.name"],
       quantityMeasureUnit: ts["quantity_Measure_Unit.name"],
       curveType: ts.curveType,
+      curveTypeDescription: ts.curveType ? (CurveTypes as Record<string, string>)[ts.curveType] : void 0,
       businessType: ts.businessType,
       inDomain: ts["in_Domain.mRID"]?.["#text"],
       outDomain: ts["out_Domain.mRID"]?.["#text"],
@@ -134,7 +137,7 @@ const ParsePublication = (d: SourcePublicationDocument): PublicationDocument => 
     };
     const periodArray = Array.isArray(ts.Period) ? ts.Period : (ts.Period ? [ts.Period] : []);
     for (const inputPeriod of (periodArray as SourcePeriod[])) {
-      tsEntry.periods?.push(ParsePeriod(inputPeriod));
+      tsEntry.periods?.push(ParsePeriod(inputPeriod, ts.curveType));
     }
     document.timeseries.push(tsEntry);
   }

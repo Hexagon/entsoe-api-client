@@ -1,46 +1,47 @@
 <TransmissionNetwork_MarketDocument xmlns="urn:iec62325.351:tc57wg16:451-6:transmissionnetworkdocument:3:0">
-	<mRID>18df89badd5e4bf8996332299541be3c</mRID>
-	<revisionNumber>1</revisionNumber>
-	<type>A90</type>
-	<process.processType>A35</process.processType>
-	<createdDateTime>2016-05-10T08:36:36Z</createdDateTime>
-	<sender_MarketParticipant.mRID codingScheme="A01">10X1001A1001A450</sender_MarketParticipant.mRID>
-	<sender_MarketParticipant.marketRole.type>A32</sender_MarketParticipant.marketRole.type>
-	<receiver_MarketParticipant.mRID codingScheme="A01">10X1001A1001A450</receiver_MarketParticipant.mRID>
-	<receiver_MarketParticipant.marketRole.type>A33</receiver_MarketParticipant.marketRole.type>
-	<period.timeInterval>
-		<start>2016-01-04T23:00Z</start>
-		<end>2016-01-05T00:00Z</end>
-	</period.timeInterval>
-	<TimeSeries>
-		<mRID>1</mRID>
-		<businessType>B01</businessType>
-		<in_Domain.mRID codingScheme="A01">10YCZ-CEPS-----N</in_Domain.mRID>
-		<out_Domain.mRID codingScheme="A01">10YDE-VE-------2</out_Domain.mRID>
-		<quantity_Measure_Unit.name>MAW</quantity_Measure_Unit.name>
-		<curveType>A01</curveType>
-		<end_DateAndOrTime.date>2016-12-31</end_DateAndOrTime.date>
-		<Asset_RegisteredResource>
-			<mRID codingScheme="A01">27T-PST-HRA-DE-X</mRID>
-			<pSRType.psrType>B24</pSRType.psrType>
-			<location.name>CZ</location.name>
-		</Asset_RegisteredResource>
-		<Period>
-			<timeInterval>
-				<start>2016-01-04T23:00Z</start>
-				<end>2016-01-05T00:00Z</end>
-			</timeInterval>
-			<resolution>PT60M</resolution>
-			<Point>
-				<position>1</position>
-				<quantity>500</quantity>
-			</Point>
-		</Period>
-		<Reason>
-			<code>A95</code>
-			<text>
+  <mRID>18df89badd5e4bf8996332299541be3c</mRID>
+  <revisionNumber>1</revisionNumber>
+  <type>A90</type>
+  <process.processType>A35</process.processType>
+  <createdDateTime>2016-05-10T08:36:36Z</createdDateTime>
+  <sender_MarketParticipant.mRID codingScheme="A01">10X1001A1001A450</sender_MarketParticipant.mRID>
+  <sender_MarketParticipant.marketRole.type>A32</sender_MarketParticipant.marketRole.type>
+  <receiver_MarketParticipant.mRID codingScheme="A01">10X1001A1001A450</receiver_MarketParticipant.mRID>
+  <receiver_MarketParticipant.marketRole.type>A33</receiver_MarketParticipant.marketRole.type>
+  <period.timeInterval>
+    <start>2016-01-04T23:00Z</start>
+    <end>2016-01-05T00:00Z</end>
+  </period.timeInterval>
+  <TimeSeries>
+    <mRID>1</mRID>
+    <businessType>B01</businessType>
+    <in_Domain.mRID codingScheme="A01">10YCZ-CEPS-----N</in_Domain.mRID>
+    <out_Domain.mRID codingScheme="A01">10YDE-VE-------2</out_Domain.mRID>
+    <quantity_Measure_Unit.name>MAW</quantity_Measure_Unit.name>
+    <curveType>A01</curveType>
+    <end_DateAndOrTime.date>2016-12-31</end_DateAndOrTime.date>
+    <Asset_RegisteredResource>
+      <mRID codingScheme="A01">27T-PST-HRA-DE-X</mRID>
+      <pSRType.psrType>B24</pSRType.psrType>
+      <location.name>CZ</location.name>
+    </Asset_RegisteredResource>
+    <Period>
+      <timeInterval>
+        <start>2016-01-04T23:00Z</start>
+        <end>2016-01-05T00:00Z</end>
+      </timeInterval>
+      <resolution>PT60M</resolution>
+      <Point>
+        <position>1</position>
+        <quantity>500</quantity>
+      </Point>
+    </Period>
+    <Reason>
+      <code>A95</code>
+      <text
+      >
 				The est. effect represents expected increase of interconnector tech. cross zonal capacity (CZC). The actual CZC offered to the allocation processes will be harmonized with TSO partners and will reflect operational conditions in the interconnected grid.
 			</text>
-		</Reason>
-	</TimeSeries>
+    </Reason>
+  </TimeSeries>
 </TransmissionNetwork_MarketDocument>

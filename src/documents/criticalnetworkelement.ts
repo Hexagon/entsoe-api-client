@@ -8,6 +8,7 @@
  */
 
 import { BusinessTypes } from "../definitions/businesstypes.ts";
+import { CurveTypes } from "../definitions/curvetypes.ts";
 import {
   BaseDocument,
   BaseEntry,
@@ -55,6 +56,7 @@ interface CriticalNetworkElementDocument extends BaseDocument {
  */
 interface CriticalNetworkElementDocumentEntry extends BaseEntry {
   curveType?: string;
+  curveTypeDescription?: string;
 }
 
 /**
@@ -92,13 +94,14 @@ const ParseCriticalNetworkElement = (d: SourceCriticalNetworkElementDocument): C
   for (const ts of tsArray) {
     const tsEntry: CriticalNetworkElementDocumentEntry = {
       curveType: ts.curveType,
+      curveTypeDescription: ts.curveType ? (CurveTypes as Record<string, string>)[ts.curveType] : void 0,
       businessType: ts.businessType,
       businessTypeDescription: ts.businessType ? (BusinessTypes as Record<string, string>)[ts.businessType] : void 0,
       periods: [],
     };
     const periodArray = Array.isArray(ts.Period) ? ts.Period : (ts.Period ? [ts.Period] : []);
     for (const inputPeriod of (periodArray as SourcePeriod[])) {
-      tsEntry.periods?.push(ParsePeriod(inputPeriod));
+      tsEntry.periods?.push(ParsePeriod(inputPeriod, ts.curveType));
     }
     document.timeseries.push(tsEntry);
   }

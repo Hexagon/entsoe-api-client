@@ -1,76 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Publication_MarketDocument xmlns="urn:iec62325.351:tc57wg16:451-3:publicationdocument:7:0">
-	<mRID>aa7484cb0aaf40fabad9134d2d59aa4e</mRID>
-	<revisionNumber>2</revisionNumber>
-	<type>A25</type>
-	<sender_MarketParticipant.mRID codingScheme="A01">10X1001A1001A450</sender_MarketParticipant.mRID>
-	<sender_MarketParticipant.marketRole.type>A32</sender_MarketParticipant.marketRole.type>
-	<receiver_MarketParticipant.mRID codingScheme="A01">10X1001A1001A450</receiver_MarketParticipant.mRID>
-	<receiver_MarketParticipant.marketRole.type>A33</receiver_MarketParticipant.marketRole.type>
-	<createdDateTime>2016-03-01T08:56:05Z</createdDateTime>
-	<period.timeInterval>
+  <mRID>aa7484cb0aaf40fabad9134d2d59aa4e</mRID>
+  <revisionNumber>2</revisionNumber>
+  <type>A25</type>
+  <sender_MarketParticipant.mRID codingScheme="A01">10X1001A1001A450</sender_MarketParticipant.mRID>
+  <sender_MarketParticipant.marketRole.type>A32</sender_MarketParticipant.marketRole.type>
+  <receiver_MarketParticipant.mRID codingScheme="A01">10X1001A1001A450</receiver_MarketParticipant.mRID>
+  <receiver_MarketParticipant.marketRole.type>A33</receiver_MarketParticipant.marketRole.type>
+  <createdDateTime>2016-03-01T08:56:05Z</createdDateTime>
+  <period.timeInterval>
+    <start>2016-01-01T23:00Z</start>
+    <end>2016-01-02T23:00Z</end>
+  </period.timeInterval>
+  <TimeSeries>
+    <mRID>1</mRID>
+    <auction.mRID>CP_A_Base1_SK-CZ</auction.mRID>
+    <auction.type>A02</auction.type>
+    <auction.category>A01</auction.category>
+    <businessType>A43</businessType>
+    <in_Domain.mRID codingScheme="A01">10YSK-SEPS-----K</in_Domain.mRID>
+    <out_Domain.mRID codingScheme="A01">10YCZ-CEPS-----N</out_Domain.mRID>
+    <contract_MarketAgreement.type>A01</contract_MarketAgreement.type>
+    <quantity_Measure_Unit.name>MAW</quantity_Measure_Unit.name>
+    <price_Measure_Unit.name>MWH</price_Measure_Unit.name>
+    <classificationSequence_AttributeInstanceComponent.position>1</classificationSequence_AttributeInstanceComponent.position>
+    <curveType>A01</curveType>
+    <Period>
+      <timeInterval>
         <start>2016-01-01T23:00Z</start>
         <end>2016-01-02T23:00Z</end>
-	</period.timeInterval>
-	<TimeSeries>
-		<mRID>1</mRID>
-		<auction.mRID>CP_A_Base1_SK-CZ</auction.mRID>
-		<auction.type>A02</auction.type>
-		<auction.category>A01</auction.category>
-		<businessType>A43</businessType>
-		<in_Domain.mRID codingScheme="A01">10YSK-SEPS-----K</in_Domain.mRID>
-		<out_Domain.mRID codingScheme="A01">10YCZ-CEPS-----N</out_Domain.mRID>
-		<contract_MarketAgreement.type>A01</contract_MarketAgreement.type>
-		<quantity_Measure_Unit.name>MAW</quantity_Measure_Unit.name>
-		<price_Measure_Unit.name>MWH</price_Measure_Unit.name>
-		<classificationSequence_AttributeInstanceComponent.position>1</classificationSequence_AttributeInstanceComponent.position>
-		<curveType>A01</curveType>
-			<Period>
-				<timeInterval>
-					<start>2016-01-01T23:00Z</start>
-					<end>2016-01-02T23:00Z</end>
-				</timeInterval>
-				<resolution>PT60M</resolution>
-					<Point>
-						<position>1</position>
-						<quantity>1234</quantity>
-					</Point>
-                    <Point>
-						<position>2</position>
-						<quantity>1235</quantity>
-					</Point>
-			</Period>
-	</TimeSeries>
-	<TimeSeries>
-		<mRID>2</mRID>
-		<auction.mRID>CP_A_Base1_SK-CZ</auction.mRID>
-		<auction.type>A02</auction.type>
-		<auction.category>A01</auction.category>
-		<businessType>B05</businessType>
-		<in_Domain.mRID codingScheme="A01">10YSK-SEPS-----K</in_Domain.mRID>
-		<out_Domain.mRID codingScheme="A01">10YCZ-CEPS-----N</out_Domain.mRID>
-		<contract_MarketAgreement.type>A01</contract_MarketAgreement.type>
-		<quantity_Measure_Unit.name>MAW</quantity_Measure_Unit.name>
-		<currency_Unit.name>EUR</currency_Unit.name>
-		<price_Measure_Unit.name>MWH</price_Measure_Unit.name>
-		<classificationSequence_AttributeInstanceComponent.position>1</classificationSequence_AttributeInstanceComponent.position>
-		<curveType>A01</curveType>
-			<Period>
-				<timeInterval>
-					<start>2016-01-01T23:00Z</start>
-					<end>2016-01-02T23:00Z</end>
-				</timeInterval>
-				<resolution>PT60M</resolution>
-					<Point>
-						<position>1</position>
-						<quantity>1234</quantity>
-						<price.amount>8.00</price.amount>
-					</Point>
-                    <Point>
-						<position>2</position>
-						<quantity>1234</quantity>
-						<price.amount>9.00</price.amount>
-					</Point>
-			</Period>
-	</TimeSeries>
+      </timeInterval>
+      <resolution>PT60M</resolution>
+      <Point>
+        <position>1</position>
+        <quantity>1234</quantity>
+      </Point>
+      <Point>
+        <position>2</position>
+        <quantity>1235</quantity>
+      </Point>
+    </Period>
+  </TimeSeries>
+  <TimeSeries>
+    <mRID>2</mRID>
+    <auction.mRID>CP_A_Base1_SK-CZ</auction.mRID>
+    <auction.type>A02</auction.type>
+    <auction.category>A01</auction.category>
+    <businessType>B05</businessType>
+    <in_Domain.mRID codingScheme="A01">10YSK-SEPS-----K</in_Domain.mRID>
+    <out_Domain.mRID codingScheme="A01">10YCZ-CEPS-----N</out_Domain.mRID>
+    <contract_MarketAgreement.type>A01</contract_MarketAgreement.type>
+    <quantity_Measure_Unit.name>MAW</quantity_Measure_Unit.name>
+    <currency_Unit.name>EUR</currency_Unit.name>
+    <price_Measure_Unit.name>MWH</price_Measure_Unit.name>
+    <classificationSequence_AttributeInstanceComponent.position>1</classificationSequence_AttributeInstanceComponent.position>
+    <curveType>A01</curveType>
+    <Period>
+      <timeInterval>
+        <start>2016-01-01T23:00Z</start>
+        <end>2016-01-02T23:00Z</end>
+      </timeInterval>
+      <resolution>PT60M</resolution>
+      <Point>
+        <position>1</position>
+        <quantity>1234</quantity>
+        <price.amount>8.00</price.amount>
+      </Point>
+      <Point>
+        <position>2</position>
+        <quantity>1234</quantity>
+        <price.amount>9.00</price.amount>
+      </Point>
+    </Period>
+  </TimeSeries>
 </Publication_MarketDocument>

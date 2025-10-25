@@ -24,6 +24,18 @@ import {
 import { ProcessTypes } from "./definitions/processtypes.ts";
 import { PsrTypes } from "./definitions/psrtypes.ts";
 import { TextWriter, Uint8ArrayReader, ZipReader } from "../deps.ts";
+
+// Type definition for zip entry with getData method
+interface ZipEntryWithData {
+  getData: (writer: TextWriter) => Promise<void>;
+  filename?: string;
+  directory?: boolean;
+}
+
+// Type guard to check if entry has getData method
+function hasGetData(entry: unknown): entry is ZipEntryWithData {
+  return !!entry && typeof (entry as Record<string, unknown>).getData === "function";
+}
 import { BusinessTypes } from "./definitions/businesstypes.ts";
 import { QueryParameters } from "./parameters.ts";
 
@@ -256,7 +268,6 @@ const Query = async (securityToken: string, params: QueryParameters): Promise<(P
   const query = ComposeQuery(securityToken, params);
 
   // Construct url and get result
-  // @ts-expect-error fetch is not recognised as a valid global.
   const result = await fetch(`${ENTSOE_ENDPOINT}?${query}`);
 
   // Check for 401
@@ -284,7 +295,7 @@ const Query = async (securityToken: string, params: QueryParameters): Promise<(P
         // Unzip file
         const stringDataWriter = new TextWriter();
 
-        if (typeof xmlFileEntry.getData !== "function") break;
+        if (!hasGetData(xmlFileEntry)) break;
 
         await xmlFileEntry.getData(stringDataWriter);
         const xmlFileData = await stringDataWriter.getData();

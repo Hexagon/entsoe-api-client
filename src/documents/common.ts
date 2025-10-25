@@ -145,15 +145,84 @@ interface BaseEntry {
 }
 
 /**
+ * Helper function to apply forward fill for A03 curve type (Variable sized block)
+ *
+ * @private
+ * @category Parsing
+ *
+ * @param points - Array of points to potentially forward fill
+ * @param periodStart - Start date of the period
+ * @param periodEnd - End date of the period
+ * @param resolution - ISO8601 duration resolution
+ * @returns - Array of points with forward fill applied
+ */
+const ApplyForwardFill = (points: Point[], periodStart: Date, periodEnd: Date, resolution: string): Point[] => {
+  if (points.length === 0) {
+    return points;
+  }
+
+  const periodLengthS = ISO8601DurToSec(resolution) || 3600; // Default to 1 hour if resolution can't be parsed
+  const periodLengthMs = periodLengthS * 1000;
+  const totalDurationMs = periodEnd.getTime() - periodStart.getTime();
+  const expectedPointCount = Math.ceil(totalDurationMs / periodLengthMs);
+
+  // If we already have all expected points, no forward fill needed
+  if (points.length >= expectedPointCount) {
+    return points;
+  }
+
+  const filledPoints: Point[] = [];
+  let currentPrice: number | undefined;
+  let currentQuantity: number | undefined;
+
+  // Sort points by position to ensure correct order
+  const sortedPoints = [...points].sort((a, b) => a.position - b.position);
+
+  for (let i = 0; i < expectedPointCount; i++) {
+    const position = i + 1;
+    const pointStartTime = new Date(periodStart.getTime() + i * periodLengthMs);
+    const pointEndTime = new Date(periodStart.getTime() + (i + 1) * periodLengthMs);
+
+    // Check if we have an actual data point for this position
+    const actualPoint = sortedPoints.find((p) => p.position === position);
+
+    if (actualPoint) {
+      // Use actual data point and update current value for forward fill
+      if (actualPoint.price !== undefined) currentPrice = actualPoint.price;
+      if (actualPoint.quantity !== undefined) currentQuantity = actualPoint.quantity;
+
+      filledPoints.push({
+        ...actualPoint,
+        startDate: pointStartTime,
+        endDate: pointEndTime,
+      });
+    } else {
+      // Forward fill with last known value
+      filledPoints.push({
+        startDate: pointStartTime,
+        endDate: pointEndTime,
+        position: position,
+        price: currentPrice,
+        quantity: currentQuantity,
+        constraintTimeSeries: undefined,
+      });
+    }
+  }
+
+  return filledPoints;
+};
+
+/**
  * Internal helper function to parse a Period-section of a source document, common to all source document types
  *
  * @private
  * @category Parsing
  *
  * @param period - Period section from a source XML document represented by an object
+ * @param curveType - Optional curve type for applying specific processing (e.g., A03 for forward fill)
  * @returns - Parsed and validated Period object
  */
-const ParsePeriod = (period: SourcePeriod): Period => {
+const ParsePeriod = (period: SourcePeriod, curveType?: string): Period => {
   // Extract start and end of whole period, then determine number of seconds of each interval
   const baseDate = Date.parse(period.timeInterval.start),
     baseEndDate = Date.parse(period.timeInterval.end),
@@ -192,6 +261,11 @@ const ParsePeriod = (period: SourcePeriod): Period => {
       outputPoint.quantity = points[i].quantity;
     }
     outputPeriod.points.push(outputPoint);
+  }
+
+  // Apply forward fill for A03 curve type (Variable sized block)
+  if (curveType === "A03") {
+    outputPeriod.points = ApplyForwardFill(outputPeriod.points, outputPeriod.startDate, outputPeriod.endDate, outputPeriod.resolution);
   }
 
   return outputPeriod;

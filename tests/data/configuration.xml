@@ -1,40 +1,40 @@
 <Configuration_MarketDocument xmlns="urn:iec62325.351:tc57wg16:451-6:configurationdocument:3:0">
-    <mRID>cb7bf4d27053485493ecd655a9949eb0</mRID>
+  <mRID>cb7bf4d27053485493ecd655a9949eb0</mRID>
 
-    <type>A95</type>
-    <process.processType>A39</process.processType>
+  <type>A95</type>
+  <process.processType>A39</process.processType>
 
-    <sender_MarketParticipant.mRID codingScheme="A01">10X1001A1001A450</sender_MarketParticipant.mRID>
-    <sender_MarketParticipant.marketRole.type>A32</sender_MarketParticipant.marketRole.type>
+  <sender_MarketParticipant.mRID codingScheme="A01">10X1001A1001A450</sender_MarketParticipant.mRID>
+  <sender_MarketParticipant.marketRole.type>A32</sender_MarketParticipant.marketRole.type>
 
-    <receiver_MarketParticipant.mRID codingScheme="A01">10X1001A1001A450</receiver_MarketParticipant.mRID>
-    <receiver_MarketParticipant.marketRole.type>A32</receiver_MarketParticipant.marketRole.type>
+  <receiver_MarketParticipant.mRID codingScheme="A01">10X1001A1001A450</receiver_MarketParticipant.mRID>
+  <receiver_MarketParticipant.marketRole.type>A32</receiver_MarketParticipant.marketRole.type>
 
-    <createdDateTime>2017-01-01T11:24:32Z</createdDateTime>
+  <createdDateTime>2017-01-01T11:24:32Z</createdDateTime>
 
-    <TimeSeries>
-        <mRID>1</mRID>
-        <businessType>B11</businessType>
+  <TimeSeries>
+    <mRID>1</mRID>
+    <businessType>B11</businessType>
 
-        <implementation_DateAndOrTime.date>2017-01-01</implementation_DateAndOrTime.date>
+    <implementation_DateAndOrTime.date>2017-01-01</implementation_DateAndOrTime.date>
 
-        <biddingZone_Domain.mRID codingScheme="A01">10YCZ-CEPS-----N</biddingZone_Domain.mRID>
+    <biddingZone_Domain.mRID codingScheme="A01">10YCZ-CEPS-----N</biddingZone_Domain.mRID>
 
-        <registeredResource.mRID codingScheme="A01">27W-PU-EPLE----4</registeredResource.mRID>
-        <registeredResource.name>EPLE_______</registeredResource.name>
-        <registeredResource.location.name>Plzeňská energetika</registeredResource.location.name>
+    <registeredResource.mRID codingScheme="A01">27W-PU-EPLE----4</registeredResource.mRID>
+    <registeredResource.name>EPLE_______</registeredResource.name>
+    <registeredResource.location.name>Plzeňská energetika</registeredResource.location.name>
 
-        <ControlArea_Domain>
-            <mRID codingScheme="A01">10YCZ-CEPS-----N</mRID>
-        </ControlArea_Domain>
-        <Provider_MarketParticipant>
-            <mRID codingScheme="A01">27XPLZEN-ENERG-8</mRID>
-        </Provider_MarketParticipant>
+    <ControlArea_Domain>
+      <mRID codingScheme="A01">10YCZ-CEPS-----N</mRID>
+    </ControlArea_Domain>
+    <Provider_MarketParticipant>
+      <mRID codingScheme="A01">27XPLZEN-ENERG-8</mRID>
+    </Provider_MarketParticipant>
 
-        <MktPSRType>
-            <psrType>B02</psrType>
-            <production_PowerSystemResources.highVoltageLimit unit="KVT">22</production_PowerSystemResources.highVoltageLimit>
-            <nominalIP_PowerSystemResources.nominalP unit="MAW">111</nominalIP_PowerSystemResources.nominalP>
-        </MktPSRType>
-    </TimeSeries>
+    <MktPSRType>
+      <psrType>B02</psrType>
+      <production_PowerSystemResources.highVoltageLimit unit="KVT">22</production_PowerSystemResources.highVoltageLimit>
+      <nominalIP_PowerSystemResources.nominalP unit="MAW">111</nominalIP_PowerSystemResources.nominalP>
+    </MktPSRType>
+  </TimeSeries>
 </Configuration_MarketDocument>

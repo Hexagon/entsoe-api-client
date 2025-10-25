@@ -8,6 +8,7 @@
  */
 
 import { BusinessTypes } from "../definitions/businesstypes.ts";
+import { CurveTypes } from "../definitions/curvetypes.ts";
 import { PsrTypes } from "../definitions/psrtypes.ts";
 import {
   BaseDocument,
@@ -77,6 +78,7 @@ interface TransmissionNetworkDocumentEntry extends BaseEntry {
   inDomain?: string;
   outDomain?: string;
   curveType?: string;
+  curveTypeDescription?: string;
   endDate?: Date;
   assetRegisteredResourceId?: string;
   assetRegisteredResourcePsrType?: string;
@@ -136,6 +138,7 @@ const ParseTransmissionNetwork = (d: SourceTransmissionNetworkDocument): Transmi
       endDate: endDate,
       quantityMeasureUnit: ts["quantity_Measure_Unit.name"],
       curveType: ts.curveType,
+      curveTypeDescription: ts.curveType ? (CurveTypes as Record<string, string>)[ts.curveType] : void 0,
       businessType: ts.businessType,
       inDomain: ts["in_Domain.mRID"]?.["#text"],
       outDomain: ts["out_Domain.mRID"]?.["#text"],
@@ -150,7 +153,7 @@ const ParseTransmissionNetwork = (d: SourceTransmissionNetworkDocument): Transmi
     };
     const periodArray = Array.isArray(ts.Period) ? ts.Period : (ts.Period ? [ts.Period] : []);
     for (const inputPeriod of (periodArray as SourcePeriod[])) {
-      tsEntry.periods?.push(ParsePeriod(inputPeriod));
+      tsEntry.periods?.push(ParsePeriod(inputPeriod, ts.curveType));
     }
     document.timeseries.push(tsEntry);
   }

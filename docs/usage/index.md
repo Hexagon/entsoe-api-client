@@ -51,6 +51,7 @@ Helper functions for translating human-readable descriptions to IDs that can be 
 | DocStatus        | (name)<br>=><br>string \| undefined                                             | Get document status id from document status name                                                                              |
 | MarketAgreementType        | (name)<br>=><br>string \| undefined                                             | Get market agreement type id from market agreement type name                                                                              |
 | MarketProduct        | (name)<br>=><br>string \| undefined                                             | Get Market product id from market product name                                                                              |
+| CurveType        | (name)<br>=><br>string \| undefined                                             | Get curve type id from curve type name (A01: Sequential fixed size block, A02: Point, A03: Variable sized block)                                                                              |
 
 **Parsing**
 
@@ -60,6 +61,34 @@ Helper functions for translating human-readable descriptions to IDs that can be 
 
 > **Note**
 > The parsing function is mainly intended for internal use within the library.
+
+## Curve Types and Forward Fill
+
+The library supports all ENTSO-e curve types with special handling for variable sized blocks:
+
+| Curve Type | Description | Forward Fill |
+|------------|-------------|--------------|
+| A01 | Sequential fixed size block | No |
+| A02 | Point | No |
+| A03 | Variable sized block | **Yes** ✨ |
+
+### Forward Fill for A03 (Variable Sized Block)
+
+When parsing documents with curve type A03, the library automatically applies **forward fill** to complete missing data points:
+
+- **Missing data points** are filled with the last known value
+- **Time intervals** are correctly calculated based on resolution 
+- **Both price and quantity** values are forward filled when present
+- **Maintains data integrity** while providing complete time series
+
+**Example**: For a 6-hour period with hourly resolution and sparse data:
+```
+Original: Position 1 (€100), Position 3 (€120), Position 6 (€90)
+Result:   Position 1 (€100), Position 2 (€100), Position 3 (€120), 
+          Position 4 (€120), Position 5 (€120), Position 6 (€90)
+```
+
+This feature is particularly useful for capacity allocations and market data where values remain constant until explicitly changed.
 
 ## Query Parameters
 

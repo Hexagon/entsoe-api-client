@@ -23,5 +23,6 @@ Unofficial ENTSO-e REST API Client for Deno and Node. Comprehensive. User-friend
   * Written in fully typed [TypeScript](https://www.typescriptlang.org/)
   * Offers ESM (for Deno and Node) and CommonJS (for Node) support
   * Adds descriptions to codes while parsing the documents
+  * Supports curve type A03 with automatic forward fill
 
 For further details, check out the [Installation](https://entsoe-api-client.56k.guru/installation.html) and [Usage](https://entsoe-api-client.56k.guru/usage/) sections.

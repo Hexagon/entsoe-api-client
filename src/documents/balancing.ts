@@ -8,6 +8,7 @@
  */
 
 import { BusinessTypes } from "../definitions/businesstypes.ts";
+import { CurveTypes } from "../definitions/curvetypes.ts";
 import {
   BaseDocument,
   BaseEntry,
@@ -62,6 +63,7 @@ interface BalancingDocumentEntry extends BaseEntry {
   quantityMeasureUnit?: string;
   flowDirection?: string;
   curveType?: string;
+  curveTypeDescription?: string;
 }
 
 /**
@@ -102,6 +104,7 @@ const ParseBalancing = (d: SourceBalancingDocument): BalancingDocument => {
     const tsEntry: BalancingDocumentEntry = {
       quantityMeasureUnit: ts["quantity_Measure_Unit.name"],
       curveType: ts.curveType,
+      curveTypeDescription: ts.curveType ? (CurveTypes as Record<string, string>)[ts.curveType] : void 0,
       businessType: ts.businessType,
       flowDirection: ts["flowDirection.direction"],
       businessTypeDescription: ts.businessType ? (BusinessTypes as Record<string, string>)[ts.businessType] : void 0,
@@ -109,7 +112,7 @@ const ParseBalancing = (d: SourceBalancingDocument): BalancingDocument => {
     };
     const periodArray = Array.isArray(ts.Period) ? ts.Period : (ts.Period ? [ts.Period] : []);
     for (const inputPeriod of (periodArray as SourcePeriod[])) {
-      tsEntry.periods?.push(ParsePeriod(inputPeriod));
+      tsEntry.periods?.push(ParsePeriod(inputPeriod, ts.curveType));
     }
     document.timeseries.push(tsEntry);
   }

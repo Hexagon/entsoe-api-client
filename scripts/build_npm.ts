@@ -1,4 +1,4 @@
-import { build, emptyDir, copy } from "./deps.ts";
+import { build, copy, emptyDir } from "./deps.ts";
 
 // Clear NPM directory
 await emptyDir("./npm");
@@ -16,7 +16,7 @@ await build({
   mappings: {
     "https://deno.land/x/zipjs@v2.7.17/index.js": {
       name: "@zip.js/zip.js",
-      version: "^2.7.17"
+      version: "^2.7.17",
     },
   },
   package: {
@@ -26,20 +26,26 @@ await build({
     description: "ENTSO-e transparency platform API Client. Complete. Easy to use. Minimal.",
     license: "MIT",
     repository: {
-        type: "git",
-        url: "git+https://github.com/Hexagon/entsoe-api-client.git"
+      type: "git",
+      url: "git+https://github.com/Hexagon/entsoe-api-client.git",
     },
     author: "Hexagon <Hexagon@GitHub>",
     bugs: {
-        url: "https://github.com/Hexagon/entsoe-api-client/issues"
+      url: "https://github.com/Hexagon/entsoe-api-client/issues",
     },
-    homepage: "https://github.com/Hexagon/entsoe-api-client#readme"
+    homepage: "https://github.com/Hexagon/entsoe-api-client#readme",
   },
 });
 
 // post build steps
 Deno.copyFileSync("LICENSE", "npm/LICENSE");
 Deno.copyFileSync("README.md", "npm/README.md");
+
+// Fix the .npmignore file to prevent exclusion of esm/src/ and script/src/
+// DNT generates "src/" which matches all src directories, but we only want to exclude the root src/
+let npmignore = await Deno.readTextFile("npm/.npmignore");
+npmignore = npmignore.replace(/^src\/$/m, "/src/");
+await Deno.writeTextFile("npm/.npmignore", npmignore);
 
 // npmignore test data
 // ensure the test data is ignored in the `.npmignore` file

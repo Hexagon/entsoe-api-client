@@ -3,6 +3,10 @@
 /**
  * Verification script to ensure the npm package contains the required files
  * Run this after building the npm package to verify it will work correctly
+ *
+ * Required permissions:
+ * --allow-run: To execute npm pack --dry-run command
+ * --allow-read: To read npm/.npmignore and check directory structure
  */
 
 // Check if npm directory exists
@@ -76,8 +80,15 @@ try {
   });
 
   const { stdout, stderr } = await process.output();
-  const output = new TextDecoder().decode(stdout) +
-    new TextDecoder().decode(stderr);
+  const stdoutText = new TextDecoder().decode(stdout);
+  const stderrText = new TextDecoder().decode(stderr);
+
+  // Log stderr separately if there are any messages (usually warnings)
+  if (stderrText.trim()) {
+    console.log("npm pack warnings/errors:", stderrText);
+  }
+
+  const output = stdoutText + stderrText;
 
   const esmSrcCount = (output.match(/esm\/src\//g) || []).length;
   const scriptSrcCount = (output.match(/script\/src\//g) || []).length;
@@ -97,7 +108,8 @@ try {
   }
 
   // Check that root src is NOT included
-  const rootSrcPattern = /\ssrc\//;
+  // Match 'src/' at the beginning of a line or after whitespace, but not as part of a path
+  const rootSrcPattern = /(?:^|\s)src\//;
   const rootSrcMatches = output.split("\n").filter((line) =>
     line.match(rootSrcPattern) && !line.includes("esm/src/") &&
     !line.includes("script/src/")

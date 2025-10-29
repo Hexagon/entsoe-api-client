@@ -13,7 +13,7 @@ import { ParsePublication, PublicationDocument } from "./documents/publication.t
 import { GLDocument, ParseGL } from "./documents/gl.ts";
 import { ParseUnavailability, UnavailabilityDocument } from "./documents/unavailability.ts";
 import { ConfigurationDocument, ParseConfiguration } from "./documents/configuration.ts";
-import { ParseTransmissionNetwork, TransmissionNetworkDocument } from "./documents/transmittionnetwork.ts";
+import { ParseTransmissionNetwork, TransmissionNetworkDocument } from "./documents/transmissionnetwork.ts";
 import { BalancingDocument, ParseBalancing } from "./documents/balancing.ts";
 import { CriticalNetworkElementDocument, ParseCriticalNetworkElement } from "./documents/criticalnetworkelement.ts";
 

@@ -8,6 +8,7 @@
  */
 
 import { BusinessTypes } from "../definitions/businesstypes.ts";
+import { CurveTypes } from "../definitions/curvetypes.ts";
 import { PsrTypes } from "../definitions/psrtypes.ts";
 import {
   BaseDocument,
@@ -41,6 +42,7 @@ interface SourceUnavailabilityDocument extends SourceBaseDocument {
  */
 interface SourceUnavailabilityEntry extends SourceBaseDocument {
   businessType?: string;
+  curveType?: string;
   "start_DateAndOrTime.date"?: string;
   "start_DateAndOrTime.time"?: string;
   "end_DateAndOrTime.date"?: string;
@@ -73,6 +75,8 @@ interface UnavailabilityDocument extends BaseDocument {
 interface UnavailabilityEntry extends BaseEntry {
   startDate: Date;
   endDate: Date;
+  curveType?: string;
+  curveTypeDescription?: string;
   resourceName?: string;
   resourceLocation?: string;
   psrName?: string;
@@ -148,6 +152,8 @@ const ParseUnavailability = (d: SourceUnavailabilityDocument): UnavailabilityDoc
       resourceLocation: outage["production_RegisteredResource.location.name"],
       businessType: outage.businessType,
       businessTypeDescription: outage.businessType ? (BusinessTypes as Record<string, string>)[outage.businessType] : void 0,
+      curveType: outage.curveType,
+      curveTypeDescription: outage.curveType ? (CurveTypes as Record<string, string>)[outage.curveType] : void 0,
       psrName: outage["production_RegisteredResource.pSRType.powerSystemResources.name"],
       psrNominalPowerUnit: outage["production_RegisteredResource.pSRType.powerSystemResources.nominalP"]
         ? outage["production_RegisteredResource.pSRType.powerSystemResources.nominalP"]["@unit"]
@@ -168,7 +174,7 @@ const ParseUnavailability = (d: SourceUnavailabilityDocument): UnavailabilityDoc
       ? outage.Available_Period
       : (outage.Available_Period ? [outage.Available_Period] : []);
     for (const avail of (availablePeriodArray as SourcePeriod[])) {
-      ts.periods?.push(ParsePeriod(avail));
+      ts.periods?.push(ParsePeriod(avail, outage.curveType));
     }
     document.timeseries.push(ts);
   }

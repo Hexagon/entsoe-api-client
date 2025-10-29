@@ -15,7 +15,7 @@ import { SourceUnavailabilityDocument } from "./unavailability.ts";
 import { DocumentTypes } from "../definitions/documenttypes.ts";
 import { ISO8601DurToSec } from "../helpers/duration.ts";
 import { ProcessTypes } from "../definitions/processtypes.ts";
-import { SourceTransmissionNetworkDocument } from "./transmittionnetwork.ts";
+import { SourceTransmissionNetworkDocument } from "./transmissionnetwork.ts";
 import { SourceBalancingDocument } from "./balancing.ts";
 import { SourceCriticalNetworkElementDocument } from "./criticalnetworkelement.ts";
 
@@ -175,8 +175,12 @@ const ApplyForwardFill = (points: Point[], periodStart: Date, periodEnd: Date, r
   let currentPrice: number | undefined;
   let currentQuantity: number | undefined;
 
-  // Sort points by position to ensure correct order
+  // Sort points by position to ensure correct order and create a map for O(1) lookup
   const sortedPoints = [...points].sort((a, b) => a.position - b.position);
+  const pointMap = new Map<number, Point>();
+  for (const point of sortedPoints) {
+    pointMap.set(point.position, point);
+  }
 
   for (let i = 0; i < expectedPointCount; i++) {
     const position = i + 1;
@@ -184,7 +188,7 @@ const ApplyForwardFill = (points: Point[], periodStart: Date, periodEnd: Date, r
     const pointEndTime = new Date(periodStart.getTime() + (i + 1) * periodLengthMs);
 
     // Check if we have an actual data point for this position
-    const actualPoint = sortedPoints.find((p) => p.position === position);
+    const actualPoint = pointMap.get(position);
 
     if (actualPoint) {
       // Use actual data point and update current value for forward fill
@@ -196,8 +200,8 @@ const ApplyForwardFill = (points: Point[], periodStart: Date, periodEnd: Date, r
         startDate: pointStartTime,
         endDate: pointEndTime,
       });
-    } else {
-      // Forward fill with last known value
+    } else if (currentPrice !== undefined || currentQuantity !== undefined) {
+      // Forward fill with last known value only if we have at least one value
       filledPoints.push({
         startDate: pointStartTime,
         endDate: pointEndTime,

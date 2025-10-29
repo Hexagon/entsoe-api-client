@@ -49,11 +49,11 @@ let npmignore = await Deno.readTextFile("npm/.npmignore");
 npmignore = npmignore.replace(/^src\/$/m, "/src/");
 await Deno.writeTextFile("npm/.npmignore", npmignore);
 
-// npmignore test data
-// ensure the test data is ignored in the `.npmignore` file
-// so it doesn't get published with your npm package
+// npmignore test data and test declaration files
+// ensure the test data and generated test .d.ts files are ignored in the `.npmignore` file
+// so they don't get published with your npm package
 await Deno.writeTextFile(
   "npm/.npmignore",
-  "esm/tests/data\nscript/tests/data\n",
+  "esm/tests/data\nscript/tests/data\n*.test.d.ts\ntests/**/*.d.ts\n",
   { append: true },
 );

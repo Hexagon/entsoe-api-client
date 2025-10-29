@@ -13,7 +13,6 @@
         "coverage:ci": "deno task clean && deno test tests --allow-read --coverage=coverage && deno coverage coverage --lcov --output=cov.lcov",
         "precommit": "deno task clean && deno fmt && deno lint && deno task test && deno task build",
         "update-deps": "deno run --allow-read=. --allow-net=deno.land,cdn.deno.land,unpkg.com https://deno.land/x/udd/main.ts --dry-run deps.ts scripts/deps.ts",
-        "build": "deno run -A scripts/build_npm.ts",
-        "verify-package": "deno run --allow-run --allow-read scripts/verify_npm_package.ts"
+        "build": "deno run -A scripts/build_npm.ts"
     }
 }

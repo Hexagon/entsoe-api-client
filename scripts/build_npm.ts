@@ -42,7 +42,9 @@ Deno.copyFileSync("LICENSE", "npm/LICENSE");
 Deno.copyFileSync("README.md", "npm/README.md");
 
 // Fix the .npmignore file to prevent exclusion of esm/src/ and script/src/
-// DNT generates "src/" which matches all src directories, but we only want to exclude the root src/
+// DNT 0.37.0 generates "src/" in .npmignore by default (when not using source maps).
+// This pattern inadvertently excludes esm/src/ and script/src/ containing transpiled code.
+// Replace "src/" with "/src/" to only match the root TypeScript source directory.
 let npmignore = await Deno.readTextFile("npm/.npmignore");
 npmignore = npmignore.replace(/^src\/$/m, "/src/");
 await Deno.writeTextFile("npm/.npmignore", npmignore);

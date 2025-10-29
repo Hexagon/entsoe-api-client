@@ -16,6 +16,8 @@ testing.js
 testing.ts
 test.js
 test.ts
+*.test.d.ts
+tests/**/*.d.ts
 
 # Deno specific
 deno.lock

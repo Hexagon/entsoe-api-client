@@ -242,7 +242,7 @@ const ParsePeriod = (period: SourcePeriod, curveType?: string): Period => {
     resolutionSeconds: periodLengthSSafe,
   };
 
-  const points: SourcePoint[] = Array.isArray(period.Point) ? period.Point : [period.Point];
+  const points: SourcePoint[] = period.Point ? (Array.isArray(period.Point) ? period.Point : [period.Point]) : [];
 
   for (let i = 0; i < points.length; i++) {
     // Determine current position, and next position (if there is one)

@@ -38,6 +38,7 @@ function hasGetData(entry: unknown): entry is ZipEntryWithData {
 }
 import { BusinessTypes } from "./definitions/businesstypes.ts";
 import { QueryParameters } from "./parameters.ts";
+import { formatEntsoeDate } from "./helpers/date.ts";
 
 /**
  * Helper to validate input parameters
@@ -205,34 +206,8 @@ const ComposeQuery = (securityToken: string, params: QueryParameters, force?: bo
     if (!params.endDateTimeUpdate) {
       throw new Error("endDateTimeUpdate must be specified when startDateTimeUpdate is provided");
     }
-    // Accept Date or string (YYYYMMDDHHmm)
-    const formatEntsoeIsoDate = (d: Date | string) => {
-      // Always return YYYY-MM-DDTHH:mmZ (no seconds)
-      const toEntsoe = (date: Date) => {
-        // Get YYYY-MM-DDTHH:mmZ
-        return date.getUTCFullYear() +
-          "-" + String(date.getUTCMonth() + 1).padStart(2, "0") +
-          "-" + String(date.getUTCDate()).padStart(2, "0") +
-          "T" + String(date.getUTCHours()).padStart(2, "0") +
-          ":" + String(date.getUTCMinutes()).padStart(2, "0") + "Z";
-      };
-      if (typeof d === "string") {
-        // Accept ISO 8601 string, or try to parse to Date
-        const iso = d.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}Z$/) ? d : null;
-        if (iso) return iso;
-        const parsed = new Date(d);
-        if (!isNaN(parsed.getTime())) {
-          return toEntsoe(parsed);
-        }
-        throw new Error("startDateTimeUpdate/endDateTimeUpdate string must be ISO 8601 UTC (YYYY-MM-DDTHH:mmZ)");
-      } else if (d instanceof Date && !isNaN(d.getTime())) {
-        return toEntsoe(d);
-      } else {
-        throw new Error("startDateTimeUpdate/endDateTimeUpdate not valid, should be Date object or ISO 8601 string");
-      }
-    };
-    const start = formatEntsoeIsoDate(params.startDateTimeUpdate);
-    const end = formatEntsoeIsoDate(params.endDateTimeUpdate as Date | string);
+    const start = formatEntsoeDate(params.startDateTimeUpdate, "startDateTimeUpdate");
+    const end = formatEntsoeDate(params.endDateTimeUpdate as Date | string, "endDateTimeUpdate");
     const timeInterval = `${start}/${end}`;
     query.append("TimeIntervalUpdate", timeInterval);
   }
@@ -242,34 +217,8 @@ const ComposeQuery = (securityToken: string, params: QueryParameters, force?: bo
     if (!params.endDateTime) {
       throw new Error("endDateTime must be specified when startDateTime is provided");
     }
-    // Accept Date or string (YYYYMMDDHHmm)
-    const formatEntsoeIsoDate = (d: Date | string) => {
-      // Always return YYYY-MM-DDTHH:mmZ (no seconds)
-      const toEntsoe = (date: Date) => {
-        // Get YYYY-MM-DDTHH:mmZ
-        return date.getUTCFullYear() +
-          "-" + String(date.getUTCMonth() + 1).padStart(2, "0") +
-          "-" + String(date.getUTCDate()).padStart(2, "0") +
-          "T" + String(date.getUTCHours()).padStart(2, "0") +
-          ":" + String(date.getUTCMinutes()).padStart(2, "0") + "Z";
-      };
-      if (typeof d === "string") {
-        // Accept ISO 8601 string, or try to parse to Date
-        const iso = d.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}Z$/) ? d : null;
-        if (iso) return iso;
-        const parsed = new Date(d);
-        if (!isNaN(parsed.getTime())) {
-          return toEntsoe(parsed);
-        }
-        throw new Error("startDateTime/endDateTime string must be ISO 8601 UTC (YYYY-MM-DDTHH:mmZ)");
-      } else if (d instanceof Date && !isNaN(d.getTime())) {
-        return toEntsoe(d);
-      } else {
-        throw new Error("startDateTime/endDateTime not valid, should be Date object or ISO 8601 string");
-      }
-    };
-    const start = formatEntsoeIsoDate(params.startDateTime);
-    const end = formatEntsoeIsoDate(params.endDateTime as Date | string);
+    const start = formatEntsoeDate(params.startDateTime, "startDateTime");
+    const end = formatEntsoeDate(params.endDateTime as Date | string, "endDateTime");
     const timeInterval = `${start}/${end}`;
     query.append("TimeInterval", timeInterval);
   }

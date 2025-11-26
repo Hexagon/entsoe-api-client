@@ -41,16 +41,16 @@ interface QueryParameters {
   outBiddingZoneDomain?: string;
 
   /** Combine with endDateTime to construct a TimeInterval */
-  startDateTime?: Date;
+  startDateTime?: Date | string;
 
   /** Combine with startDateTime to construct a TimeInterval  */
-  endDateTime?: Date;
+  endDateTime?: Date | string;
 
   /** Combine with endDateTimeUpdate to cnstruct a TimeIntervalUpdate */
-  startDateTimeUpdate?: Date;
+  startDateTimeUpdate?: Date | string;
 
   /** Combine with startDateTimeUpdate to cnstruct a TimeIntervalUpdate */
-  endDateTimeUpdate?: Date;
+  endDateTimeUpdate?: Date | string;
 
   /** Offset - Enables fetching more than X documents by using "pagination" */
   offset?: number;
